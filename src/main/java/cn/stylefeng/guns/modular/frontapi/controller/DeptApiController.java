@@ -6,12 +6,12 @@ import cn.stylefeng.guns.core.common.constant.dictmap.DeptDict;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.node.TreeviewNode;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
-import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.modular.system.entity.Dept;
 import cn.stylefeng.guns.modular.system.model.DeptDto;
 import cn.stylefeng.guns.modular.system.service.DeptService;
 import cn.stylefeng.guns.modular.system.warpper.DeptTreeWrapper;
 import cn.stylefeng.guns.modular.system.warpper.DeptWrapper;
+import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.treebuild.DefaultTreeBuildFactory;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -29,7 +29,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/gunsApi/dept")
-public class DeptApiController {
+public class DeptApiController extends BaseController {
 
     @Autowired
     private DeptService deptService;
@@ -50,9 +50,8 @@ public class DeptApiController {
 
         //缓存部门修改前详细信息
         Dept dept = deptService.getById(deptId);
-        LogObjectHolder.me().set(dept);
 
-        return ResponseData.success();
+        return ResponseData.success(dept);
     }
 
     /**
@@ -102,7 +101,7 @@ public class DeptApiController {
     @ResponseBody
     public ResponseData add(Dept dept) {
         this.deptService.addDept(dept);
-        return ResponseData.success();
+        return SUCCESS_TIP;
     }
 
     /**
@@ -147,7 +146,7 @@ public class DeptApiController {
     @ResponseBody
     public ResponseData update(Dept dept) {
         deptService.editDept(dept);
-        return ResponseData.success();
+        return SUCCESS_TIP;
     }
 
     /**
@@ -161,12 +160,9 @@ public class DeptApiController {
     @ResponseBody
     public ResponseData delete(@RequestParam Long deptId) {
 
-        //缓存被删除的部门名称
-        LogObjectHolder.me().set(ConstantFactory.me().getDeptName(deptId));
-
         deptService.deleteDept(deptId);
 
-        return ResponseData.success();
+        return SUCCESS_TIP;
     }
 
 }
