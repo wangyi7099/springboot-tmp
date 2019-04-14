@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <p align="center">
     <img src="https://images.gitee.com/uploads/images/2019/0109/214218_d2aa949b_551203.png" width="300">
     <br>      
@@ -268,4 +267,4 @@ jwt token鉴权机制是指若需要请求服务器接口，必须通过AuthCont
 4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
 5. 码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
 6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
->>>>>>> 78ac8ff54d8212ba88df1a198c28f7cc0995987e
+
