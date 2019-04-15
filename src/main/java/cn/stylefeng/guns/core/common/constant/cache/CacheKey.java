@@ -43,4 +43,9 @@ public interface CacheKey {
      */
     String DEPT_NAME = "dept_name_";
 
+    /**
+     * 菜单缓存
+     */
+    String MENU_LIST = "nemu_list_";
+
 }

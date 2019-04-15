@@ -2,6 +2,8 @@ package cn.stylefeng.guns.modular.system.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.stylefeng.guns.core.common.constant.Const;
+import cn.stylefeng.guns.core.common.constant.cache.Cache;
+import cn.stylefeng.guns.core.common.constant.cache.CacheKey;
 import cn.stylefeng.guns.core.common.constant.state.ManagerStatus;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.common.node.MenuNode;
@@ -15,10 +17,12 @@ import cn.stylefeng.guns.modular.system.factory.UserFactory;
 import cn.stylefeng.guns.modular.system.mapper.UserMapper;
 import cn.stylefeng.guns.modular.system.model.UserDto;
 import cn.stylefeng.roses.core.datascope.DataScope;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -214,6 +218,36 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         ShiroUser shiroUser = userAuthService.shiroUser(currentUser);
         ShiroUser lastUser = ShiroKit.getUser();
         BeanUtil.copyProperties(shiroUser, lastUser);
+    }
+
+
+    /**
+     * 通过token获取左侧菜单
+     *
+     * @author yaoliguo
+     * @date 2019-04-15 20:00
+     */
+    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.MENU_LIST + "'+#userId")
+    public List<MenuNode> getLeftMenuByUserId(String userId) {
+
+        User user = baseMapper.selectById(userId);
+        if (user != null) {
+            String roleId = user.getRoleId();
+            if (ToolUtil.isNotEmpty(roleId)) {
+                String[] roleIds = roleId.split(",");
+                List<Long> rids = new ArrayList<>();
+                for (String tempId : roleIds) {
+                    rids.add(Long.valueOf(tempId));
+                }
+                //通过角色id查询菜单
+                List<MenuNode> menus = getUserMenuNodes(rids);
+
+                return menus;
+            }
+
+        }
+
+        return null;
     }
 
 }

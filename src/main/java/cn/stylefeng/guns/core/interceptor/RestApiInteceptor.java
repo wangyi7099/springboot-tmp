@@ -15,12 +15,6 @@
  */
 package cn.stylefeng.guns.core.interceptor;
 
-import cn.stylefeng.guns.core.common.constant.JwtConstants;
-import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
-import cn.stylefeng.guns.core.util.JwtTokenUtil;
-import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
-import cn.stylefeng.roses.core.util.RenderUtil;
-import io.jsonwebtoken.JwtException;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +38,7 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean check(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getServletPath().equals(JwtConstants.AUTH_PATH)) {
+        /*if (request.getServletPath().equals(JwtConstants.AUTH_PATH)) {
             return true;
         }
         final String requestHeader = request.getHeader(JwtConstants.AUTH_HEADER);
@@ -68,7 +62,7 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
             //header没有带Bearer字段
             RenderUtil.renderJson(response, new ErrorResponseData(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
             return false;
-        }
+        }*/
         return true;
     }
 

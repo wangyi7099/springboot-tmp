@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.stylefeng.guns.modular.demos.controller;
+package cn.stylefeng.guns.modular.frontapi.controller;
 
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
@@ -22,6 +22,9 @@ import cn.stylefeng.guns.modular.system.entity.User;
 import cn.stylefeng.guns.modular.system.mapper.UserMapper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -51,7 +54,12 @@ public class ApiController extends BaseController {
     /**
      * api登录接口，通过账号密码获取token
      */
-    @RequestMapping("/auth")
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
+    @ApiOperation(value = "获取token", notes = "获取token")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "username", value = "帐号", required = true, dataType = "String"),
+            @ApiImplicitParam(paramType = "query", name = "password", value = "密码", required = true, dataType = "String")
+    })
     public Object auth(@RequestParam("username") String username,
                        @RequestParam("password") String password) {
 
@@ -77,6 +85,8 @@ public class ApiController extends BaseController {
         if (passwordTrueFlag) {
             HashMap<String, Object> result = new HashMap<>();
             result.put("token", JwtTokenUtil.generateToken(String.valueOf(user.getUserId())));
+
+
             return result;
         } else {
             return new ErrorResponseData(500, "账号密码错误！");

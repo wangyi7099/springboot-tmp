@@ -9,6 +9,7 @@ import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.common.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.util.JwtTokenUtil;
 import cn.stylefeng.guns.modular.system.entity.Menu;
 import cn.stylefeng.guns.modular.system.model.MenuDto;
 import cn.stylefeng.guns.modular.system.service.MenuService;
@@ -19,12 +20,12 @@ import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,24 @@ public class MenuApiController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @ApiOperation(value = "通过token获取做成菜单", notes = "通过token获取做成菜单")
+    @RequestMapping(value = "/left_menu", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "token", value = "token", required = true, dataType = "String")
+    })
+    @ResponseBody
+    public ResponseData leftMenu(@RequestParam String token) {
+
+        //String token = getHttpServletRequest().getHeader("token");
+        if (ToolUtil.isEmpty(token)) {
+            throw new ServiceException(BizExceptionEnum.TOKEN_ERROR);
+        }
+        //根据token获取userId
+        String userId = JwtTokenUtil.getUsernameFromToken(token);
+
+        return ResponseData.success(userService.getLeftMenuByUserId(userId));
+    }
 
     /**
      * 跳转到菜单详情列表页面

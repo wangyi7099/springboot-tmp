@@ -14,15 +14,11 @@ import cn.stylefeng.guns.modular.system.warpper.DeptWrapper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.treebuild.DefaultTreeBuildFactory;
-import cn.stylefeng.roses.core.util.ToolUtil;
-import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -34,25 +30,6 @@ public class DeptApiController extends BaseController {
     @Autowired
     private DeptService deptService;
 
-    /**
-     * 跳转到修改部门
-     *
-     * @author fengshuonan
-     * @Date 2018/12/23 4:56 PM
-     */
-
-    @RequestMapping("/dept_update")
-    public ResponseData deptUpdate(@RequestParam("deptId") Long deptId) {
-
-        if (ToolUtil.isEmpty(deptId)) {
-            throw new RequestEmptyException();
-        }
-
-        //缓存部门修改前详细信息
-        Dept dept = deptService.getById(deptId);
-
-        return ResponseData.success(dept);
-    }
 
     /**
      * 获取部门的tree列表，ztree格式
@@ -60,7 +37,8 @@ public class DeptApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 4:56 PM
      */
-    @RequestMapping(value = "/tree")
+    @ApiOperation(value = "获取部门树", notes = "获取部门树结构")
+    @RequestMapping(value = "/tree", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData tree() {
         List<ZTreeNode> tree = this.deptService.tree();
@@ -74,8 +52,9 @@ public class DeptApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 4:57 PM
      */
-    @RequestMapping(value = "/treeview")
+    @RequestMapping(value = "/treeview", method = RequestMethod.GET)
     @ResponseBody
+    @ApiOperation(value = "获取部门的tree列表", notes = "获取部门的tree列表，treeview格式")
     public ResponseData treeview() {
         List<TreeviewNode> treeviewNodes = this.deptService.treeviewNodes();
 
@@ -97,8 +76,9 @@ public class DeptApiController extends BaseController {
      * @Date 2018/12/23 4:57 PM
      */
     @BussinessLog(value = "添加部门", key = "simpleName", dict = DeptDict.class)
-    @RequestMapping(value = "/add")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(value = "添加部门", notes = "添加部门")
     public ResponseData add(Dept dept) {
         this.deptService.addDept(dept);
         return SUCCESS_TIP;
@@ -110,8 +90,9 @@ public class DeptApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 4:57 PM
      */
-    @RequestMapping(value = "/list")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
+    @ApiOperation(value = "获取所有部门列表", notes = "获取所有部门列表")
     public ResponseData list(@RequestParam(value = "condition", required = false) String condition,
                              @RequestParam(value = "deptId", required = false) Long deptId) {
         Page<Map<String, Object>> list = this.deptService.list(condition, deptId);
@@ -125,8 +106,9 @@ public class DeptApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 4:57 PM
      */
-    @RequestMapping(value = "/detail/{deptId}")
+    @RequestMapping(value = "/{deptId}/detail", method = RequestMethod.GET)
     @ResponseBody
+    @ApiOperation(value = "部门详情", notes = "部门详情")
     public ResponseData detail(@PathVariable("deptId") Long deptId) {
         Dept dept = deptService.getById(deptId);
         DeptDto deptDto = new DeptDto();
@@ -142,8 +124,9 @@ public class DeptApiController extends BaseController {
      * @Date 2018/12/23 4:57 PM
      */
     @BussinessLog(value = "修改部门", key = "simpleName", dict = DeptDict.class)
-    @RequestMapping(value = "/update")
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     @ResponseBody
+    @ApiOperation(value = "修改部门", notes = "修改部门")
     public ResponseData update(Dept dept) {
         deptService.editDept(dept);
         return SUCCESS_TIP;
@@ -156,8 +139,9 @@ public class DeptApiController extends BaseController {
      * @Date 2018/12/23 4:57 PM
      */
     @BussinessLog(value = "删除部门", key = "deptId", dict = DeptDict.class)
-    @RequestMapping(value = "/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     @ResponseBody
+    @ApiOperation(value = "删除部门", notes = "删除部门")
     public ResponseData delete(@RequestParam Long deptId) {
 
         deptService.deleteDept(deptId);
