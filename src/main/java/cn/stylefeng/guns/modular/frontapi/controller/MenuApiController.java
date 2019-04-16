@@ -24,7 +24,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,7 +35,7 @@ import java.util.Map;
  * @author fengshuonan
  * @Date 2017年2月12日21:59:14
  */
-@Controller
+@RestController
 @RequestMapping("/gunsApi/menu")
 public class MenuApiController extends BaseController {
 
@@ -51,7 +50,6 @@ public class MenuApiController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", value = "token", required = true, dataType = "String")
     })
-    @ResponseBody
     public ResponseData leftMenu(@RequestParam String token) {
 
         //String token = getHttpServletRequest().getHeader("token");
@@ -64,23 +62,6 @@ public class MenuApiController extends BaseController {
         return ResponseData.success(userService.getLeftMenuByUserId(userId));
     }
 
-    /**
-     * 跳转到菜单详情列表页面
-     *
-     * @author fengshuonan
-     * @Date 2018/12/23 5:53 PM
-     */
-    @RequestMapping(value = "/menu_edit")
-    public ResponseData menuEdit(@RequestParam Long menuId) {
-        if (ToolUtil.isEmpty(menuId)) {
-            throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
-        }
-
-        //获取菜单当前信息，记录日志用
-        Menu menu = this.menuService.getById(menuId);
-
-        return ResponseData.success(menu);
-    }
 
     /**
      * 修该菜单
@@ -90,7 +71,6 @@ public class MenuApiController extends BaseController {
      */
     @RequestMapping(value = "/edit")
     @BussinessLog(value = "修改菜单", key = "name", dict = MenuDict.class)
-    @ResponseBody
     public ResponseData edit(MenuDto menu) {
 
         //如果修改了编号，则该菜单的子菜单也要修改对应编号
@@ -109,7 +89,6 @@ public class MenuApiController extends BaseController {
      * @Date 2018/12/23 5:53 PM
      */
     @RequestMapping(value = "/list")
-    @ResponseBody
     public ResponseData list(@RequestParam(required = false) String menuName,
                              @RequestParam(required = false) String level,
                              @RequestParam(required = false) Long menuId) {
@@ -125,7 +104,6 @@ public class MenuApiController extends BaseController {
      * @Date 2019年2月23日22:01:47
      */
     @RequestMapping(value = "/listTree")
-    @ResponseBody
     public ResponseData listTree(@RequestParam(required = false) String menuName,
                                  @RequestParam(required = false) String level) {
         List<Map<String, Object>> menus = this.menuService.selectMenuTree(menuName, level);
@@ -144,7 +122,6 @@ public class MenuApiController extends BaseController {
      */
     @RequestMapping(value = "/add")
     @BussinessLog(value = "菜单新增", key = "name", dict = MenuDict.class)
-    @ResponseBody
     public ResponseData add(MenuDto menu) {
         this.menuService.addMenu(menu);
         return SUCCESS_TIP;
@@ -158,7 +135,6 @@ public class MenuApiController extends BaseController {
      */
     @RequestMapping(value = "/remove")
     @BussinessLog(value = "删除菜单", key = "menuId", dict = DeleteDict.class)
-    @ResponseBody
     public ResponseData remove(@RequestParam Long menuId) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
@@ -178,8 +154,7 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:53 PM
      */
-    @RequestMapping(value = "/view/{menuId}")
-    @ResponseBody
+    @RequestMapping(value = "/{menuId}/view")
     public ResponseData view(@PathVariable Long menuId) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
@@ -195,7 +170,6 @@ public class MenuApiController extends BaseController {
      * @Date 2018/12/23 5:53 PM
      */
     @RequestMapping(value = "/getMenuInfo")
-    @ResponseBody
     public ResponseData getMenuInfo(@RequestParam Long menuId) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
@@ -220,7 +194,6 @@ public class MenuApiController extends BaseController {
      * @Date 2018/12/23 5:54 PM
      */
     @RequestMapping(value = "/menuTreeList")
-    @ResponseBody
     public ResponseData menuTreeList() {
         return ResponseData.success(menuService.menuTreeList());
     }
@@ -232,7 +205,6 @@ public class MenuApiController extends BaseController {
      * @Date 2018/12/23 5:54 PM
      */
     @RequestMapping(value = "/selectMenuTreeList")
-    @ResponseBody
     public ResponseData selectMenuTreeList() {
         List<ZTreeNode> roleTreeList = this.menuService.menuTreeList();
         roleTreeList.add(ZTreeNode.createParent());
@@ -245,8 +217,7 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:54 PM
      */
-    @RequestMapping(value = "/menuTreeListByRoleId/{roleId}")
-    @ResponseBody
+    @RequestMapping(value = "/{roleId}/menuTreeListByRoleId")
     public ResponseData menuTreeListByRoleId(@PathVariable Long roleId) {
         List<Long> menuIds = this.menuService.getMenuIdsByRoleId(roleId);
         if (ToolUtil.isEmpty(menuIds)) {
