@@ -34,3 +34,8 @@ mybatis-plus:
 
 log:
   path: guns-logs
+
+flowable:
+  async-executor-activate: false
+  database-schema-update: true
+  database-schema: act
