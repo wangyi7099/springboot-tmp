@@ -28,6 +28,7 @@ spring:
       max-request-size: 100MB
       max-file-size: 100MB
 
+
 mybatis-plus:
   typeAliasesPackage: cn.stylefeng.guns.modular.system.model
   mapper-locations: classpath:cn/stylefeng/guns/modular/**/mapping/*.xml
@@ -37,5 +38,3 @@ log:
 
 flowable:
   async-executor-activate: false
-  database-schema-update: true
-  database-schema: act
