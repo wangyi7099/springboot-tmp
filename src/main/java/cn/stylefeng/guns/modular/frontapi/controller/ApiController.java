@@ -31,10 +31,7 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -54,6 +51,7 @@ public class ApiController extends BaseController {
     /**
      * api登录接口，通过账号密码获取token
      */
+    @CrossOrigin(origins = "*", maxAge = 3600)
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     @ApiOperation(value = "获取token", notes = "获取token")
     @ApiImplicitParams({
