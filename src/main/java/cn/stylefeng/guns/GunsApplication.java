@@ -46,7 +46,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
         org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration.class,
         org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration.class,
         org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration.class
+        org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration.class,
 })
 @EnableScheduling
 public class GunsApplication {

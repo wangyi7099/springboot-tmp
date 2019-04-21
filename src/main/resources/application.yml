@@ -32,6 +32,8 @@ spring:
 mybatis-plus:
   typeAliasesPackage: cn.stylefeng.guns.modular.system.model
   mapper-locations: classpath:cn/stylefeng/guns/modular/**/mapping/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 log:
   path: guns-logs
