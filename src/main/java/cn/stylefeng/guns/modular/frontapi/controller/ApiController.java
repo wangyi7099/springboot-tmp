@@ -59,7 +59,12 @@ public class ApiController extends BaseController {
             @ApiImplicitParam(paramType = "query", name = "password", value = "密码", required = true, dataType = "String")
     })
     public Object auth(@RequestParam("username") String username,
-                       @RequestParam("password") String password) {
+                       @RequestParam("password") String password,
+                       @RequestParam("type") String type) {
+        // 返回结果
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("type", type);
 
         //封装请求账号密码为shiro可验证的token
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password.toCharArray());
@@ -81,14 +86,17 @@ public class ApiController extends BaseController {
                 usernamePasswordToken, simpleAuthenticationInfo);
 
         if (passwordTrueFlag) {
-            HashMap<String, Object> result = new HashMap<>();
+
             result.put("token", JwtTokenUtil.generateToken(String.valueOf(user.getUserId())));
+            result.put("status", "ok");
 
+         } else {
 
-            return result;
-        } else {
-            return new ErrorResponseData(500, "账号密码错误！");
-        }
+            result.put("token", null);
+            result.put("status", "error");
+         }
+
+        return result;
     }
 
     /**
