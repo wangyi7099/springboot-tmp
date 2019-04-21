@@ -13,99 +13,101 @@
 'use strict';
 
 angular.module('flowableModeler')
-.controller('EditModelPopupCtrl', ['$rootScope', '$scope', '$http', '$translate', '$location',
-    function ($rootScope, $scope, $http, $translate, $location) {
+    .controller('EditModelPopupCtrl', ['$rootScope', '$scope', '$http', '$translate', '$location',
+        function ($rootScope, $scope, $http, $translate, $location) {
 
-        var model;
-        var popupType;
-        if ($scope.model.process) {
-            model = $scope.model.process;
-            popupType = 'PROCESS';
-        } else if ($scope.model.caseModel) {
-            model = $scope.model.caseModel;
-            popupType = 'CASE';
-        } else if ($scope.model.form) {
-            model = $scope.model.form;
-            popupType = 'FORM';
-        } else if ($scope.model.decisionTable) {
-            model = $scope.model.decisionTable;
-            popupType = 'DECISION-TABLE';
-        } else {
-            model = $scope.model.app;
-            popupType = 'APP';
-        }
+            var model;
+            var popupType;
+            if ($scope.model.process) {
+                model = $scope.model.process;
+                popupType = 'PROCESS';
+            } else if ($scope.model.caseModel) {
+                model = $scope.model.caseModel;
+                popupType = 'CASE';
+            } else if ($scope.model.form) {
+                model = $scope.model.form;
+                popupType = 'FORM';
+            } else if ($scope.model.decisionTable) {
+                model = $scope.model.decisionTable;
+                popupType = 'DECISION-TABLE';
+            } else {
+                model = $scope.model.app;
+                popupType = 'APP';
+            }
 
-    	$scope.popup = {
-    		loading: false,
-    		popupType: popupType,
-        	modelName: model.name,
-        	modelKey: model.key,
-        	modelDescription: model.description,
-    		id: model.id
-    	};
+            $scope.popup = {
+                loading: false,
+                popupType: popupType,
+                modelName: model.name,
+                modelKey: model.key,
+                modelDescription: model.description,
+                id: model.id
+            };
 
-    	$scope.ok = function () {
+            $scope.ok = function () {
 
-    		if (!$scope.popup.modelName || $scope.popup.modelName.length == 0 ||
-    			!$scope.popup.modelKey || $scope.popup.modelKey.length == 0) {
-    			
-    			return;
-    		}
+                if (!$scope.popup.modelName || $scope.popup.modelName.length == 0 ||
+                    !$scope.popup.modelKey || $scope.popup.modelKey.length == 0) {
 
-        	$scope.model.name = $scope.popup.modelName;
-        	$scope.model.key = $scope.popup.modelKey;
-        	$scope.model.description = $scope.popup.modelDescription;
+                    return;
+                }
 
-    		$scope.popup.loading = true;
-    		var updateData = {
-    			name: $scope.model.name, 
-    			key: $scope.model.key, description: 
-    			$scope.model.description
-    		};
+                $scope.model.name = $scope.popup.modelName;
+                $scope.model.key = $scope.popup.modelKey;
+                $scope.model.description = $scope.popup.modelDescription;
 
-    		$http({method: 'PUT', url: FLOWABLE.APP_URL.getModelUrl($scope.popup.id), data: updateData}).
-    			success(function(data, status, headers, config) {
-    				if ($scope.model.process) {
-    					$scope.model.process = data;
-    				} else if ($scope.model.caseModel) {
+                $scope.popup.loading = true;
+                var updateData = {
+                    name: $scope.model.name,
+                    key: $scope.model.key, description:
+                    $scope.model.description
+                };
+
+                $http({
+                    method: 'PUT',
+                    url: FLOWABLE.APP_URL.getModelUrl($scope.popup.id),
+                    data: updateData
+                }).success(function (data, status, headers, config) {
+                    if ($scope.model.process) {
+                        $scope.model.process = data;
+                    } else if ($scope.model.caseModel) {
                         $scope.model.caseModel = data;
-    				} else if ($scope.model.form) {
-    					$scope.model.form = data;
-    				} else if ($scope.model.decisionTable) {
-    					$scope.model.decisionTable = data;
-    				} else {
-    					$scope.model.app = data;
-    				}
-
-    				$scope.addAlertPromise($translate('PROCESS.ALERT.EDIT-CONFIRM'), 'info');
-    				$scope.$hide();
-    				$scope.popup.loading = false;
-
-    				if (popupType === 'FORM') {
-                        $location.path("/forms/" +  $scope.popup.id);
-                    } else if (popupType === 'APP') {
-                        $location.path("/apps/" +  $scope.popup.id);
-                    } else if (popupType === 'DECISION-TABLE') {
-                        $location.path("/decision-tables/" +  $scope.popup.id);
-                    } else if (popupType === 'CASE') {
-                        $location.path("/casemodels/" +  $scope.popup.id);
+                    } else if ($scope.model.form) {
+                        $scope.model.form = data;
+                    } else if ($scope.model.decisionTable) {
+                        $scope.model.decisionTable = data;
                     } else {
-                        $location.path("/processes/" +  $scope.popup.id);
+                        $scope.model.app = data;
                     }
 
-    			}).
-    			error(function(data, status, headers, config) {
-    				$scope.popup.loading = false;
-    				$scope.popup.errorMessage = data.message;
-    			});
-    	};
+                    $scope.addAlertPromise($translate('PROCESS.ALERT.EDIT-CONFIRM'), 'info');
+                    $scope.$hide();
+                    $scope.popup.loading = false;
 
-    	$scope.cancel = function () {
-    		if (!$scope.popup.loading) {
-    			$scope.$hide();
-    		}
-    	};
-}]);
+                    if (popupType === 'FORM') {
+                        $location.path("/forms/" + $scope.popup.id);
+                    } else if (popupType === 'APP') {
+                        $location.path("/apps/" + $scope.popup.id);
+                    } else if (popupType === 'DECISION-TABLE') {
+                        $location.path("/decision-tables/" + $scope.popup.id);
+                    } else if (popupType === 'CASE') {
+                        $location.path("/casemodels/" + $scope.popup.id);
+                    } else {
+                        $location.path("/processes/" + $scope.popup.id);
+                    }
+
+                }).error(function (data, status, headers, config) {
+                    $scope.popup.loading = false;
+                    $scope.popup.errorMessage = data.message;
+                });
+            };
+
+            $scope.cancel = function () {
+                if (!$scope.popup.loading) {
+                    $scope.$hide();
+                }
+            };
+        }]);
 
 angular.module('flowableModeler')
     .controller('DeleteModelPopupCtrl', ['$rootScope', '$scope', '$http', '$translate', function ($rootScope, $scope, $http, $translate) {
@@ -138,16 +140,17 @@ angular.module('flowableModeler')
         };
 
         // Loading relations when opening
-        $http({method: 'GET', url: FLOWABLE.APP_URL.getModelParentRelationsUrl($scope.popup.model.id)}).
-            success(function (data, status, headers, config) {
-                $scope.popup.loading = false;
-                $scope.popup.loadingRelations = false;
-                $scope.popup.relations = data;
-            }).
-            error(function (data, status, headers, config) {
-                $scope.$hide();
-                $scope.popup.loading = false;
-            });
+        $http({
+            method: 'GET',
+            url: FLOWABLE.APP_URL.getModelParentRelationsUrl($scope.popup.model.id)
+        }).success(function (data, status, headers, config) {
+            $scope.popup.loading = false;
+            $scope.popup.loadingRelations = false;
+            $scope.popup.relations = data;
+        }).error(function (data, status, headers, config) {
+            $scope.$hide();
+            $scope.popup.loading = false;
+        });
 
         $scope.ok = function () {
             $scope.popup.loading = true;
@@ -156,17 +159,19 @@ angular.module('flowableModeler')
                 cascade: $scope.popup.cascade === 'true'
             };
 
-            $http({method: 'DELETE', url: FLOWABLE.APP_URL.getModelUrl($scope.popup.model.id), params: params}).
-                success(function (data, status, headers, config) {
-                    $scope.$hide();
-                    $scope.popup.loading = false;
-                    $scope.addAlertPromise($translate(popupType + '.ALERT.DELETE-CONFIRM'), 'info');
-                    $scope.returnToList();
-                }).
-                error(function (data, status, headers, config) {
-                    $scope.$hide();
-                    $scope.popup.loading = false;
-                });
+            $http({
+                method: 'DELETE',
+                url: FLOWABLE.APP_URL.getModelUrl($scope.popup.model.id),
+                params: params
+            }).success(function (data, status, headers, config) {
+                $scope.$hide();
+                $scope.popup.loading = false;
+                $scope.addAlertPromise($translate(popupType + '.ALERT.DELETE-CONFIRM'), 'info');
+                $scope.returnToList();
+            }).error(function (data, status, headers, config) {
+                $scope.$hide();
+                $scope.popup.loading = false;
+            });
         };
 
         $scope.cancel = function () {
@@ -177,57 +182,60 @@ angular.module('flowableModeler')
     }]);
 
 angular.module('flowableModeler')
-.controller('UseAsNewVersionPopupCtrl', ['$rootScope', '$scope', '$http', '$translate', '$location', function ($rootScope, $scope, $http, $translate, $location) {
+    .controller('UseAsNewVersionPopupCtrl', ['$rootScope', '$scope', '$http', '$translate', '$location', function ($rootScope, $scope, $http, $translate, $location) {
 
-	var model;
-	var popupType;
-	if ($scope.model.process) {
-		model = $scope.model.process;
-		popupType = 'PROCESS';
-	} else if ($scope.model.caseModel) {
-        model = $scope.model.caseModel;
-        popupType = 'CASE';
-	} else if ($scope.model.form) {
-        model = $scope.model.form;
-        popupType = 'FORM';
-    } else if ($scope.model.decisionTable) {
-        model = $scope.model.decisionTable;
-        popupType = 'DECISION-TABLE';
-    } else {
-        model = $scope.model.app;
-        popupType = 'APP';
-    }
+        var model;
+        var popupType;
+        if ($scope.model.process) {
+            model = $scope.model.process;
+            popupType = 'PROCESS';
+        } else if ($scope.model.caseModel) {
+            model = $scope.model.caseModel;
+            popupType = 'CASE';
+        } else if ($scope.model.form) {
+            model = $scope.model.form;
+            popupType = 'FORM';
+        } else if ($scope.model.decisionTable) {
+            model = $scope.model.decisionTable;
+            popupType = 'DECISION-TABLE';
+        } else {
+            model = $scope.model.app;
+            popupType = 'APP';
+        }
 
-	$scope.popup = {
-		loading: false,
-		model: model,
-		popupType: popupType,
-		latestModelId: $scope.model.latestModelId,
-		comment: ''
-	};
+        $scope.popup = {
+            loading: false,
+            model: model,
+            popupType: popupType,
+            latestModelId: $scope.model.latestModelId,
+            comment: ''
+        };
 
-	$scope.ok = function () {
-		$scope.popup.loading = true;
+        $scope.ok = function () {
+            $scope.popup.loading = true;
 
-		var actionData = {
-			action: 'useAsNewVersion',
-			comment: $scope.popup.comment
-		};
+            var actionData = {
+                action: 'useAsNewVersion',
+                comment: $scope.popup.comment
+            };
 
-		$http({method: 'POST', url: FLOWABLE.APP_URL.getModelHistoryUrl($scope.popup.latestModelId, $scope.popup.model.id), data: actionData}).
-			success(function(data, status, headers, config) {
+            $http({
+                method: 'POST',
+                url: FLOWABLE.APP_URL.getModelHistoryUrl($scope.popup.latestModelId, $scope.popup.model.id),
+                data: actionData
+            }).success(function (data, status, headers, config) {
 
-                var backToOverview = function() {
+                var backToOverview = function () {
                     if (popupType === 'FORM') {
-                        $location.path("/forms/" +  $scope.popup.latestModelId);
+                        $location.path("/forms/" + $scope.popup.latestModelId);
                     } else if (popupType === 'APP') {
-                        $location.path("/apps/" +  $scope.popup.latestModelId);
+                        $location.path("/apps/" + $scope.popup.latestModelId);
                     } else if (popupType === 'DECISION-TABLE') {
-                        $location.path("/decision-tables/" +  $scope.popup.latestModelId);
+                        $location.path("/decision-tables/" + $scope.popup.latestModelId);
                     } else if (popupType === 'CASE') {
-                        $location.path("/casemodels/" +  $scope.popup.latestModelId);
+                        $location.path("/casemodels/" + $scope.popup.latestModelId);
                     } else {
-                        $location.path("/processes/" +  $scope.popup.latestModelId);
+                        $location.path("/processes/" + $scope.popup.latestModelId);
                     }
                 };
 
@@ -240,7 +248,7 @@ angular.module('flowableModeler')
                     $scope.popup.foundUnresolvedModels = true;
                     $scope.popup.unresolvedModels = data.unresolvedModels;
 
-                    $scope.close = function() {
+                    $scope.close = function () {
                         $scope.$hide();
                         backToOverview();
                     };
@@ -258,16 +266,15 @@ angular.module('flowableModeler')
 
                 }
 
-			}).
-			error(function(data, status, headers, config) {
-				$scope.$hide();
-				$scope.popup.loading = false;
-			});
-	};
+            }).error(function (data, status, headers, config) {
+                $scope.$hide();
+                $scope.popup.loading = false;
+            });
+        };
 
-	$scope.cancel = function () {
-		if (!$scope.popup.loading) {
-			$scope.$hide();
-		}
-	};
-}]);
+        $scope.cancel = function () {
+            if (!$scope.popup.loading) {
+                $scope.$hide();
+            }
+        };
+    }]);

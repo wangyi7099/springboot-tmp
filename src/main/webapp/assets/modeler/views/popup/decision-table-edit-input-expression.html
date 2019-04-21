@@ -60,18 +60,19 @@
                             </div>
                             <div ng-if="!model.readOnly" class="col-xs-8">
                                 <hot-table hot-auto-destroy
-                                        hot-id="decision-table-allowed-values"
-                                        settings="popup.hotSettings"
-                                        datarows="popup.selectedExpressionInputValues"
-                                        columns="popup.columnDefs"
-                                        row-heights="30"
-                                        class-name="'htMiddle'"
-                                        min-spare-rows="1"
-                                        read-only="model.readOnly">
+                                           hot-id="decision-table-allowed-values"
+                                           settings="popup.hotSettings"
+                                           datarows="popup.selectedExpressionInputValues"
+                                           columns="popup.columnDefs"
+                                           row-heights="30"
+                                           class-name="'htMiddle'"
+                                           min-spare-rows="1"
+                                           read-only="model.readOnly">
                                 </hot-table>
                             </div>
                             <div ng-if="model.readOnly" class="col-xs-8">
-                                <div ng-repeat="allowedValue in popup.selectedExpressionInputValues"><span style="font-size: 14px">{{allowedValue[0]}}</span><br></div>
+                                <div ng-repeat="allowedValue in popup.selectedExpressionInputValues"><span
+                                        style="font-size: 14px">{{allowedValue[0]}}</span><br></div>
                             </div>
                         </div>
                     </div>

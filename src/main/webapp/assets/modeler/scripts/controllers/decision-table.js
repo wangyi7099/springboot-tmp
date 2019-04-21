@@ -16,7 +16,7 @@
 var extScope;
 
 angular.module('flowableModeler')
-    .controller('DecisionTableDetailsCtrl', ['$rootScope', '$scope', '$translate', '$http', '$location', '$routeParams','$modal', '$timeout', '$popover', 'DecisionTableService', 'hotRegisterer',
+    .controller('DecisionTableDetailsCtrl', ['$rootScope', '$scope', '$translate', '$http', '$location', '$routeParams', '$modal', '$timeout', '$popover', 'DecisionTableService', 'hotRegisterer',
         function ($rootScope, $scope, $translate, $http, $location, $routeParams, $modal, $timeout, $popover, DecisionTableService, hotRegisterer) {
 
             extScope = $scope;
@@ -64,7 +64,7 @@ angular.module('flowableModeler')
                 }
             };
 
-            $scope.loadDecisionTable = function() {
+            $scope.loadDecisionTable = function () {
                 var url, decisionTableUrl;
                 if ($routeParams.modelHistoryId) {
                     url = FLOWABLE.APP_URL.getModelHistoryUrl($routeParams.modelId, $routeParams.modelHistoryId);
@@ -74,88 +74,93 @@ angular.module('flowableModeler')
                     decisionTableUrl = FLOWABLE.APP_URL.getDecisionTableModelUrl($routeParams.modelId);
                 }
 
-                $http({method: 'GET', url: url}).
-                    success(function(data, status, headers, config) {
-                        $scope.model.decisionTable = data;
-                        $scope.model.decisionTableDownloadUrl = decisionTableUrl + '/export?version=' + Date.now();
-                        $scope.loadVersions();
+                $http({method: 'GET', url: url}).success(function (data, status, headers, config) {
+                    $scope.model.decisionTable = data;
+                    $scope.model.decisionTableDownloadUrl = decisionTableUrl + '/export?version=' + Date.now();
+                    $scope.loadVersions();
 
-                    }).error(function(data, status, headers, config) {
-                        $scope.returnToList();
-                    });
+                }).error(function (data, status, headers, config) {
+                    $scope.returnToList();
+                });
             };
 
-            $scope.useAsNewVersion = function() {
+            $scope.useAsNewVersion = function () {
                 _internalCreateModal({
                     template: 'views/popup/model-use-as-new-version.html',
                     scope: $scope
                 }, $modal, $scope);
             };
 
-            $scope.toggleFavorite = function() {
+            $scope.toggleFavorite = function () {
                 $scope.model.favoritePending = true;
 
                 var data = {
                     favorite: !$scope.model.decisionTable.favorite
                 };
 
-                $http({method: 'PUT', url: FLOWABLE.APP_URL.getModelUrl($scope.model.latestModelId), data: data}).
-                    success(function(data, status, headers, config) {
-                        $scope.model.favoritePending = false;
-                        if ($scope.model.decisionTable.favorite) {
-                            $scope.addAlertPromise($translate('DECISION-TABLE.ALERT.UN-FAVORITE-CONFIRM'), 'info');
-                        } else {
-                            $scope.addAlertPromise($translate('DECISION-TABLE.ALERT.FAVORITE-CONFIRM'), 'info');
-                        }
-                        $scope.model.decisionTable.favorite = !$scope.model.decisionTable.favorite;
-                    }).error(function(data, status, headers, config) {
-                        $scope.model.favoritePending = false;
-                    });
+                $http({
+                    method: 'PUT',
+                    url: FLOWABLE.APP_URL.getModelUrl($scope.model.latestModelId),
+                    data: data
+                }).success(function (data, status, headers, config) {
+                    $scope.model.favoritePending = false;
+                    if ($scope.model.decisionTable.favorite) {
+                        $scope.addAlertPromise($translate('DECISION-TABLE.ALERT.UN-FAVORITE-CONFIRM'), 'info');
+                    } else {
+                        $scope.addAlertPromise($translate('DECISION-TABLE.ALERT.FAVORITE-CONFIRM'), 'info');
+                    }
+                    $scope.model.decisionTable.favorite = !$scope.model.decisionTable.favorite;
+                }).error(function (data, status, headers, config) {
+                    $scope.model.favoritePending = false;
+                });
             };
 
 
-            $scope.loadVersions = function() {
+            $scope.loadVersions = function () {
 
                 var params = {
                     includeLatestVersion: !$scope.model.decisionTable.latestVersion
                 };
 
-                $http({method: 'GET', url: FLOWABLE.APP_URL.getModelHistoriesUrl($scope.model.latestModelId), params: params}).
-                    success(function(data, status, headers, config) {
-                        if ($scope.model.decisionTable.latestVersion) {
-                            if (!data.data) {
-                                data.data = [];
-                            }
-                            data.data.unshift($scope.model.decisionTable);
+                $http({
+                    method: 'GET',
+                    url: FLOWABLE.APP_URL.getModelHistoriesUrl($scope.model.latestModelId),
+                    params: params
+                }).success(function (data, status, headers, config) {
+                    if ($scope.model.decisionTable.latestVersion) {
+                        if (!data.data) {
+                            data.data = [];
                         }
+                        data.data.unshift($scope.model.decisionTable);
+                    }
 
-                        $scope.model.versions = data;
-                    });
+                    $scope.model.versions = data;
+                });
             };
 
-            $scope.showVersion = function(version) {
+            $scope.showVersion = function (version) {
                 if (version) {
                     if (version.latestVersion) {
-                        $location.path("/decision-tables/" +  $scope.model.latestModelId);
+                        $location.path("/decision-tables/" + $scope.model.latestModelId);
                     } else {
                         // Show latest version, no history-suffix needed in URL
-                        $location.path("/decision-tables/" +  $scope.model.latestModelId + "/history/" + version.id);
+                        $location.path("/decision-tables/" + $scope.model.latestModelId + "/history/" + version.id);
                     }
                 }
             };
 
-            $scope.returnToList = function() {
+            $scope.returnToList = function () {
                 $location.path("/decision-tables/");
             };
 
-            $scope.editDecisionTable = function() {
+            $scope.editDecisionTable = function () {
                 _internalCreateModal({
                     template: 'views/popup/model-edit.html',
                     scope: $scope
                 }, $modal, $scope);
             };
 
-            $scope.duplicateDecisionTable = function() {
+            $scope.duplicateDecisionTable = function () {
 
                 var modalInstance = _internalCreateModal({
                     template: 'views/popup/decision-table-duplicate.html?version=' + Date.now()
@@ -163,33 +168,33 @@ angular.module('flowableModeler')
 
                 modalInstance.$scope.originalModel = $scope.model;
 
-                modalInstance.$scope.duplicateDecisionTableCallback = function(result) {
+                modalInstance.$scope.duplicateDecisionTableCallback = function (result) {
                     $rootScope.editorHistory = [];
                     $location.url("/decision-table-editor/" + encodeURIComponent(result.id));
                 };
             };
 
-            $scope.deleteDecisionTable = function() {
+            $scope.deleteDecisionTable = function () {
                 _internalCreateModal({
                     template: 'views/popup/model-delete.html',
                     scope: $scope
                 }, $modal, $scope);
             };
 
-            $scope.shareDecisionTable = function() {
+            $scope.shareDecisionTable = function () {
                 _internalCreateModal({
                     template: 'views/popup/model-share.html',
                     scope: $scope
                 }, $modal, $scope);
             };
 
-            $scope.openEditor = function() {
+            $scope.openEditor = function () {
                 if ($scope.model.decisionTable) {
                     $location.path("/decision-table-editor/" + $scope.model.decisionTable.id);
                 }
             };
 
-            $scope.toggleHistory = function($event) {
+            $scope.toggleHistory = function ($event) {
                 if (!$scope.historyState) {
                     var state = {};
                     $scope.historyState = state;
@@ -203,7 +208,7 @@ angular.module('flowableModeler')
                         container: 'body'
                     });
 
-                    var destroy = function() {
+                    var destroy = function () {
                         state.popover.destroy();
                         delete $scope.historyState;
                     };
@@ -339,7 +344,7 @@ angular.module('flowableModeler')
             };
 
             var isOperatorCell = function (cellMeta) {
-                return !(cellMeta == null || cellMeta.prop == null || typeof cellMeta.prop !== 'string'|| cellMeta.prop.endsWith("_operator") === false);
+                return !(cellMeta == null || cellMeta.prop == null || typeof cellMeta.prop !== 'string' || cellMeta.prop.endsWith("_operator") === false);
             };
 
             var createNewInputExpression = function (inputExpression) {
@@ -580,10 +585,10 @@ angular.module('flowableModeler')
                     data: inputExpression.id + '_expression',
                     type: type,
                     title: '<div class="input-header">' +
-                    '<a onclick="triggerExpressionEditor(\'input\',' + expressionPosition + ',false)"><span class="header-label">' + (inputExpression.label ? inputExpression.label : "New Input") + '</span></a>' +
-                    '<br><span class="header-variable">' + (inputExpression.variableId ? inputExpression.variableId : "none") + '</span>' +
-                    '<br/><span class="header-variable-type">' + (inputExpression.type ? inputExpression.type : "") + '</brspan>' +
-                    '</div>',
+                        '<a onclick="triggerExpressionEditor(\'input\',' + expressionPosition + ',false)"><span class="header-label">' + (inputExpression.label ? inputExpression.label : "New Input") + '</span></a>' +
+                        '<br><span class="header-variable">' + (inputExpression.variableId ? inputExpression.variableId : "none") + '</span>' +
+                        '<br/><span class="header-variable-type">' + (inputExpression.type ? inputExpression.type : "") + '</brspan>' +
+                        '</div>',
                     expressionType: 'input-expression',
                     expression: inputExpression,
                     className: 'htCenter',

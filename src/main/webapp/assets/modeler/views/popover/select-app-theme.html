@@ -8,18 +8,20 @@
                 {{'GENERAL.ACTION.CLOSE' | translate}}</a>
         </div>
     </div>
-	<div class="popover-wrapper">
-    	<div class="grid wide">
-    		<div class="item" ng-repeat="theme in availableThemes" ng-class="{'active': theme == currentAppDefinition.definition.theme}" ng-click="selectTheme(theme); $hide();">
-    			<div class="app preview thumb {{theme}}">
-    				<div class="backdrop">
-    					<i class="glyphicon glyphicon-briefcase"></i>
-    				</div>
-    				<div class="logo">
-    					<i class="glyphicon glyphicon-briefcase"></i>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-	</div>
+    <div class="popover-wrapper">
+        <div class="grid wide">
+            <div class="item" ng-repeat="theme in availableThemes"
+                 ng-class="{'active': theme == currentAppDefinition.definition.theme}"
+                 ng-click="selectTheme(theme); $hide();">
+                <div class="app preview thumb {{theme}}">
+                    <div class="backdrop">
+                        <i class="glyphicon glyphicon-briefcase"></i>
+                    </div>
+                    <div class="logo">
+                        <i class="glyphicon glyphicon-briefcase"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -15,14 +15,13 @@
  * Call activity calledElement type property
  */
 
-angular.module('flowableModeler').controller('FlowableCalledElementTypeCtrl', [ '$scope', function($scope) {
+angular.module('flowableModeler').controller('FlowableCalledElementTypeCtrl', ['$scope', function ($scope) {
 
-    if ($scope.property.value == undefined && $scope.property.value == null)
-    {
-    	$scope.property.value = 'key';
+    if ($scope.property.value == undefined && $scope.property.value == null) {
+        $scope.property.value = 'key';
     }
-        
-    $scope.calledElementTypeChanged = function() {
-    	$scope.updatePropertyInModel($scope.property);
+
+    $scope.calledElementTypeChanged = function () {
+        $scope.updatePropertyInModel($scope.property);
     };
 }]);

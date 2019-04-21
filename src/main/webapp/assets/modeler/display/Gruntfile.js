@@ -52,47 +52,59 @@ module.exports = function (grunt) {
         },
         // Put files not handled in other tasks here
         copy: {
-          dist: {
-            files: [{
-              expand: true,
-              dot: true,
-              cwd: '.',
-              dest: '<%= yeoman.dist %>',
-              src: [
-                'fonts/*'
-              ]
-            }, {
-              expand: true,
-              cwd: '.tmp/images',
-              dest: '<%= yeoman.dist %>/images',
-              src: [
-                'generated/*'
-              ]
-            }]
-          },
-          styles: {
-            expand: true,
-            cwd: 'styles',
-            dest: '.tmp/styles/',
-            src: '{,*/}*.css'
-          },
-          index: {
-            expand: true,
-            cwd: './',
-            src: ['*.html', 'views/**/**.html'],
-            dest: '<%= yeoman.dist %>'
-          },
-          copyCss : {
-            files: [
-          {expand: true, cwd:'.tmp/concat/display/styles/', src:'*.css', dest:'<%= yeoman.dist %>/display/styles/', filter: 'isFile'}
-            ]
-          },
-          copyJs : {
-            files: [
-          {expand: true, cwd:'.tmp/concat/display/scripts', src:'*.js', dest:'<%= yeoman.dist %>/display/scripts/', filter: 'isFile'}
-            ]
-          },
-        },  
+            dist: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '.',
+                    dest: '<%= yeoman.dist %>',
+                    src: [
+                        'fonts/*'
+                    ]
+                }, {
+                    expand: true,
+                    cwd: '.tmp/images',
+                    dest: '<%= yeoman.dist %>/images',
+                    src: [
+                        'generated/*'
+                    ]
+                }]
+            },
+            styles: {
+                expand: true,
+                cwd: 'styles',
+                dest: '.tmp/styles/',
+                src: '{,*/}*.css'
+            },
+            index: {
+                expand: true,
+                cwd: './',
+                src: ['*.html', 'views/**/**.html'],
+                dest: '<%= yeoman.dist %>'
+            },
+            copyCss: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: '.tmp/concat/display/styles/',
+                        src: '*.css',
+                        dest: '<%= yeoman.dist %>/display/styles/',
+                        filter: 'isFile'
+                    }
+                ]
+            },
+            copyJs: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: '.tmp/concat/display/scripts',
+                        src: '*.js',
+                        dest: '<%= yeoman.dist %>/display/scripts/',
+                        filter: 'isFile'
+                    }
+                ]
+            },
+        },
         ngAnnotate: {
             dist: {
                 files: [

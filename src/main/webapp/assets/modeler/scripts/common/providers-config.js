@@ -15,23 +15,22 @@
  * a resource using $http.
  */
 
-flowableModule.factory('NotPermittedInterceptor', [ '$q', '$window', function($q, $window) {
+flowableModule.factory('NotPermittedInterceptor', ['$q', '$window', function ($q, $window) {
     return {
-        responseError: function ( response ) {
+        responseError: function (response) {
 
             if (response.status === 403) {
                 $window.location.href = FLOWABLE.CONFIG.contextRoot;
                 $window.location.reload();
                 return $q.reject(response);
-            }
-            else{
+            } else {
                 return $q.reject(response);
             }
         }
     }
 }]);
 
-flowableModule.config(['$httpProvider', function($httpProvider) {
+flowableModule.config(['$httpProvider', function ($httpProvider) {
 
     if (!$httpProvider.defaults.headers.get) {
         $httpProvider.defaults.headers.get = {};

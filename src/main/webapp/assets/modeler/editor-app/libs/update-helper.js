@@ -11,21 +11,22 @@
 var UpdateHelper = Class.create({
     logLevel: 0,
     MessageTemplate: new Template('Update Helper: #{message}\n#{stack}'),
-    Regexp:          new RegExp("@" + window.location.protocol + ".*?\\d+\\n", "g"),
+    Regexp: new RegExp("@" + window.location.protocol + ".*?\\d+\\n", "g"),
 
-    initialize: function(deprecatedMethods) {
-        var notify = function(message, type) {
+    initialize: function (deprecatedMethods) {
+        var notify = function (message, type) {
             this.notify(message, type);
         }.bind(this);   // Late binding to simplify testing.
 
-        deprecatedMethods.each(function(d) {
+        deprecatedMethods.each(function (d) {
             var condition = d.condition,
-                type      = d.type || 'info',
-                message   = d.message,
+                type = d.type || 'info',
+                message = d.message,
                 namespace = d.namespace,
-                method    = d.methodName;
+                method = d.methodName;
 
-            namespace[method] = (namespace[method] || function() {}).wrap(function(proceed) {
+            namespace[method] = (namespace[method] || function () {
+            }).wrap(function (proceed) {
                 var args = $A(arguments).splice(1);
                 if (!condition || condition.apply(this, args)) notify(message, type);
                 return proceed.apply(proceed, args);
@@ -34,8 +35,8 @@ var UpdateHelper = Class.create({
         Element.addMethods();
     },
 
-    notify: function(message, type) {
-        switch(type) {
+    notify: function (message, type) {
+        switch (type) {
             case 'info':
                 if (this.logLevel > UpdateHelper.Info) return false;
             case 'warn':
@@ -50,20 +51,22 @@ var UpdateHelper = Class.create({
         return true;
     },
 
-    getStack: function() {
+    getStack: function () {
         try {
             throw new Error("stack");
-        } catch(e) {
+        } catch (e) {
             var match = (e.stack || '').match(this.Regexp);
             if (match) {
-                return match.reject(function(path) {
+                return match.reject(function (path) {
                     return (/(prototype|unittest|update_helper)\.js/).test(path);
                 }).join("\n");
-            } else { return ''; }
+            } else {
+                return '';
+            }
         }
     },
 
-    log: function(message, type) {
+    log: function (message, type) {
         if (type == 'error') console.error(message);
         else if (type == 'warn') console.warn(message);
         else console.log(message);
@@ -71,8 +74,8 @@ var UpdateHelper = Class.create({
 });
 
 Object.extend(UpdateHelper, {
-    Info:  0,
-    Warn:  1,
+    Info: 0,
+    Warn: 1,
     Error: 2
 });
 
@@ -110,45 +113,55 @@ var prototypeUpdateHelper = new UpdateHelper([
         methodName: 'show',
         namespace: Element.Methods,
         message: 'Passing an arbitrary number of elements to Element.show is no longer supported.\n' +
-        'Use [id_1, id_2, ...].each(Element.show) or $(id_1, id_2, ...).invoke("show") instead.',
+            'Use [id_1, id_2, ...].each(Element.show) or $(id_1, id_2, ...).invoke("show") instead.',
         type: 'error',
-        condition: function() { return arguments.length > 1 && !Object.isNumber(arguments[1]) }
+        condition: function () {
+            return arguments.length > 1 && !Object.isNumber(arguments[1])
+        }
     },
 
     {
         methodName: 'hide',
         namespace: Element.Methods,
         message: 'Passing an arbitrary number of elements to Element.hide is no longer supported.\n' +
-        'Use [id_1, id_2, ...].each(Element.hide) or $(id_1, id_2, ...).invoke("hide") instead.',
+            'Use [id_1, id_2, ...].each(Element.hide) or $(id_1, id_2, ...).invoke("hide") instead.',
         type: 'error',
-        condition: function() { return arguments.length > 1 && !Object.isNumber(arguments[1]) }
+        condition: function () {
+            return arguments.length > 1 && !Object.isNumber(arguments[1])
+        }
     },
 
     {
         methodName: 'toggle',
         namespace: Element.Methods,
         message: 'Passing an arbitrary number of elements to Element.toggle is no longer supported.\n' +
-        'Use [id_1, id_2, ...].each(Element.toggle) or $(id_1, id_2, ...).invoke("toggle") instead.',
+            'Use [id_1, id_2, ...].each(Element.toggle) or $(id_1, id_2, ...).invoke("toggle") instead.',
         type: 'error',
-        condition: function() { return arguments.length > 1 && !Object.isNumber(arguments[1]) }
+        condition: function () {
+            return arguments.length > 1 && !Object.isNumber(arguments[1])
+        }
     },
 
     {
         methodName: 'clear',
         namespace: Form.Element.Methods,
         message: 'Passing an arbitrary number of elements to Field.clear is no longer supported.\n' +
-        'Use [id_1, id_2, ...].each(Form.Element.clear) or $(id_1, id_2, ...).invoke("clear") instead.',
+            'Use [id_1, id_2, ...].each(Form.Element.clear) or $(id_1, id_2, ...).invoke("clear") instead.',
         type: 'error',
-        condition: function() { return arguments.length > 1 && !Object.isNumber(arguments[1]) }
+        condition: function () {
+            return arguments.length > 1 && !Object.isNumber(arguments[1])
+        }
     },
 
     {
         methodName: 'present',
         namespace: Form.Element.Methods,
         message: 'Passing an arbitrary number of elements to Field.present is no longer supported.\n' +
-        'Use [id_1, id_2, ...].each(Form.Element.present) or $(id_1, id_2, ...).invoke("present") instead.',
+            'Use [id_1, id_2, ...].each(Form.Element.present) or $(id_1, id_2, ...).invoke("present") instead.',
         type: 'error',
-        condition: function() { return arguments.length > 1 && !Object.isNumber(arguments[1]) }
+        condition: function () {
+            return arguments.length > 1 && !Object.isNumber(arguments[1])
+        }
     },
 
     {
@@ -263,16 +276,16 @@ var prototypeUpdateHelper = new UpdateHelper([
         methodName: 'classNames',
         namespace: Element.Methods,
         message: 'Element#classNames has been deprecated.\n' +
-        'If you need to access CSS class names as an array, try: $w(element.classname).'
+            'If you need to access CSS class names as an array, try: $w(element.classname).'
     },
 
     {
         methodName: 'setStyle',
         namespace: Element.Methods,
         message: 'Use of uncamelized style-property names is no longer supported.\n' +
-        'Use either camelized style-property names or a regular CSS string instead (see online documentation).',
+            'Use either camelized style-property names or a regular CSS string instead (see online documentation).',
         type: 'error',
-        condition: function(element, style) {
+        condition: function (element, style) {
             return !Object.isString(style) && Object.keys(style).join('').include('-');
         }
     },
@@ -305,14 +318,14 @@ var prototypeUpdateHelper = new UpdateHelper([
         methodName: 'toQueryString',
         namespace: Hash,
         message: 'Hash.toQueryString has been deprecated.\n' +
-        'Use the instance method Hash#toQueryString or Object.toQueryString instead.'
+            'Use the instance method Hash#toQueryString or Object.toQueryString instead.'
     },
 
     {
         methodName: 'toJSON',
         namespace: Hash,
         message: 'Hash.toJSON has been removed.\n' +
-        'Use the instance method Hash#toJSON or Object.toJSON instead.',
+            'Use the instance method Hash#toJSON or Object.toJSON instead.',
         type: 'error'
     },
 
@@ -320,7 +333,7 @@ var prototypeUpdateHelper = new UpdateHelper([
         methodName: 'remove',
         namespace: Hash.prototype,
         message: 'Hash#remove is no longer supported, use Hash#unset instead.\n' +
-        'Please note that Hash#unset only accepts one argument.',
+            'Please note that Hash#unset only accepts one argument.',
         type: 'error'
     },
 
@@ -328,7 +341,7 @@ var prototypeUpdateHelper = new UpdateHelper([
         methodName: 'merge',
         namespace: Hash.prototype,
         message: 'Hash#merge is no longer destructive and now operates on a clone of the Hash instance.\n' +
-        'If you need a destructive merge, use Hash#update instead.',
+            'If you need a destructive merge, use Hash#update instead.',
         type: 'warn'
     },
 
@@ -336,8 +349,8 @@ var prototypeUpdateHelper = new UpdateHelper([
         methodName: 'reduce',
         namespace: Array.prototype,
         message: 'Array#reduce is no longer supported.\n' +
-        'This is due to an infortunate naming collision with Mozilla\'s own implementation of Array#reduce which differs completely from Prototype\'s implementation (it\'s in fact similar to Prototype\'s Array#inject).\n' +
-        'Mozilla\'s Array#reduce is already implemented in Firefox 3 (as part of JavaScript 1.8) and is about to be standardized in EcmaScript 3.1.',
+            'This is due to an infortunate naming collision with Mozilla\'s own implementation of Array#reduce which differs completely from Prototype\'s implementation (it\'s in fact similar to Prototype\'s Array#inject).\n' +
+            'Mozilla\'s Array#reduce is already implemented in Firefox 3 (as part of JavaScript 1.8) and is about to be standardized in EcmaScript 3.1.',
         type: 'error'
     },
 
@@ -352,8 +365,10 @@ var prototypeUpdateHelper = new UpdateHelper([
         methodName: 'create',
         namespace: Class,
         message: 'The class API has been fully revised and now allows for mixins and inheritance.\n' +
-        'You can find more about it here: http://prototypejs.org/learn/class-inheritance',
-        condition: function() { return !arguments.length }
+            'You can find more about it here: http://prototypejs.org/learn/class-inheritance',
+        condition: function () {
+            return !arguments.length
+        }
     },
 
     {
@@ -415,7 +430,7 @@ var prototypeUpdateHelper = new UpdateHelper([
 
 // Special casing for Hash.
 
-(function() {
+(function () {
     var __properties = Object.keys(Hash.prototype).concat(['_object', '__properties']);
 
     var messages = {
@@ -437,11 +452,11 @@ var prototypeUpdateHelper = new UpdateHelper([
         storeProperties(obj);
         if (obj.__properties.include(prop)) return;
         obj.__properties.push(prop);
-        obj.__defineGetter__(prop, function() {
+        obj.__defineGetter__(prop, function () {
             checkProperties(this);
             notify(prop);
         });
-        obj.__defineSetter__(prop, function(value) {
+        obj.__defineSetter__(prop, function (value) {
             checkProperties(this);
             notify(prop, value);
         });
@@ -452,7 +467,7 @@ var prototypeUpdateHelper = new UpdateHelper([
         var current = Object.keys(hash);
         if (current.length == hash.__properties.length)
             return;
-        current.each(function(prop) {
+        current.each(function (prop) {
             if (hash.__properties.include(prop)) return;
             notify(prop, hash[prop]);
             defineSetters(hash, prop);
@@ -465,28 +480,28 @@ var prototypeUpdateHelper = new UpdateHelper([
         return h;
     }
 
-    Hash.prototype.set = Hash.prototype.set.wrap(function(proceed, property, value) {
+    Hash.prototype.set = Hash.prototype.set.wrap(function (proceed, property, value) {
         defineSetters(this, property);
         return proceed(property, value);
     });
 
-    $w('merge update').each(function(name) {
-        Hash.prototype[name] = Hash.prototype[name].wrap(function(proceed, object) {
+    $w('merge update').each(function (name) {
+        Hash.prototype[name] = Hash.prototype[name].wrap(function (proceed, object) {
             for (var prop in object) defineSetters(this, prop);
             return proceed(object);
         });
     });
 
-    $H(Hash.prototype).each(function(method) {
+    $H(Hash.prototype).each(function (method) {
         var key = method.key;
         if (!Object.isFunction(method.value) || key == 'initialize') return;
-        Hash.prototype[key] = Hash.prototype[key].wrap(function(proceed) {
+        Hash.prototype[key] = Hash.prototype[key].wrap(function (proceed) {
             checkProperties(this);
             return proceed.apply(proceed, $A(arguments).splice(1));
         });
     });
 
-    Hash.prototype.initialize = Hash.prototype.initialize.wrap(function(proceed, object) {
+    Hash.prototype.initialize = Hash.prototype.initialize.wrap(function (proceed, object) {
         storeProperties(this);
         for (var prop in object) defineSetters(this, prop);
         proceed(object);

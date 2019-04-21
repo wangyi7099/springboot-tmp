@@ -38,8 +38,7 @@ angular.module('flowableModeler').controller('FlowableTaskListenersPopupCtrl',
 
             if ($scope.property.value.taskListeners.constructor == String) {
                 $scope.taskListeners = JSON.parse($scope.property.value.taskListeners);
-            }
-            else {
+            } else {
                 // Note that we clone the json object rather then setting it directly,
                 // this to cope with the fact that the user can click the cancel button and no changes should have happened
                 $scope.taskListeners = angular.copy($scope.property.value.taskListeners);
@@ -49,11 +48,9 @@ angular.module('flowableModeler').controller('FlowableTaskListenersPopupCtrl',
                 var taskListener = $scope.taskListeners[i];
                 if (taskListener.className !== undefined && taskListener.className !== '') {
                     taskListener.implementation = taskListener.className;
-                }
-                else if (taskListener.expression !== undefined && taskListener.expression !== '') {
+                } else if (taskListener.expression !== undefined && taskListener.expression !== '') {
                     taskListener.implementation = taskListener.expression;
-                }
-                else if (taskListener.delegateExpression !== undefined && taskListener.delegateExpression !== '') {
+                } else if (taskListener.delegateExpression !== undefined && taskListener.delegateExpression !== '') {
                     taskListener.implementation = taskListener.delegateExpression;
                 }
             }

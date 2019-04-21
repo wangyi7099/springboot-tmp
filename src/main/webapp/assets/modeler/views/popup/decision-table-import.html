@@ -1,14 +1,13 @@
-
 <div class="modal" ng-controller="ImportDecisionTableModelCtrl">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header-wrapper">
-            	<div class="modal-header">
-            		<div class="pull-right">
+                <div class="modal-header">
+                    <div class="pull-right">
                         <a class="action" ng-click="cancel()">&times; {{'GENERAL.ACTION.CANCEL' | translate}}</a>
                     </div>
-            		<h2>{{'DECISION-TABLE.POPUP.IMPORT-TITLE' | translate}}</h2>
-            	</div>
+                    <h2>{{'DECISION-TABLE.POPUP.IMPORT-TITLE' | translate}}</h2>
+                </div>
             </div>
             <div class="modal-body">
 
@@ -20,7 +19,8 @@
 
                 <div class="import-process-form">
 
-                    <input type="file" ngf-select="" ngf-change="onFileSelect($files, true)" style="font-size: smaller; padding-top:6px;" >
+                    <input type="file" ngf-select="" ngf-change="onFileSelect($files, true)"
+                           style="font-size: smaller; padding-top:6px;">
                     <div class="import-process-dropbox"
                          ngf-drop="onFileSelect($files)"
                          ngf-drag-over-class="dragover"
@@ -28,7 +28,8 @@
                         {{'DECISION-TABLE.POPUP.IMPORT.DROPZONE' | translate}}
                     </div>
                     <div ngf-drop-available="dropSupported=true"
-                         ng-show="!dropSupported">{{'DECISION-TABLE.POPUP.IMPORT.NO-DROP' | translate}}</div>
+                         ng-show="!dropSupported">{{'DECISION-TABLE.POPUP.IMPORT.NO-DROP' | translate}}
+                    </div>
                     <div class="graph-wrapper" ng-show="status.loading" style="margin: 10px 0 10px 0">
                         <div class="graph-bar" ng-style="{width: model.uploadProgress + '%'}"></div>
                     </div>
@@ -44,7 +45,8 @@
                 <!--[if gt IE 9]> <!-- -->
                 <div class="import-process-form">
 
-                    <input type="file" ngf-select="" ngf-change="onFileSelect($files)" style="font-size: smaller; padding-top:6px;" >
+                    <input type="file" ngf-select="" ngf-change="onFileSelect($files)"
+                           style="font-size: smaller; padding-top:6px;">
                     <div class="import-process-dropbox"
                          ngf-drop ngf-change="onFileSelect($files)"
                          ngf-drag-over-class="dragover"
@@ -52,7 +54,8 @@
                         {{'DECISION-TABLE.POPUP.IMPORT.DROPZONE' | translate}}
                     </div>
                     <div ngf-drop-available="dropSupported=true"
-                         ng-show="!dropSupported">{{'DECISION-TABLE.POPUP.IMPORT.NO-DROP' | translate}}</div>
+                         ng-show="!dropSupported">{{'DECISION-TABLE.POPUP.IMPORT.NO-DROP' | translate}}
+                    </div>
                     <div class="graph-wrapper" ng-show="status.loading" style="margin: 10px 0 10px 0">
                         <div class="graph-bar" ng-style="{width: model.uploadProgress + '%'}"></div>
                     </div>
@@ -71,7 +74,8 @@
                 <div class="modal-footer">
                     <loading></loading>
                     <div class="pull-right modeler-processes-error" ng-if="model.error">
-                        <span>{{'DECISION-TABLE.POPUP.IMPORT.ERROR' | translate}} <span ng-if="model.errorMessage"> : </span>{{model.errorMessage}}</span>
+                        <span>{{'DECISION-TABLE.POPUP.IMPORT.ERROR' | translate}} <span
+                                ng-if="model.errorMessage"> : </span>{{model.errorMessage}}</span>
                     </div>
                 </div>
             </div>

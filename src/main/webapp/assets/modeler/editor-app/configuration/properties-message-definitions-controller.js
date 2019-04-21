@@ -37,8 +37,7 @@ angular.module('flowableModeler').controller('FlowableMessageDefinitionsPopupCtr
 
             if ($scope.property.value.constructor == String) {
                 $scope.messageDefinitions = JSON.parse($scope.property.value);
-            }
-            else {
+            } else {
                 // Note that we clone the json object rather then setting it directly,
                 // this to cope with the fact that the user can click the cancel button and no changes should have happened
                 $scope.messageDefinitions = angular.copy($scope.property.value);

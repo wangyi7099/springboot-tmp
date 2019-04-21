@@ -13,21 +13,21 @@
 'use strict';
 
 var APP_DEFINITION_TOOLBAR_CONFIG = {
-    "items" : [
+    "items": [
         {
-            "type" : "button",
-            "title" : "APP_DEFINITION_TOOLBAR.ACTION.SAVE",
-            "cssClass" : "editor-icon editor-icon-save",
-            "action" : "APP_DEFINITION_TOOLBAR.ACTIONS.saveModel"
+            "type": "button",
+            "title": "APP_DEFINITION_TOOLBAR.ACTION.SAVE",
+            "cssClass": "editor-icon editor-icon-save",
+            "action": "APP_DEFINITION_TOOLBAR.ACTIONS.saveModel"
         }
     ],
-    
-    "secondaryItems" : [
-		{
-		    "type" : "button",
-		    "title" : "Close",
-		    "cssClass" : "glyphicon glyphicon-remove",
-		    "action" : "APP_DEFINITION_TOOLBAR.ACTIONS.closeEditor"
-		}
+
+    "secondaryItems": [
+        {
+            "type": "button",
+            "title": "Close",
+            "cssClass": "glyphicon glyphicon-remove",
+            "action": "APP_DEFINITION_TOOLBAR.ACTIONS.closeEditor"
+        }
     ]
 };

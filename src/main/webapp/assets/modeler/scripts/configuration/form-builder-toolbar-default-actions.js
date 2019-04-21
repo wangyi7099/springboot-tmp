@@ -29,52 +29,52 @@ var FORM_TOOLBAR = {
 
         },
 
-        closeEditor:  function (services) {
+        closeEditor: function (services) {
             if (services.$rootScope.editorHistory.length > 0) {
-        		var callback = function() {
+                var callback = function () {
                     services.$rootScope.formChanges = false;
 
-        		    var navigationObject = services.$rootScope.editorHistory.pop();
-        		    var additionalParameters = '';
-                	if (navigationObject.subProcessId && navigationObject.subProcessId.length > 0) {
-                		additionalParameters = '?subProcessId=' + navigationObject.subProcessId;
-                	}
-        		    services.$location.url('/editor/' + navigationObject.id + additionalParameters);
-        		};
+                    var navigationObject = services.$rootScope.editorHistory.pop();
+                    var additionalParameters = '';
+                    if (navigationObject.subProcessId && navigationObject.subProcessId.length > 0) {
+                        additionalParameters = '?subProcessId=' + navigationObject.subProcessId;
+                    }
+                    services.$location.url('/editor/' + navigationObject.id + additionalParameters);
+                };
 
-        		if (services.$rootScope.formChanges == true) {
+                if (services.$rootScope.formChanges == true) {
 
-        		    services.$scope.$emit("formChangesEvent");
+                    services.$scope.$emit("formChangesEvent");
 
-        		    var unbindMustSave = services.$scope.$on("mustSaveEvent", function(){
-        		        //save the form data
-        		        var description = '';
-        		        if (services.$rootScope.currentForm.description) {
-        		            description = services.$rootScope.currentForm.description;
-        		        }
+                    var unbindMustSave = services.$scope.$on("mustSaveEvent", function () {
+                        //save the form data
+                        var description = '';
+                        if (services.$rootScope.currentForm.description) {
+                            description = services.$rootScope.currentForm.description;
+                        }
 
-        		        var data = {
-        		            newVersion: false
-        		        };
-        		        unbindEvents();
-        		        services.FormBuilderService.saveForm(data, services.$rootScope.currentForm.name, description, callback);
-        		    });
+                        var data = {
+                            newVersion: false
+                        };
+                        unbindEvents();
+                        services.FormBuilderService.saveForm(data, services.$rootScope.currentForm.name, description, callback);
+                    });
 
-        		    var unbindDiscardDataEvent = services.$scope.$on("discardDataEvent", function() {
-        		        unbindEvents();
-        		        callback();
-        		    });
+                    var unbindDiscardDataEvent = services.$scope.$on("discardDataEvent", function () {
+                        unbindEvents();
+                        callback();
+                    });
 
-        		    var unbindContinueEditingEvent = services.$scope.$on("continueEditingEvent", function () {
-        		        unbindEvents();
-        		    });
+                    var unbindContinueEditingEvent = services.$scope.$on("continueEditingEvent", function () {
+                        unbindEvents();
+                    });
 
-        		} else {
-        		    callback();
-        		}
+                } else {
+                    callback();
+                }
 
             } else {
-            	services.$location.path('/forms');
+                services.$location.path('/forms');
             }
 
             var unbindEvents = function () {
@@ -89,129 +89,131 @@ var FORM_TOOLBAR = {
 
 /** Custom controller for the save dialog */
 angular.module('flowableModeler')
-    .controller('SaveFormCtrl', [ '$rootScope', '$scope', '$http', '$route', '$location', '$translate', 'FormBuilderService',
-                         function ($rootScope, $scope, $http, $route, $location, $translate, FormBuilderService) {
+    .controller('SaveFormCtrl', ['$rootScope', '$scope', '$http', '$route', '$location', '$translate', 'FormBuilderService',
+        function ($rootScope, $scope, $http, $route, $location, $translate, FormBuilderService) {
 
-	var formKey = '';
-    if ($rootScope.currentForm.key) {
-    	formKey = $rootScope.currentForm.key;
-    }
-	
-    var description = '';
-    if ($rootScope.currentForm.description) {
-    	description = $rootScope.currentForm.description;
-    }
-
-    var saveDialog = { name: $rootScope.currentForm.name,
-    		formKey: formKey,
-            description: description,
-            reusable: false,
-            newVersion: false,
-            comment: ''};
-
-    $scope.saveDialog = saveDialog;
-
-    $scope.status = {
-        loading: false
-    };
-
-    $scope.cancel = function () {
-    	$scope.$hide();
-    };
-
-    $scope.saveAndClose = function () {
-    	$scope.save(function() {
-    	    if ($rootScope.editorHistory.length > 0) {
-    	        var navigationObject = $rootScope.editorHistory.pop();
-    	        var additionalParameters = '';
-            	if (navigationObject.subProcessId && navigationObject.subProcessId.length > 0) {
-            		additionalParameters = '?subProcessId=' + navigationObject.subProcessId;
-            	}
-    	        $location.url('/editor/' + navigationObject.id + additionalParameters);
- 
-            } else {
-            	$location.path('/forms');
-            }
-    	});
-    };
-
-    $scope.save = function (additionalSaveCallback) {
-
-        if (!$scope.saveDialog.name || $scope.saveDialog.name.length == 0 ||
-        	!$scope.saveDialog.formKey || $scope.saveDialog.formKey.length == 0) {
-        	
-            return;
-        }
-
-        // Indicator spinner image
-        $scope.status = {
-        	loading: true
-        };
-
-        var data = {
-        	reusable: $scope.saveDialog.reusable,
-        	newVersion: $scope.saveDialog.newVersion,
-        	comment: $scope.saveDialog.comment
-        };
-
-        var saveCallback = function() {
-            $scope.$hide();
-            // TODO: i18n
-            $rootScope.addAlert("Saved form '" + $scope.saveDialog.name, 'info');
-            if (additionalSaveCallback) {
-                additionalSaveCallback();
+            var formKey = '';
+            if ($rootScope.currentForm.key) {
+                formKey = $rootScope.currentForm.key;
             }
 
-            $rootScope.formChanges = false;
-        };
-
-        var errorCallback = function(errorMessage) {
-        	$scope.status.loading = false;
-            $scope.saveDialog.errorMessage = errorMessage.message;
-        };
-
-        FormBuilderService.saveForm(data, $scope.saveDialog.name, $scope.saveDialog.formKey, 
-        	$scope.saveDialog.description, saveCallback, errorCallback);
-    };
-
-    $scope.isOkButtonDisabled = function() {
-        if ($scope.status.loading) {
-            return false;
-        } else if ($scope.error && $scope.error.conflictResolveAction) {
-            if ($scope.error.conflictResolveAction === 'saveAs') {
-                return !$scope.error.saveAs || $scope.error.saveAs.length == 0;
-            } else {
-                return false;
+            var description = '';
+            if ($rootScope.currentForm.description) {
+                description = $rootScope.currentForm.description;
             }
-        }
-        return true;
-    };
 
-    $scope.okClicked = function() {
-        if ($scope.error) {
-            if ($scope.error.conflictResolveAction === 'discardChanges') {
-                $scope.close();
-                $route.reload();
-            } else if ($scope.error.conflictResolveAction === 'overwrite'
-                || $scope.error.conflictResolveAction === 'newVersion') {
-                $scope.save();
-            } else if($scope.error.conflictResolveAction === 'saveAs') {
-                $scope.save(function() {
-                    $rootScope.ignoreChanges = true;  // Otherwise will get pop up that changes are not saved.
+            var saveDialog = {
+                name: $rootScope.currentForm.name,
+                formKey: formKey,
+                description: description,
+                reusable: false,
+                newVersion: false,
+                comment: ''
+            };
+
+            $scope.saveDialog = saveDialog;
+
+            $scope.status = {
+                loading: false
+            };
+
+            $scope.cancel = function () {
+                $scope.$hide();
+            };
+
+            $scope.saveAndClose = function () {
+                $scope.save(function () {
                     if ($rootScope.editorHistory.length > 0) {
                         var navigationObject = $rootScope.editorHistory.pop();
                         var additionalParameters = '';
-		            	if (navigationObject.subProcessId && navigationObject.subProcessId.length > 0) {
-		            		additionalParameters = '?subProcessId=' + navigationObject.subProcessId;
-		            	}
+                        if (navigationObject.subProcessId && navigationObject.subProcessId.length > 0) {
+                            additionalParameters = '?subProcessId=' + navigationObject.subProcessId;
+                        }
                         $location.url('/editor/' + navigationObject.id + additionalParameters);
-                        
+
                     } else {
-                    	$location.path('/forms');
+                        $location.path('/forms');
                     }
                 });
-            }
-        }
-    };
+            };
 
-}]);
+            $scope.save = function (additionalSaveCallback) {
+
+                if (!$scope.saveDialog.name || $scope.saveDialog.name.length == 0 ||
+                    !$scope.saveDialog.formKey || $scope.saveDialog.formKey.length == 0) {
+
+                    return;
+                }
+
+                // Indicator spinner image
+                $scope.status = {
+                    loading: true
+                };
+
+                var data = {
+                    reusable: $scope.saveDialog.reusable,
+                    newVersion: $scope.saveDialog.newVersion,
+                    comment: $scope.saveDialog.comment
+                };
+
+                var saveCallback = function () {
+                    $scope.$hide();
+                    // TODO: i18n
+                    $rootScope.addAlert("Saved form '" + $scope.saveDialog.name, 'info');
+                    if (additionalSaveCallback) {
+                        additionalSaveCallback();
+                    }
+
+                    $rootScope.formChanges = false;
+                };
+
+                var errorCallback = function (errorMessage) {
+                    $scope.status.loading = false;
+                    $scope.saveDialog.errorMessage = errorMessage.message;
+                };
+
+                FormBuilderService.saveForm(data, $scope.saveDialog.name, $scope.saveDialog.formKey,
+                    $scope.saveDialog.description, saveCallback, errorCallback);
+            };
+
+            $scope.isOkButtonDisabled = function () {
+                if ($scope.status.loading) {
+                    return false;
+                } else if ($scope.error && $scope.error.conflictResolveAction) {
+                    if ($scope.error.conflictResolveAction === 'saveAs') {
+                        return !$scope.error.saveAs || $scope.error.saveAs.length == 0;
+                    } else {
+                        return false;
+                    }
+                }
+                return true;
+            };
+
+            $scope.okClicked = function () {
+                if ($scope.error) {
+                    if ($scope.error.conflictResolveAction === 'discardChanges') {
+                        $scope.close();
+                        $route.reload();
+                    } else if ($scope.error.conflictResolveAction === 'overwrite'
+                        || $scope.error.conflictResolveAction === 'newVersion') {
+                        $scope.save();
+                    } else if ($scope.error.conflictResolveAction === 'saveAs') {
+                        $scope.save(function () {
+                            $rootScope.ignoreChanges = true;  // Otherwise will get pop up that changes are not saved.
+                            if ($rootScope.editorHistory.length > 0) {
+                                var navigationObject = $rootScope.editorHistory.pop();
+                                var additionalParameters = '';
+                                if (navigationObject.subProcessId && navigationObject.subProcessId.length > 0) {
+                                    additionalParameters = '?subProcessId=' + navigationObject.subProcessId;
+                                }
+                                $location.url('/editor/' + navigationObject.id + additionalParameters);
+
+                            } else {
+                                $location.path('/forms');
+                            }
+                        });
+                    }
+                }
+            };
+
+        }]);

@@ -15,12 +15,11 @@
 angular.module('flowableModeler').service('UserService', ['$http', '$q',
     function ($http, $q) {
 
-        var httpAsPromise = function(options) {
+        var httpAsPromise = function (options) {
             var deferred = $q.defer();
-            $http(options).
-                success(function (response, status, headers, config) {
-                    deferred.resolve(response);
-                })
+            $http(options).success(function (response, status, headers, config) {
+                deferred.resolve(response);
+            })
                 .error(function (response, status, headers, config) {
                     deferred.reject(response);
                 });
@@ -32,7 +31,7 @@ angular.module('flowableModeler').service('UserService', ['$http', '$q',
          */
         this.getFilteredUsers = function (filterText, taskId, processInstanceId) {
             var params = {filter: filterText};
-            if(taskId) {
+            if (taskId) {
                 params.excludeTaskId = taskId;
             }
             if (processInstanceId) {
@@ -51,12 +50,11 @@ angular.module('flowableModeler').service('UserService', ['$http', '$q',
 angular.module('flowableModeler').service('GroupService', ['$http', '$q',
     function ($http, $q) {
 
-        var httpAsPromise = function(options) {
+        var httpAsPromise = function (options) {
             var deferred = $q.defer();
-            $http(options).
-                success(function (response, status, headers, config) {
-                    deferred.resolve(response);
-                })
+            $http(options).success(function (response, status, headers, config) {
+                deferred.resolve(response);
+            })
                 .error(function (response, status, headers, config) {
                     deferred.reject(response);
                 });
@@ -68,7 +66,7 @@ angular.module('flowableModeler').service('GroupService', ['$http', '$q',
          */
         this.getFilteredGroups = function (filterText) {
             var params;
-            if(filterText) {
+            if (filterText) {
                 params = {filter: filterText};
             }
 

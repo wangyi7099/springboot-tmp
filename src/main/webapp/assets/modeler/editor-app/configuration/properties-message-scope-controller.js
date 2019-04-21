@@ -10,14 +10,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-angular.module('flowableModeler').controller('FlowableMessageRefCtrl', [ '$scope', function($scope) {
+angular.module('flowableModeler').controller('FlowableMessageRefCtrl', ['$scope', function ($scope) {
 
     // Find the parent shape on which the message definitions are defined
     var messageDefinitionsProperty = undefined;
     var parent = $scope.selectedShape;
     while (parent !== null && parent !== undefined && messageDefinitionsProperty === undefined) {
         if (parent.properties && parent.properties.get('oryx-messagedefinitions')) {
-        	messageDefinitionsProperty = parent.properties.get('oryx-messagedefinitions');
+            messageDefinitionsProperty = parent.properties.get('oryx-messagedefinitions');
         } else {
             parent = parent.parent;
         }
@@ -35,7 +35,7 @@ angular.module('flowableModeler').controller('FlowableMessageRefCtrl', [ '$scope
     $scope.messageDefinitions = messageDefinitionsProperty;
 
 
-    $scope.messageChanged = function() {
-    	$scope.updatePropertyInModel($scope.property);
+    $scope.messageChanged = function () {
+        $scope.updatePropertyInModel($scope.property);
     };
 }]);

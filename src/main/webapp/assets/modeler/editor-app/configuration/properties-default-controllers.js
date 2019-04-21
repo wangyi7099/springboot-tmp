@@ -15,20 +15,20 @@
  * String controller
  */
 
-angular.module('flowableModeler').controller('FlowableStringPropertyCtrl', [ '$scope', function ($scope) {
+angular.module('flowableModeler').controller('FlowableStringPropertyCtrl', ['$scope', function ($scope) {
 
-	$scope.shapeId = $scope.selectedShape.id;
-	$scope.valueFlushed = false;
+    $scope.shapeId = $scope.selectedShape.id;
+    $scope.valueFlushed = false;
     /** Handler called when input field is blurred */
-    $scope.inputBlurred = function() {
-    	$scope.valueFlushed = true;
-    	if ($scope.property.value) {
-    		$scope.property.value = $scope.property.value.replace(/(<([^>]+)>)/ig,"");
-    	}
+    $scope.inputBlurred = function () {
+        $scope.valueFlushed = true;
+        if ($scope.property.value) {
+            $scope.property.value = $scope.property.value.replace(/(<([^>]+)>)/ig, "");
+        }
         $scope.updatePropertyInModel($scope.property);
     };
 
-    $scope.enterPressed = function(keyEvent) {
+    $scope.enterPressed = function (keyEvent) {
         // if enter is pressed
         if (keyEvent && keyEvent.which === 13) {
             keyEvent.preventDefault();
@@ -36,14 +36,14 @@ angular.module('flowableModeler').controller('FlowableStringPropertyCtrl', [ '$s
         }
         // else; do nothing
     };
-    
+
     $scope.$on('$destroy', function controllerDestroyed() {
-    	if(!$scope.valueFlushed) {
-    		if ($scope.property.value) {
-        		$scope.property.value = $scope.property.value.replace(/(<([^>]+)>)/ig,"");
-        	}
-    		$scope.updatePropertyInModel($scope.property, $scope.shapeId);
-    	}
+        if (!$scope.valueFlushed) {
+            if ($scope.property.value) {
+                $scope.property.value = $scope.property.value.replace(/(<([^>]+)>)/ig, "");
+            }
+            $scope.updatePropertyInModel($scope.property, $scope.shapeId);
+        }
     });
 
 }]);
@@ -54,7 +54,7 @@ angular.module('flowableModeler').controller('FlowableStringPropertyCtrl', [ '$s
 
 angular.module('flowableModeler').controller('FlowableBooleanPropertyCtrl', ['$scope', function ($scope) {
 
-    $scope.changeValue = function() {
+    $scope.changeValue = function () {
         if ($scope.property.key === 'oryx-defaultflow' && $scope.property.value) {
             var selectedShape = $scope.selectedShape;
             if (selectedShape) {
@@ -86,32 +86,32 @@ angular.module('flowableModeler').controller('FlowableBooleanPropertyCtrl', ['$s
  * Text controller
  */
 
-angular.module('flowableModeler').controller('FlowableTextPropertyCtrl', [ '$scope', '$modal', '$timeout', function($scope, $modal, $timeout) {
+angular.module('flowableModeler').controller('FlowableTextPropertyCtrl', ['$scope', '$modal', '$timeout', function ($scope, $modal, $timeout) {
 
     var opts = {
-        template:  'editor-app/configuration/properties/text-popup.html?version=' + Date.now(),
+        template: 'editor-app/configuration/properties/text-popup.html?version=' + Date.now(),
         scope: $scope,
         prefixEvent: 'textModalEvent'
     };
-    
-     $scope.$on('textModalEvent.hide.before', function() {
-        $timeout(function() {
+
+    $scope.$on('textModalEvent.hide.before', function () {
+        $timeout(function () {
             $scope.property.mode = 'read';
         }, 0);
     });
-    
+
     // Open the dialog
     _internalCreateModal(opts, $modal, $scope);
 }]);
 
-angular.module('flowableModeler').controller('FlowableTextPropertyPopupCtrl', ['$scope', function($scope) {
+angular.module('flowableModeler').controller('FlowableTextPropertyPopupCtrl', ['$scope', function ($scope) {
 
-    $scope.save = function() {
+    $scope.save = function () {
         $scope.updatePropertyInModel($scope.property);
         $scope.close();
     };
-    
-    $scope.close = function() {
+
+    $scope.close = function () {
         $scope.property.mode = 'read';
         $scope.$hide();
     };

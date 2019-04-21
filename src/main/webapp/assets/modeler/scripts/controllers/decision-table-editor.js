@@ -298,7 +298,7 @@ angular.module('flowableModeler')
             };
 
             // dummy validator for text fields in order to trigger the post validation hook
-            var textValidator = function(value, callback) {
+            var textValidator = function (value, callback) {
                 callback(true);
             };
 
@@ -373,7 +373,7 @@ angular.module('flowableModeler')
             };
 
             var isOperatorCell = function (cellMeta) {
-                return !(cellMeta == null || cellMeta.prop == null || typeof cellMeta.prop !== 'string'|| cellMeta.prop.endsWith("_operator") === false);
+                return !(cellMeta == null || cellMeta.prop == null || typeof cellMeta.prop !== 'string' || cellMeta.prop.endsWith("_operator") === false);
             };
 
             var createNewInputExpression = function (inputExpression) {
@@ -639,13 +639,13 @@ angular.module('flowableModeler')
                     data: inputExpression.id + '_expression',
                     type: type,
                     title: '<div class="input-header">' +
-                    '<a onclick="triggerExpressionEditor(\'input\',' + expressionPosition + ',false)"><span class="header-label">' + (inputExpression.label ? inputExpression.label : "New Input") + '</span></a>' +
-                    '<br><span class="header-variable">' + (inputExpression.variableId ? inputExpression.variableId : "none") + '</span>' +
-                    '<br/><span class="header-variable-type">' + (inputExpression.type ? inputExpression.type : "") + '</brspan>' +
-                    '</div>' +
-                    '<div class="header-add-new-expression">' +
-                    '<a onclick="triggerExpressionEditor(\'input\',' + expressionPosition + ',true)"><span class="glyphicon glyphicon-plus-sign"></span></a>' +
-                    '</div>',
+                        '<a onclick="triggerExpressionEditor(\'input\',' + expressionPosition + ',false)"><span class="header-label">' + (inputExpression.label ? inputExpression.label : "New Input") + '</span></a>' +
+                        '<br><span class="header-variable">' + (inputExpression.variableId ? inputExpression.variableId : "none") + '</span>' +
+                        '<br/><span class="header-variable-type">' + (inputExpression.type ? inputExpression.type : "") + '</brspan>' +
+                        '</div>' +
+                        '<div class="header-add-new-expression">' +
+                        '<a onclick="triggerExpressionEditor(\'input\',' + expressionPosition + ',true)"><span class="glyphicon glyphicon-plus-sign"></span></a>' +
+                        '</div>',
                     expressionType: 'input-expression',
                     expression: inputExpression,
                     className: 'htCenter',
@@ -844,11 +844,9 @@ angular.module('flowableModeler')
                 $scope.model.columnDefs.forEach(function (columnDefinition) {
                     if (columnDefinition.expressionType === 'input-operator') {
                         defaultRow[columnDefinition.data] = '==';
-                    }
-                    else if (columnDefinition.expressionType === 'input-expression') {
+                    } else if (columnDefinition.expressionType === 'input-expression') {
                         defaultRow[columnDefinition.data] = '-';
-                    }
-                    else if (columnDefinition.expressionType === 'output') {
+                    } else if (columnDefinition.expressionType === 'output') {
                         defaultRow[columnDefinition.data] = '';
                     }
                 });

@@ -17,7 +17,7 @@ FLOWABLE.eventBus = {
 
     /** Event fired when the editor is loaded and ready */
     EVENT_TYPE_EDITOR_READY: 'event-type-editor-ready',
-    
+
     EVENT_TYPE_EDITOR_BOOTED: 'event-type-editor-booted',
 
     /** Event fired when a selection is made on the canvas. */
@@ -43,17 +43,17 @@ FLOWABLE.eventBus = {
 
     /** Event fired when a model is saved. */
     EVENT_TYPE_MODEL_SAVED: 'event-type-model-saved',
-    
+
     /** Event fired when the quick menu buttons should be hidden. */
     EVENT_TYPE_HIDE_SHAPE_BUTTONS: 'event-type-hide-shape-buttons',
-    
+
     /** Event fired when the validation popup should be shown. */
     EVENT_TYPE_SHOW_VALIDATION_POPUP: 'event-type-show-validation-popup',
-    
+
     /** Event fired when a different process must be loaded. */
     EVENT_TYPE_NAVIGATE_TO_PROCESS: 'event-type-navigate-to-process',
-    
-    EVENT_TYPE_UNDO_REDO_RESET : 'event-type-undo-redo-reset',
+
+    EVENT_TYPE_UNDO_REDO_RESET: 'event-type-undo-redo-reset',
 
     /** A mapping for storing the listeners*/
     listeners: {},
@@ -99,15 +99,15 @@ FLOWABLE.eventBus = {
         }
     },
 
-    hasListener:function(type, callback, scope) {
-        if(typeof this.listeners[type] != "undefined") {
+    hasListener: function (type, callback, scope) {
+        if (typeof this.listeners[type] != "undefined") {
             var numOfCallbacks = this.listeners[type].length;
-            if(callback === undefined && scope === undefined){
+            if (callback === undefined && scope === undefined) {
                 return numOfCallbacks > 0;
             }
-            for(var i=0; i<numOfCallbacks; i++) {
+            for (var i = 0; i < numOfCallbacks; i++) {
                 var listener = this.listeners[type][i];
-                if(listener.scope == scope && listener.callback == callback) {
+                if (listener.scope == scope && listener.callback == callback) {
                     return true;
                 }
             }
@@ -118,19 +118,19 @@ FLOWABLE.eventBus = {
     /**
      * Dispatch an event to all event listeners registered to that specific type.
      */
-    dispatch:function(type, event) {
-        if(typeof this.listeners[type] != "undefined") {
+    dispatch: function (type, event) {
+        if (typeof this.listeners[type] != "undefined") {
             var numOfCallbacks = this.listeners[type].length;
-            for(var i=0; i<numOfCallbacks; i++) {
+            for (var i = 0; i < numOfCallbacks; i++) {
                 var listener = this.listeners[type][i];
-                if(listener && listener.callback) {
+                if (listener && listener.callback) {
                     listener.callback.apply(listener.scope, [event]);
                 }
             }
         }
     },
 
-    dispatchOryxEvent: function(event, uiObject) {
+    dispatchOryxEvent: function (event, uiObject) {
         FLOWABLE.eventBus.editor.handleEvents(event, uiObject);
     }
 

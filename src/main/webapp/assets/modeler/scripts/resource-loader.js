@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(function(resources){
+(function (resources) {
 
     if (resources) {
 
@@ -28,17 +28,14 @@
                     var done = false;
 
                     // Attach handlers for all browsers
-                    resource.onload = resource.onreadystatechange = function()
-                    {
-                        if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete"))
-                        {
+                    resource.onload = resource.onreadystatechange = function () {
+                        if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
                             done = true;
                             callback.call(scope ? scope : this, res);
                         }
                     };
                 }
-            }
-            else if (res.tag === 'link') {
+            } else if (res.tag === 'link') {
                 resource = document.createElement('link');
                 resource.rel = res.rel || 'stylesheet';
                 resource.href = res.href;
@@ -46,8 +43,7 @@
 
             if (node.nextSibling) {
                 node.parentNode.insertBefore(resource, node.nextSibling);
-            }
-            else {
+            } else {
                 node.parentNode.appendChild(resource);
             }
 
@@ -75,11 +71,11 @@
 
         var loadedResources = 0;
         for (var i = 0, il = res.length; i < il; i++) {
-            load(res[i], resourceLoaderElement, function(){
+            load(res[i], resourceLoaderElement, function () {
                 loadedResources++;
                 if (loadedResources == res.length) {
                     // Let angular resume bootstrap
-                    var interval = window.setInterval(function(){
+                    var interval = window.setInterval(function () {
                         if (angular && typeof angular.resumeBootstrap == 'function') {
                             angular.resumeBootstrap();
                             window.clearInterval(interval);

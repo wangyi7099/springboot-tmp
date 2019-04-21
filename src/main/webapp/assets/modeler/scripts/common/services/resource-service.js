@@ -18,22 +18,18 @@ flowableModule.service('ResourceService', ['$http', '$q', 'appResourceRoot',
 
         var loadedResources = {};
 
-        function loadStylesheet(relativeUrl, cache)
-        {
+        function loadStylesheet(relativeUrl, cache) {
             var url = appResourceRoot + relativeUrl;
-            if (!cache || !loadedResources[url])
-            {
+            if (!cache || !loadedResources[url]) {
                 if (cache) {
                     loadedResources[url] = true;
                 }
-                if (document.createStyleSheet)
-                {
-                    try
-                    {
+                if (document.createStyleSheet) {
+                    try {
                         document.createStyleSheet();
-                    } catch (e) { }
-                }
-                else {
+                    } catch (e) {
+                    }
+                } else {
                     var link = document.createElement("link");
                     link.rel = "stylesheet";
                     link.type = "text/css";
@@ -44,32 +40,26 @@ flowableModule.service('ResourceService', ['$http', '$q', 'appResourceRoot',
             }
         }
 
-        function loadScript(relativeUrl, callback, cache)
-        {
+        function loadScript(relativeUrl, callback, cache) {
             var url = appResourceRoot + relativeUrl;
-            if (cache && loadedResources[url] && callback)
-            {
+            if (cache && loadedResources[url] && callback) {
                 callback();
-            }
-            else
-            {
+            } else {
                 if (cache) {
                     loadedResources[url] = true;
                 }
 
                 // Insert the node so it gets loaded
                 var script = document.createElement("script");
-                script.type="text/javascript";
+                script.type = "text/javascript";
                 script.src = url;
 
                 if (callback) {
                     var done = false;
 
                     // Attach handlers for all browsers
-                    script.onload = script.onreadystatechange = function()
-                    {
-                        if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete"))
-                        {
+                    script.onload = script.onreadystatechange = function () {
+                        if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
                             done = true;
                             callback();
                         }
@@ -80,37 +70,28 @@ flowableModule.service('ResourceService', ['$http', '$q', 'appResourceRoot',
             }
         }
 
-        function loadScripts(relativeUrls, callback, cache)
-        {
-            function loadNext()
-            {
+        function loadScripts(relativeUrls, callback, cache) {
+            function loadNext() {
                 var relativeUrl = relativeUrls.shift();
-                if (relativeUrl)
-                {
+                if (relativeUrl) {
                     loadScript.call(this, relativeUrl, loadNext.bind(this), cache);
-                }
-                else
-                {
-                    if (callback)
-                    {
+                } else {
+                    if (callback) {
                         callback();
                     }
                 }
             }
+
             loadNext.call(this);
         }
 
-        function loadFromHtml(url, callback, cache)
-        {
-            $http.get(url).success(function(responseText)
-            {
+        function loadFromHtml(url, callback, cache) {
+            $http.get(url).success(function (responseText) {
                 var xmlDoc;
-                if (window.DOMParser)
-                {
+                if (window.DOMParser) {
                     var parser = new DOMParser();
                     xmlDoc = parser.parseFromString(responseText, "text/xml");
-                }
-                else // Internet Explorer
+                } else // Internet Explorer
                 {
                     xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
                     xmlDoc.async = false;
@@ -119,20 +100,16 @@ flowableModule.service('ResourceService', ['$http', '$q', 'appResourceRoot',
                 var resources = xmlDoc.getElementsByTagName("link");
                 var resourceUrl;
                 var resourceUrls = [];
-                for (var i = 0, il = resources.length; i < il; i++)
-                {
+                for (var i = 0, il = resources.length; i < il; i++) {
                     resourceUrl = resources[i].getAttribute("href");
-                    if (resourceUrl)
-                    {
+                    if (resourceUrl) {
                         loadStylesheet(resourceUrl, cache);
                     }
                 }
                 resources = xmlDoc.getElementsByTagName("script");
-                for (i = 0, il = resources.length; i < il; i++)
-                {
+                for (i = 0, il = resources.length; i < il; i++) {
                     resourceUrl = resources[i].getAttribute("src");
-                    if (resourceUrl)
-                    {
+                    if (resourceUrl) {
                         resourceUrls.push(resourceUrl);
                     }
                 }

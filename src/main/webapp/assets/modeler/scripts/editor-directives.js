@@ -37,7 +37,7 @@ angular.module('flowableModeler')
             },
             restrict: 'E',
             template: '<img class="stencil-item-list-icon" ng-if=\"item.customIconId != null && item.customIconId != undefined\" ng-src=\"' + getImageUrl(item.customIconId) + '\" width=\"16px\" height=\"16px\"/>' +
-            '<img class="stencil-item-list-icon" ng-if=\"(item.customIconId == null || item.customIconId == undefined) && item.icon != null && item.icon != undefined\" ng-src=\"editor-app/stencilsets/bpmn2.0/icons/{{item.icon}}\" width=\"16px\" height=\"16px\"/>'
+                '<img class="stencil-item-list-icon" ng-if=\"(item.customIconId == null || item.customIconId == undefined) && item.icon != null && item.icon != undefined\" ng-src=\"editor-app/stencilsets/bpmn2.0/icons/{{item.icon}}\" width=\"16px\" height=\"16px\"/>'
         };
     }]);
 
@@ -63,217 +63,217 @@ angular.module('flowableModeler')
 //form builder element renderer
 angular.module('flowableModeler').directive('formBuilderElement', ['$rootScope', '$timeout', '$modal', '$http', '$templateCache', '$translate', 'RecursionHelper', 'FormBuilderService',
     function ($rootScope, $timeout, $modal, $http, $templateCache, $translate, RecursionHelper, FormBuilderService) {
-    return {
-        restrict: 'AE',
-        templateUrl: 'views/templates/form-builder-element-template.html',
-        transclude: false,
-        scope: {
-            formElement: '=formElement',
-            editState: '=editState',
-            formMode: '=formMode',
-            drop: "&",
-            moved: "&"
-        },
-        compile: function(element) {
-            return RecursionHelper.compile(element, this.link);
-        },
-        link: function ($scope, $element, attributes) {
+        return {
+            restrict: 'AE',
+            templateUrl: 'views/templates/form-builder-element-template.html',
+            transclude: false,
+            scope: {
+                formElement: '=formElement',
+                editState: '=editState',
+                formMode: '=formMode',
+                drop: "&",
+                moved: "&"
+            },
+            compile: function (element) {
+                return RecursionHelper.compile(element, this.link);
+            },
+            link: function ($scope, $element, attributes) {
 
-            $scope.formTabs = [
-                {
-                    "id": "general",
-                    "name": $translate.instant('FORM-BUILDER.TABS.GENERAL')
-                },
-                {
-                    "id": "options",
-                    "name": $translate.instant('FORM-BUILDER.TABS.OPTIONS'),
-                    "show": ['dropdown', 'radio-buttons']
-                },
-                {
-                    "id": "upload",
-                    "name": $translate.instant('FORM-BUILDER.TABS.UPLOAD-OPTIONS'),
-                    "show": ['upload']
-                },
-                {
-                    "id": "advanced",
-                    "name": $translate.instant('FORM-BUILDER.TABS.ADVANCED-OPTIONS'),
-                    "show": ['text', 'password', 'multi-line-text', 'integer', 'decimal','hyperlink']
-                }
-            ];
-
-            $scope.activeTab = $scope.formTabs[0];
-
-            $scope.tabClicked = function (tab) {
-                $scope.activeTab = tab;
-            };
-
-            var templateUrl = 'views/popover/formfield-edit-popover.html';
-
-
-            $scope.removeFormElement = function (formElement) {
-                if ($rootScope.formItems.indexOf(formElement) >= 0) {
-                    $rootScope.formItems.splice($rootScope.formItems.indexOf(formElement), 1);
-                }
-            };
-
-            $scope.pristine = true;
-            $scope.newOption = {
-                name: ''
-            };
-
-            $scope.insertFormField = {
-                position: 0
-            };
-
-            $scope.openFieldPopover = function () {
-
-                // Storing original values. In case the changes would trigger a layout change
-                var originalFormElementType = $scope.formElement.type;
-                var originalDisplayFieldType = undefined;
-                if (originalFormElementType === 'readonly') {
-                    if ($scope.formElement.params
-                        && $scope.formElement.params.field
-                        && $scope.formElement.params.field.type) {
-                        originalDisplayFieldType = $scope.formElement.params.field.type;
+                $scope.formTabs = [
+                    {
+                        "id": "general",
+                        "name": $translate.instant('FORM-BUILDER.TABS.GENERAL')
+                    },
+                    {
+                        "id": "options",
+                        "name": $translate.instant('FORM-BUILDER.TABS.OPTIONS'),
+                        "show": ['dropdown', 'radio-buttons']
+                    },
+                    {
+                        "id": "upload",
+                        "name": $translate.instant('FORM-BUILDER.TABS.UPLOAD-OPTIONS'),
+                        "show": ['upload']
+                    },
+                    {
+                        "id": "advanced",
+                        "name": $translate.instant('FORM-BUILDER.TABS.ADVANCED-OPTIONS'),
+                        "show": ['text', 'password', 'multi-line-text', 'integer', 'decimal', 'hyperlink']
                     }
-                }
+                ];
 
-                // Create popover
-                $scope.fieldEditPopup = _internalCreateModal({
-                    template: 'views/popover/formfield-edit-popover.html?version=' + Date.now(),
-                    scope: $scope,
-                    backdrop: 'static',
-                    keyboard: false
-                }, $modal, $scope);
+                $scope.activeTab = $scope.formTabs[0];
 
-                // Check for layout changes
-                var deregisterHideListener = $scope.$on('modal.hide', function() {
-                    if ($scope.formElement.type === 'readonly') {
+                $scope.tabClicked = function (tab) {
+                    $scope.activeTab = tab;
+                };
 
-                        if ($scope.formElement.params && $scope.formElement.params.field && $scope.formElement.params.field.type
-                            && $scope.formElement.params.field.type !== originalFormElementType) {
+                var templateUrl = 'views/popover/formfield-edit-popover.html';
 
-                            $scope.$emit('readonly-field-referenced-field-changed', {
-                                formElement: $scope.formElement,
-                                originalDisplayFieldType: originalDisplayFieldType
-                            });
 
+                $scope.removeFormElement = function (formElement) {
+                    if ($rootScope.formItems.indexOf(formElement) >= 0) {
+                        $rootScope.formItems.splice($rootScope.formItems.indexOf(formElement), 1);
+                    }
+                };
+
+                $scope.pristine = true;
+                $scope.newOption = {
+                    name: ''
+                };
+
+                $scope.insertFormField = {
+                    position: 0
+                };
+
+                $scope.openFieldPopover = function () {
+
+                    // Storing original values. In case the changes would trigger a layout change
+                    var originalFormElementType = $scope.formElement.type;
+                    var originalDisplayFieldType = undefined;
+                    if (originalFormElementType === 'readonly') {
+                        if ($scope.formElement.params
+                            && $scope.formElement.params.field
+                            && $scope.formElement.params.field.type) {
+                            originalDisplayFieldType = $scope.formElement.params.field.type;
                         }
                     }
 
-                    deregisterHideListener();
-                });
+                    // Create popover
+                    $scope.fieldEditPopup = _internalCreateModal({
+                        template: 'views/popover/formfield-edit-popover.html?version=' + Date.now(),
+                        scope: $scope,
+                        backdrop: 'static',
+                        keyboard: false
+                    }, $modal, $scope);
 
-            };
+                    // Check for layout changes
+                    var deregisterHideListener = $scope.$on('modal.hide', function () {
+                        if ($scope.formElement.type === 'readonly') {
 
-            $scope.formElementNameChanged = function (field) {
-                if (!field.overrideId) {
-                    var fieldId;
-                    if (field.name && field.name.length > 0) {
-                        fieldId = field.name.toLowerCase();
-                        fieldId = fieldId.replace(new RegExp(' ', 'g'), '');
-                        fieldId = fieldId.replace(/[&\/\\#,+~%.'":*?!<>{}()$@;]/g, '');
+                            if ($scope.formElement.params && $scope.formElement.params.field && $scope.formElement.params.field.type
+                                && $scope.formElement.params.field.type !== originalFormElementType) {
+
+                                $scope.$emit('readonly-field-referenced-field-changed', {
+                                    formElement: $scope.formElement,
+                                    originalDisplayFieldType: originalDisplayFieldType
+                                });
+
+                            }
+                        }
+
+                        deregisterHideListener();
+                    });
+
+                };
+
+                $scope.formElementNameChanged = function (field) {
+                    if (!field.overrideId) {
+                        var fieldId;
+                        if (field.name && field.name.length > 0) {
+                            fieldId = field.name.toLowerCase();
+                            fieldId = fieldId.replace(new RegExp(' ', 'g'), '');
+                            fieldId = fieldId.replace(/[&\/\\#,+~%.'":*?!<>{}()$@;]/g, '');
+                        } else {
+                            var index = 1;
+                            if (field.layout) {
+                                index = 1 + (2 * field.layout.row) + field.layout.column;
+                            }
+                            fieldId = 'field' + index;
+                        }
+                        field.id = fieldId;
+                    }
+                };
+
+                $scope.confirmNewOption = function ($event) {
+                    if ($scope.newOption.name) {
+                        var options = $scope.formElement.options;
+                        options.push($scope.newOption);
+
+                        $scope.newOption = {name: ''};
+
+                        // if first additional option; first option is defaulted
+                        if (options.length == 2) {
+                            $scope.formElement.value = $scope.formElement.options[0].name;
+                        }
+
+                        if ($event) {
+                            // Focus the input field again, to make adding more options possible immediatly
+                            $($event.target).focus();
+                        }
+                    }
+                };
+
+                $scope.optionKeyDown = function ($event) {
+                    if ($event.keyCode == 13) {
+                        $scope.confirmNewOption($event);
+                    }
+                };
+
+                $scope.removeOption = function (index) {
+                    $scope.formElement.options.splice(index, 1);
+
+
+                    // if only 1 option left; reset default
+                    if ($scope.formElement.options == 1) {
+                        $scope.formElement.value = '';
                     } else {
-                        var index = 1;
-                        if (field.layout) {
-                            index = 1 + (2 * field.layout.row) + field.layout.column;
+
+                        // if removed element is the default option; first option is defaulted
+                        var isPresent = false;
+                        for (var i = 0; i < $scope.formElement.options.length; i++) {
+                            if ($scope.formElement.options[i].name == $scope.formElement.value) {
+                                isPresent = true;
+                            }
                         }
-                        fieldId = 'field' + index;
-                    }
-                    field.id = fieldId;
-                }
-            };
-
-            $scope.confirmNewOption = function ($event) {
-                if ($scope.newOption.name) {
-                    var options = $scope.formElement.options;
-                    options.push($scope.newOption);
-
-                    $scope.newOption = {name: ''};
-
-                    // if first additional option; first option is defaulted
-                    if (options.length == 2) {
-                        $scope.formElement.value = $scope.formElement.options[0].name;
-                    }
-
-                    if ($event) {
-                        // Focus the input field again, to make adding more options possible immediatly
-                        $($event.target).focus();
-                    }
-                }
-            };
-
-            $scope.optionKeyDown = function ($event) {
-                if ($event.keyCode == 13) {
-                    $scope.confirmNewOption($event);
-                }
-            };
-
-            $scope.removeOption = function (index) {
-                $scope.formElement.options.splice(index, 1);
-
-
-                // if only 1 option left; reset default
-                if ($scope.formElement.options == 1) {
-                    $scope.formElement.value = '';
-                } else {
-
-                    // if removed element is the default option; first option is defaulted
-                    var isPresent = false;
-                    for (var i = 0; i < $scope.formElement.options.length; i++) {
-                        if ($scope.formElement.options[i].name == $scope.formElement.value) {
-                            isPresent = true;
+                        if (!isPresent) {
+                            $scope.formElement.value = $scope.formElement.options[0].name;
                         }
                     }
-                    if (!isPresent) {
-                        $scope.formElement.value = $scope.formElement.options[0].name;
+                };
+
+                $scope.optionsExpressionChanged = function ($event) {
+                    if (event.target.checked) {
+                        $scope.formElement.options = [];
+                        $scope.formElement.value = '';
+                        $scope.formElement.optionsExpression = '${}';
+                    } else {
+                        $scope.formElement.optionsExpression = null;
+                        if ($scope.formElement.type === 'radio-buttons') {
+                            $scope.formElement.options = [{
+                                name: $translate.instant('FORM-BUILDER.COMPONENT.RADIO-BUTTON-DEFAULT')
+                            }];
+                        } else if ($scope.formElement.type === 'dropdown') {
+                            $scope.formElement.options = [
+                                {name: $translate.instant('FORM-BUILDER.COMPONENT.DROPDOWN-DEFAULT-EMPTY-SELECTION')}
+                            ];
+                            $scope.formElement.value = field.options[0];
+                            $scope.formElement.hasEmptyValue = true;
+                        }
                     }
-                }
-            };
+                };
 
-            $scope.optionsExpressionChanged = function ($event) {
-            	if(event.target.checked) {
-            		$scope.formElement.options = [];
-                    $scope.formElement.value = '';
-                    $scope.formElement.optionsExpression = '${}';
-            	} else {
-            		$scope.formElement.optionsExpression = null;
-                    if ($scope.formElement.type === 'radio-buttons') {
-                    	$scope.formElement.options = [{ 
-                        	name: $translate.instant('FORM-BUILDER.COMPONENT.RADIO-BUTTON-DEFAULT')
-                        }];
-                    } else if($scope.formElement.type === 'dropdown') {
-                    	$scope.formElement.options = [
-                            {name: $translate.instant('FORM-BUILDER.COMPONENT.DROPDOWN-DEFAULT-EMPTY-SELECTION')}
-                        ];
-	                    $scope.formElement.value = field.options[0];
-	                    $scope.formElement.hasEmptyValue = true;
-            	    }
-            	}
-            };
+                $scope.doneEditing = function () {
 
-            $scope.doneEditing = function () {
-
-                if ($scope.fieldEditPopup) {
-                    $scope.fieldEditPopup.$scope.$hide();
-                }
-            };
-
-            // Readonly field
-            $scope.$watch('formElement.params.field', function (newValue, oldValue) {
-                if (!$scope.pristine || (oldValue !== undefined && oldValue.id != newValue.id)) {
-                    if (newValue && newValue.name) {
-                        // Update the element's name
-                        $scope.formElement.name = newValue.name;
+                    if ($scope.fieldEditPopup) {
+                        $scope.fieldEditPopup.$scope.$hide();
                     }
-                } else {
-                    $scope.pristine = false;
-                }
+                };
 
-            });
-        }
-    };
-}]);
+                // Readonly field
+                $scope.$watch('formElement.params.field', function (newValue, oldValue) {
+                    if (!$scope.pristine || (oldValue !== undefined && oldValue.id != newValue.id)) {
+                        if (newValue && newValue.name) {
+                            // Update the element's name
+                            $scope.formElement.name = newValue.name;
+                        }
+                    } else {
+                        $scope.pristine = false;
+                    }
+
+                });
+            }
+        };
+    }]);
 
 
 angular.module('flowableModeler').directive('storeCursorPosition', ['$rootScope', '$timeout', '$popover', '$http', '$templateCache', function ($rootScope, $timeout, $popover, $http, $templateCache) {
@@ -292,39 +292,36 @@ angular.module('flowableModeler').directive('storeCursorPosition', ['$rootScope'
     };
 }]);
 
-angular.module('flowableModeler').
-    directive('editorInputCheck', function () {
+angular.module('flowableModeler').directive('editorInputCheck', function () {
 
-        return {
-            require: 'ngModel',
-            link: function (scope, element, attrs, modelCtrl) {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attrs, modelCtrl) {
 
-                modelCtrl.$parsers.push(function (inputValue) {
+            modelCtrl.$parsers.push(function (inputValue) {
 
-                    var transformedInput = inputValue.replace(/[&\/\\#,+~%.'":*?<>{}()$@;]/g, '');
+                var transformedInput = inputValue.replace(/[&\/\\#,+~%.'":*?<>{}()$@;]/g, '');
 
-                    if (transformedInput != inputValue) {
-                        modelCtrl.$setViewValue(transformedInput);
-                        modelCtrl.$render();
-                    }
+                if (transformedInput != inputValue) {
+                    modelCtrl.$setViewValue(transformedInput);
+                    modelCtrl.$render();
+                }
 
-                    return transformedInput;
-                });
-            }
-        };
-    });
+                return transformedInput;
+            });
+        }
+    };
+});
 
-angular.module('flowableModeler').
-    directive('hotAutoDestroy',["hotRegisterer",function(hotRegisterer) {
+angular.module('flowableModeler').directive('hotAutoDestroy', ["hotRegisterer", function (hotRegisterer) {
     return {
         restrict: 'A',
-        link: function (scope, element, attr){
-            element.on("$destroy", function() {
-                try{
+        link: function (scope, element, attr) {
+            element.on("$destroy", function () {
+                try {
                     var hotInstance = hotRegisterer.getInstance(attr.hotId);
                     hotInstance.destroy();
-                }
-                catch(er){
+                } catch (er) {
                     console.log(er);
                 }
             });

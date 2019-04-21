@@ -18,7 +18,7 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
 
         // Removes all properties starting with '_', used before json serialization
         function removePrivateFields(fields) {
-            fields.forEach(function(field, i){
+            fields.forEach(function (field, i) {
                 for (var attr in field) {
                     if (attr.indexOf('_') === 0) {
                         delete field[attr];
@@ -57,10 +57,10 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
             }
 
             data.formRepresentation.formDefinition = {
-            	name: name,
-            	key: formKey,
-            	fields: removePrivateFields(angular.copy($rootScope.formItems)), 
-            	outcomes: $rootScope.currentOutcomes
+                name: name,
+                key: formKey,
+                fields: removePrivateFields(angular.copy($rootScope.formItems)),
+                outcomes: $rootScope.currentOutcomes
             };
 
             html2canvas(jQuery('#canvasSection'), {
@@ -73,18 +73,20 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
                     ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 300, canvas.height / scale);
                     data.formImageBase64 = extra_canvas.toDataURL("image/png");
 
-                    $http({method: 'PUT', url: FLOWABLE.APP_URL.getFormModelUrl($rootScope.currentForm.id), data: data}).
-                        success(function (response, status, headers, config) {
+                    $http({
+                        method: 'PUT',
+                        url: FLOWABLE.APP_URL.getFormModelUrl($rootScope.currentForm.id),
+                        data: data
+                    }).success(function (response, status, headers, config) {
 
-                            if (saveCallback) {
-                                saveCallback();
-                            }
-                        }).
-                        error(function (response, status, headers, config) {
-                            if (errorCallback) {
-                                errorCallback(response);
-                            }
-                        });
+                        if (saveCallback) {
+                            saveCallback();
+                        }
+                    }).error(function (response, status, headers, config) {
+                        if (errorCallback) {
+                            errorCallback(response);
+                        }
+                    });
 
                     if (currentActiveTab != 'design') {
                         $rootScope.formBuilder.activeTab = currentActiveTab;
@@ -92,8 +94,8 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
                 }
             });
         };
-        
-        this._cleanFormField = function(field, fieldIndex) {
+
+        this._cleanFormField = function (field, fieldIndex) {
             if (!field.overrideId) {
                 var fieldId;
                 if (field.name && field.name.length > 0) {
@@ -159,7 +161,7 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
                 }
             });
 
-            uniqueForms.sort(function(a,b){
+            uniqueForms.sort(function (a, b) {
                 return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1;
             });
 
@@ -177,7 +179,7 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
                 outcomes = _getFormOutcomesForForm(formId);
             }
 
-            outcomes.sort(function(a,b){
+            outcomes.sort(function (a, b) {
                 return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1;
             });
 
@@ -199,25 +201,30 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
 
         var _updateFormCache = function (stepId, formId) {
             if (stepId && formId) {
-                $http({method: 'GET', url: FLOWABLE.APP_URL.getFormModelUrl(formId)}).
-                    success(function(response) {
-                        if (response) {
-                            var outcomes;
-                            var formFields;
-                            if (response.formDefinition) {
-                                if (response.formDefinition.fields) {
-                                    formFields = response.formDefinition.fields;
-                                }
-
-                                if (response.formDefinition.outcomes) {
-                                    outcomes = response.formDefinition.outcomes;
-                                }
+                $http({method: 'GET', url: FLOWABLE.APP_URL.getFormModelUrl(formId)}).success(function (response) {
+                    if (response) {
+                        var outcomes;
+                        var formFields;
+                        if (response.formDefinition) {
+                            if (response.formDefinition.fields) {
+                                formFields = response.formDefinition.fields;
                             }
-                            var filteredFormFields = _filterFormFields(formFields);
-                            var formFieldInfo = {id: response.id, name: response.name, description: response.description, outcomes: outcomes, fields: filteredFormFields};
-                            _addFormFieldsForStepToCache(stepId, formFieldInfo);
+
+                            if (response.formDefinition.outcomes) {
+                                outcomes = response.formDefinition.outcomes;
+                            }
                         }
-                    });
+                        var filteredFormFields = _filterFormFields(formFields);
+                        var formFieldInfo = {
+                            id: response.id,
+                            name: response.name,
+                            description: response.description,
+                            outcomes: outcomes,
+                            fields: filteredFormFields
+                        };
+                        _addFormFieldsForStepToCache(stepId, formFieldInfo);
+                    }
+                });
             }
             if (stepId && !formId) {
                 _deleteFormFieldsForStepFromCache(stepId);
@@ -240,16 +247,16 @@ angular.module('flowableModeler').service('FormBuilderService', ['$http', '$q', 
                 }
                 formIdParams += 'version=' + Date.now();
 
-                $http({method: 'GET', url: FLOWABLE.APP_URL.getFormModelValuesUrl(formIdParams)}).
-                    success(function (data) {
-                        if (callback) {
-                            callback(data);
-                        }
-                    }).
-
-                    error(function (data) {
-                        console.log('Something went wrong when fetching form values:' + JSON.stringify(data));
-                    });
+                $http({
+                    method: 'GET',
+                    url: FLOWABLE.APP_URL.getFormModelValuesUrl(formIdParams)
+                }).success(function (data) {
+                    if (callback) {
+                        callback(data);
+                    }
+                }).error(function (data) {
+                    console.log('Something went wrong when fetching form values:' + JSON.stringify(data));
+                });
             }
         };
     }

@@ -11,14 +11,13 @@
  * limitations under the License.
  */
 
-angular.module('flowableModeler').controller('FlowableHttpRequestMethodCtrl', [ '$scope', function($scope) {
+angular.module('flowableModeler').controller('FlowableHttpRequestMethodCtrl', ['$scope', function ($scope) {
 
-    if ($scope.property.value == undefined && $scope.property.value == null)
-    {
-    	   $scope.property.value = 'GET';
+    if ($scope.property.value == undefined && $scope.property.value == null) {
+        $scope.property.value = 'GET';
     }
-        
-    $scope.httpRequestMethodChanged = function() {
-        	$scope.updatePropertyInModel($scope.property);
+
+    $scope.httpRequestMethodChanged = function () {
+        $scope.updatePropertyInModel($scope.property);
     };
 }]);

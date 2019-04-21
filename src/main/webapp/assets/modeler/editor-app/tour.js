@@ -16,7 +16,7 @@ var FLOWABLE_EDITOR_TOUR = {
     /*
      * General 'getting started' tutorial for the Editor.
      */
-    gettingStarted: function($scope, $translate, $q, useLocalStorage) {
+    gettingStarted: function ($scope, $translate, $q, useLocalStorage) {
         var userName;
         if ($scope.account.firstName) {
             userName = $scope.account.firstName;
@@ -32,7 +32,7 @@ var FLOWABLE_EDITOR_TOUR = {
             $translate('TOUR.PROPERTIES-TITLE'), $translate('TOUR.PROPERTIES-CONTENT'),
             $translate('TOUR.TOOLBAR-TITLE'), $translate('TOUR.TOOLBAR-CONTENT'),
             $translate('TOUR.END-TITLE'), $translate('TOUR.END-CONTENT')
-        ]).then(function(translations) {
+        ]).then(function (translations) {
 
             // We're using a hack here due to https://github.com/sorich87/bootstrap-tour/issues/85:
             // when clicking next in the tour, it always sets the 'display' css property to 'none'
@@ -112,11 +112,11 @@ var FLOWABLE_EDITOR_TOUR = {
     /*
      * Tutorial showing how to use the bendpoint functionality for sequenceflow
      */
-    sequenceFlowBendpoint: function($scope, $translate, $q, useLocalStorage) {
+    sequenceFlowBendpoint: function ($scope, $translate, $q, useLocalStorage) {
 
         $q.all([
             $translate('FEATURE-TOUR.BENDPOINT.TITLE'), $translate('FEATURE-TOUR.BENDPOINT.DESCRIPTION')
-        ]).then(function(translations) {
+        ]).then(function (translations) {
 
             // We're using a hack here due to https://github.com/sorich87/bootstrap-tour/issues/85:
             // when clicking next in the tour, it always sets the 'display' css property to 'none'
@@ -149,8 +149,7 @@ var FLOWABLE_EDITOR_TOUR = {
     },
 
 
-
-    _buildStepTemplate : function (addPrevButton, addNextButton, addEndTourButton, optionalForcedWidth, image) {
+    _buildStepTemplate: function (addPrevButton, addNextButton, addEndTourButton, optionalForcedWidth, image) {
 
         var width = 200;
         if (optionalForcedWidth) {
@@ -180,7 +179,7 @@ var FLOWABLE_EDITOR_TOUR = {
         return template;
     },
 
-    _buildOnNextFunction: function(selector) {
+    _buildOnNextFunction: function (selector) {
         return function () {
             jQuery(selector).each(function (i, obj) {
                 obj.style.display = 'block';
@@ -188,7 +187,7 @@ var FLOWABLE_EDITOR_TOUR = {
         };
     },
 
-    _buildOnEndFunction: function(selectors) {
+    _buildOnEndFunction: function (selectors) {
         return function () {
             for (var elementsToResetIndex = 0; elementsToResetIndex < selectors.length; elementsToResetIndex++) {
                 jQuery(selectors[elementsToResetIndex]).each(function (i, obj) {

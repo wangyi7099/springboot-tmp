@@ -89,7 +89,8 @@ angular.module('flowableModeler').controller('FlowableOutParametersPopupCtrl',
                 source: '',
                 sourceExpression: '',
                 target: '',
-                targetExpression: ''};
+                targetExpression: ''
+            };
 
             $scope.parameters.push(newParameter);
             $timeout(function () {

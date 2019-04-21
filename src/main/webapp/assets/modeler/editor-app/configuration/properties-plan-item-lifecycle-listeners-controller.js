@@ -33,8 +33,7 @@ angular.module('flowableModeler').controller('FlowablePlanItemLifecycleListeners
 
             if ($scope.property.value.planItemLifecycleListeners.constructor == String) {
                 $scope.planItemLifecycleListeners = JSON.parse($scope.property.value.planItemLifecycleListeners);
-            }
-            else {
+            } else {
                 // Note that we clone the json object rather then setting it directly,
                 // this to cope with the fact that the user can click the cancel button and no changes should have happened
                 $scope.planItemLifecycleListeners = angular.copy($scope.property.value.planItemLifecycleListeners);
@@ -44,11 +43,9 @@ angular.module('flowableModeler').controller('FlowablePlanItemLifecycleListeners
                 var planItemLifeCycleListener = $scope.planItemLifecycleListeners[i];
                 if (planItemLifeCycleListener.className !== undefined && planItemLifeCycleListener.className !== '') {
                     planItemLifeCycleListener.implementation = planItemLifeCycleListener.className;
-                }
-                else if (planItemLifeCycleListener.expression !== undefined && planItemLifeCycleListener.expression !== '') {
+                } else if (planItemLifeCycleListener.expression !== undefined && planItemLifeCycleListener.expression !== '') {
                     planItemLifeCycleListener.implementation = planItemLifeCycleListener.expression;
-                }
-                else if (planItemLifeCycleListener.delegateExpression !== undefined && planItemLifeCycleListener.delegateExpression !== '') {
+                } else if (planItemLifeCycleListener.delegateExpression !== undefined && planItemLifeCycleListener.delegateExpression !== '') {
                     planItemLifeCycleListener.implementation = planItemLifeCycleListener.delegateExpression;
                 }
             }

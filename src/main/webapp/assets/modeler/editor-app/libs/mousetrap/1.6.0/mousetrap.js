@@ -20,7 +20,7 @@
  * @version 1.6.0
  * @url craig.is/killing/mice
  */
-(function(window, document, undefined) {
+(function (window, document, undefined) {
 
     // Check if mousetrap is used inside browser, if not, return
     if (!window) {
@@ -74,7 +74,7 @@
         107: '+',
         109: '-',
         110: '.',
-        111 : '/',
+        111: '/',
         186: ';',
         187: '=',
         188: ',',
@@ -621,7 +621,7 @@
          * @param {Event} e
          * @returns void
          */
-        self._handleKey = function(character, modifiers, e) {
+        self._handleKey = function (character, modifiers, e) {
             var callbacks = _getMatches(character, modifiers, e);
             var i;
             var doNotReset = {};
@@ -767,7 +767,7 @@
              * @returns {Function}
              */
             function _increaseSequence(nextAction) {
-                return function() {
+                return function () {
                     _nextExpectedAction = nextAction;
                     ++_sequenceLevels[combo];
                     _resetSequenceTimer();
@@ -873,7 +873,7 @@
          * @param {string|undefined} action
          * @returns void
          */
-        self._bindMultiple = function(combinations, callback, action) {
+        self._bindMultiple = function (combinations, callback, action) {
             for (var i = 0; i < combinations.length; ++i) {
                 _bindSingle(combinations[i], callback, action);
             }
@@ -899,7 +899,7 @@
      * @param {string=} action - 'keypress', 'keydown', or 'keyup'
      * @returns void
      */
-    Mousetrap.prototype.bind = function(keys, callback, action) {
+    Mousetrap.prototype.bind = function (keys, callback, action) {
         var self = this;
         keys = keys instanceof Array ? keys : [keys];
         self._bindMultiple.call(self, keys, callback, action);
@@ -923,9 +923,10 @@
      * @param {string} action
      * @returns void
      */
-    Mousetrap.prototype.unbind = function(keys, action) {
+    Mousetrap.prototype.unbind = function (keys, action) {
         var self = this;
-        return self.bind.call(self, keys, function() {}, action);
+        return self.bind.call(self, keys, function () {
+        }, action);
     };
 
     /**
@@ -935,7 +936,7 @@
      * @param {string=} action
      * @returns void
      */
-    Mousetrap.prototype.trigger = function(keys, action) {
+    Mousetrap.prototype.trigger = function (keys, action) {
         var self = this;
         if (self._directMap[keys + ':' + action]) {
             self._directMap[keys + ':' + action]({}, keys);
@@ -950,7 +951,7 @@
      *
      * @returns void
      */
-    Mousetrap.prototype.reset = function() {
+    Mousetrap.prototype.reset = function () {
         var self = this;
         self._callbacks = {};
         self._directMap = {};
@@ -964,7 +965,7 @@
      * @param {Element} element
      * @return {boolean}
      */
-    Mousetrap.prototype.stopCallback = function(e, element) {
+    Mousetrap.prototype.stopCallback = function (e, element) {
         var self = this;
 
         // if the element has the class "mousetrap" then no need to stop
@@ -983,7 +984,7 @@
     /**
      * exposes _handleKey publicly so it can be overwritten by extensions
      */
-    Mousetrap.prototype.handleKey = function() {
+    Mousetrap.prototype.handleKey = function () {
         var self = this;
         return self._handleKey.apply(self, arguments);
     };
@@ -991,7 +992,7 @@
     /**
      * allow custom key mappings
      */
-    Mousetrap.addKeycodes = function(object) {
+    Mousetrap.addKeycodes = function (object) {
         for (var key in object) {
             if (object.hasOwnProperty(key)) {
                 _MAP[key] = object[key];
@@ -1006,15 +1007,15 @@
      * This method is needed to allow the global mousetrap functions to work
      * now that mousetrap is a constructor function.
      */
-    Mousetrap.init = function() {
+    Mousetrap.init = function () {
         var documentMousetrap = Mousetrap(document);
         for (var method in documentMousetrap) {
             if (method.charAt(0) !== '_') {
-                Mousetrap[method] = (function(method) {
-                    return function() {
+                Mousetrap[method] = (function (method) {
+                    return function () {
                         return documentMousetrap[method].apply(documentMousetrap, arguments);
                     };
-                } (method));
+                }(method));
             }
         }
     };
@@ -1031,8 +1032,8 @@
 
     // expose mousetrap as an AMD module
     if (typeof define === 'function' && define.amd) {
-        define(function() {
+        define(function () {
             return Mousetrap;
         });
     }
-}) (typeof window !== 'undefined' ? window : null, typeof  window !== 'undefined' ? document : null);
+})(typeof window !== 'undefined' ? window : null, typeof window !== 'undefined' ? document : null);

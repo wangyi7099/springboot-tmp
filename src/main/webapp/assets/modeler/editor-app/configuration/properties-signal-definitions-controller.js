@@ -37,8 +37,7 @@ angular.module('flowableModeler').controller('FlowableSignalDefinitionsPopupCtrl
 
             if ($scope.property.value.constructor == String) {
                 $scope.signalDefinitions = JSON.parse($scope.property.value);
-            }
-            else {
+            } else {
                 // Note that we clone the json object rather then setting it directly,
                 // this to cope with the fact that the user can click the cancel button and no changes should have happened
                 $scope.signalDefinitions = angular.copy($scope.property.value);
@@ -122,7 +121,7 @@ angular.module('flowableModeler').controller('FlowableSignalDefinitionsPopupCtrl
         };
 
         $scope.scopeOptions = [{'value': 'global', 'translationId': 'PROPERTY.SIGNALDEFINITIONS.SCOPE-GLOBAL'},
-                                {'value': 'processInstance', 'translationId': 'PROPERTY.SIGNALDEFINITIONS.SCOPE-PROCESSINSTANCE'}];
+            {'value': 'processInstance', 'translationId': 'PROPERTY.SIGNALDEFINITIONS.SCOPE-PROCESSINSTANCE'}];
 
         // Click handler for save button
         $scope.save = function () {

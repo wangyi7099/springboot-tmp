@@ -15,22 +15,22 @@
 'use strict';
 
 var DECISION_TABLE_TOOLBAR_CONFIG = {
-    "items" : [
+    "items": [
         {
-            "type" : "button",
-            "title" : "TOOLBAR.ACTION.SAVE",
-            "cssClass" : "editor-icon editor-icon-save",
-            "action" : "DECISION_TABLE_TOOLBAR.ACTIONS.saveModel",
+            "type": "button",
+            "title": "TOOLBAR.ACTION.SAVE",
+            "cssClass": "editor-icon editor-icon-save",
+            "action": "DECISION_TABLE_TOOLBAR.ACTIONS.saveModel",
             "disableOnReadonly": true
         }
     ],
-    
-    "secondaryItems" : [
-		{
-		    "type" : "button",
-		    "title" : "TOOLBAR.ACTION.CLOSE",
-		    "cssClass" : "glyphicon glyphicon-remove",
-		    "action" : "DECISION_TABLE_TOOLBAR.ACTIONS.closeEditor"
-		}
+
+    "secondaryItems": [
+        {
+            "type": "button",
+            "title": "TOOLBAR.ACTION.CLOSE",
+            "cssClass": "glyphicon glyphicon-remove",
+            "action": "DECISION_TABLE_TOOLBAR.ACTIONS.closeEditor"
+        }
     ]
 };

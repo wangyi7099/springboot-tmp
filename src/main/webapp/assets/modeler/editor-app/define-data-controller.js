@@ -15,34 +15,36 @@
  * Controller for morph shape selection
  */
 
-var FlowableDefineDataCtrl = [ '$rootScope', '$scope', 'dialog', '$timeout', '$translate', function($rootScope, $scope, dialog, $timeout, $translate) {
+var FlowableDefineDataCtrl = ['$rootScope', '$scope', 'dialog', '$timeout', '$translate', function ($rootScope, $scope, dialog, $timeout, $translate) {
 
     $scope.definedDataItems = [];
     $scope.selectedDataItems = [];
-    
+
     // Config for grid
     $scope.gridOptions = {
         data: 'definedDataItems',
         enableRowSelection: true,
         headerRowHeight: 28,
         multiSelect: false,
-        keepLastSelected : false,
+        keepLastSelected: false,
         selectedItems: $scope.selectedDataItems,
         enableHorizontalScrollbar: 0,
         enableColumnMenus: false,
         enableSorting: false,
-        columnDefs: [{ field: 'name', displayName: 'Name'},
-            { field: 'value', displayName: 'Value'}]
+        columnDefs: [{field: 'name', displayName: 'Name'},
+            {field: 'value', displayName: 'Value'}]
     };
-    
+
     // Click handler for add button
-    $scope.addNewDataItem = function() {
-    	$scope.definedDataItems.push({ name : '',
-            value : ''});
+    $scope.addNewDataItem = function () {
+        $scope.definedDataItems.push({
+            name: '',
+            value: ''
+        });
     };
 
     // Click handler for remove button
-    $scope.removeDataItem = function() {
+    $scope.removeDataItem = function () {
         if ($scope.selectedDataItems.length > 0) {
             var index = $scope.definedDataItems.indexOf($scope.selectedDataItems[0]);
             $scope.gridOptions.selectItem(index, false);
@@ -58,15 +60,15 @@ var FlowableDefineDataCtrl = [ '$rootScope', '$scope', 'dialog', '$timeout', '$t
     };
 
     // Click handler for up button
-    $scope.moveDataItemUp = function() {
+    $scope.moveDataItemUp = function () {
         if ($scope.selectedParameters.length > 0) {
             var index = $scope.definedDataItems.indexOf($scope.selectedDataItems[0]);
             if (index != 0) { // If it's the first, no moving up of course
                 // Reason for funny way of swapping, see https://github.com/angular-ui/ng-grid/issues/272
                 var temp = $scope.definedDataItems[index];
                 $scope.definedDataItems.splice(index, 1);
-                $timeout(function(){
-                	$scope.definedDataItems.splice(index + -1, 0, temp);
+                $timeout(function () {
+                    $scope.definedDataItems.splice(index + -1, 0, temp);
                 }, 100);
 
             }
@@ -74,31 +76,31 @@ var FlowableDefineDataCtrl = [ '$rootScope', '$scope', 'dialog', '$timeout', '$t
     };
 
     // Click handler for down button
-    $scope.moveDataItemDown = function() {
+    $scope.moveDataItemDown = function () {
         if ($scope.selectedParameters.length > 0) {
             var index = $scope.definedDataItems.indexOf($scope.selectedDataItems[0]);
             if (index != $scope.definedDataItems.length - 1) { // If it's the last element, no moving down of course
                 // Reason for funny way of swapping, see https://github.com/angular-ui/ng-grid/issues/272
                 var temp = $scope.definedDataItems[index];
                 $scope.definedDataItems.splice(index, 1);
-                $timeout(function(){
-                	$scope.definedDataItems.splice(index + 1, 0, temp);
+                $timeout(function () {
+                    $scope.definedDataItems.splice(index + 1, 0, temp);
                 }, 100);
 
             }
         }
     };
-    
-    $scope.save = function() {
-      dialog.close();
+
+    $scope.save = function () {
+        dialog.close();
     };
 
-    $scope.cancel = function() {
-      dialog.close();
+    $scope.cancel = function () {
+        dialog.close();
     };
 
     // Close button handler
-    $scope.close = function() {
+    $scope.close = function () {
         dialog.close();
     };
 

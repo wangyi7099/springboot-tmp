@@ -15,15 +15,14 @@
 'use strict';
 
 // Decision Table service
-angular.module('flowableModeler').service('DecisionTableService', [ '$rootScope', '$http', '$q', '$timeout', '$translate',
+angular.module('flowableModeler').service('DecisionTableService', ['$rootScope', '$http', '$q', '$timeout', '$translate',
     function ($rootScope, $http, $q, $timeout, $translate) {
 
-        var httpAsPromise = function(options) {
+        var httpAsPromise = function (options) {
             var deferred = $q.defer();
-            $http(options).
-                success(function (response, status, headers, config) {
-                    deferred.resolve(response);
-                })
+            $http(options).success(function (response, status, headers, config) {
+                deferred.resolve(response);
+            })
                 .error(function (response, status, headers, config) {
                     console.log('Something went wrong during http call:' + response);
                     deferred.reject(response);
@@ -31,7 +30,7 @@ angular.module('flowableModeler').service('DecisionTableService', [ '$rootScope'
             return deferred.promise;
         };
 
-        this.filterDecisionTables = function(filter) {
+        this.filterDecisionTables = function (filter) {
             return httpAsPromise(
                 {
                     method: 'GET',
@@ -44,25 +43,25 @@ angular.module('flowableModeler').service('DecisionTableService', [ '$rootScope'
         /**
          * Fetches the details of a decision table.
          */
-        this.fetchDecisionTableDetails = function(modelId, historyModelId) {
+        this.fetchDecisionTableDetails = function (modelId, historyModelId) {
             var url = historyModelId ?
                 FLOWABLE.APP_URL.getDecisionTableModelHistoryUrl(encodeURIComponent(modelId), encodeURIComponent(historyModelId)) :
                 FLOWABLE.APP_URL.getDecisionTableModelUrl(encodeURIComponent(modelId));
-            return httpAsPromise({ method: 'GET', url: url });
+            return httpAsPromise({method: 'GET', url: url});
         };
 
-        function cleanUpModel (decisionTableDefinition) {
+        function cleanUpModel(decisionTableDefinition) {
             delete decisionTableDefinition.isEmbeddedTable;
             var expressions = (decisionTableDefinition.inputExpressions || []).concat(decisionTableDefinition.outputExpressions || []);
             if (decisionTableDefinition.rules && decisionTableDefinition.rules.length > 0) {
                 decisionTableDefinition.rules.forEach(function (rule) {
                     var headerExpressionIds = [];
-                    expressions.forEach(function(def){
+                    expressions.forEach(function (def) {
                         headerExpressionIds.push(def.id);
                     });
 
                     // Make sure that the rule has all header ids defined as attribtues
-                    headerExpressionIds.forEach(function(id){
+                    headerExpressionIds.forEach(function (id) {
                         if (!rule.hasOwnProperty(id)) {
                             rule[id] = "";
                         }
@@ -84,8 +83,8 @@ angular.module('flowableModeler').service('DecisionTableService', [ '$rootScope'
         this.saveDecisionTable = function (data, name, key, description, saveCallback, errorCallback) {
 
             data.decisionTableRepresentation = {
-            	name: name,
-            	key: key
+                name: name,
+                key: key
             };
 
             if (description && description.length > 0) {
@@ -99,7 +98,7 @@ angular.module('flowableModeler').service('DecisionTableService', [ '$rootScope'
             decisionTableDefinition.key = key;
             decisionTableDefinition.rules = angular.copy($rootScope.currentDecisionTableRules);
 
-			html2canvas(jQuery('#decision-table-editor'), {
+            html2canvas(jQuery('#decision-table-editor'), {
                 onrendered: function (canvas) {
                     var scale = canvas.width / 300.0;
 
@@ -113,21 +112,19 @@ angular.module('flowableModeler').service('DecisionTableService', [ '$rootScope'
                     data.decisionTableImageBase64 = extra_canvas.toDataURL('image/png');
 
                     $http({
-	                    method: 'PUT',
-	                    url: FLOWABLE.APP_URL.getDecisionTableModelUrl($rootScope.currentDecisionTable.id),
-	                    data: data}).
-	                
-	                	success(function (response, status, headers, config) {
+                        method: 'PUT',
+                        url: FLOWABLE.APP_URL.getDecisionTableModelUrl($rootScope.currentDecisionTable.id),
+                        data: data
+                    }).success(function (response, status, headers, config) {
 
-                            if (saveCallback) {
-                                saveCallback();
-                            }
-                        }).
-                        error(function (response, status, headers, config) {
-                            if (errorCallback) {
-                                errorCallback(response);
-                            }
-                        });
+                        if (saveCallback) {
+                            saveCallback();
+                        }
+                    }).error(function (response, status, headers, config) {
+                        if (errorCallback) {
+                            errorCallback(response);
+                        }
+                    });
                 }
             });
         };
@@ -148,17 +145,17 @@ angular.module('flowableModeler').service('DecisionTableService', [ '$rootScope'
                 }
                 decisionTableIdParams += 'version=' + Date.now();
 
-                $http({method: 'GET', url: FLOWABLE.APP_URL.getDecisionTableModelValuesUrl(decisionTableIdParams)}).
-                    success(function (data) {
-                        if (callback) {
-                            callback(data);
-                        }
-                    }).
+                $http({
+                    method: 'GET',
+                    url: FLOWABLE.APP_URL.getDecisionTableModelValuesUrl(decisionTableIdParams)
+                }).success(function (data) {
+                    if (callback) {
+                        callback(data);
+                    }
+                }).error(function (data) {
+                    console.log('Something went wrong when fetching decision table(s):' + JSON.stringify(data));
+                });
 
-                    error(function (data) {
-                        console.log('Something went wrong when fetching decision table(s):' + JSON.stringify(data));
-                    });
-                    
             } else {
                 if (callback) {
                     callback();

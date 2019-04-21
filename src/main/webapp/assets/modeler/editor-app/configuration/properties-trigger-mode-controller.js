@@ -11,13 +11,13 @@
  * limitations under the License.
  */
 
-angular.module('flowableModeler').controller('FlowableTriggerModeCtrl', [ '$scope', function($scope) {
+angular.module('flowableModeler').controller('FlowableTriggerModeCtrl', ['$scope', function ($scope) {
 
     if ($scope.property.value === undefined || $scope.property.value == null) {
-    	$scope.property.value = 'default';
+        $scope.property.value = 'default';
     }
-        
-    $scope.triggerModeChanged = function() {
-    	$scope.updatePropertyInModel($scope.property);
+
+    $scope.triggerModeChanged = function () {
+        $scope.updatePropertyInModel($scope.property);
     };
 }]);

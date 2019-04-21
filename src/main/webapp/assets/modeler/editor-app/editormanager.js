@@ -32,15 +32,15 @@ angular.module("flowableModeler").factory("editorManager", ["$http", function ($
         getModelId: function () {
             return this.modelId;
         },
-        setModelId: function (modelId){
+        setModelId: function (modelId) {
             this.modelId = modelId;
         },
         getCurrentModelId: function () {
-        	return this.current;
+            return this.current;
         },
-        setStencilData: function(stencilData){
+        setStencilData: function (stencilData) {
             //we don't want a references!
-            this.stencilData = jQuery.extend(true, {},stencilData);
+            this.stencilData = jQuery.extend(true, {}, stencilData);
         },
         getStencilData: function () {
             return this.stencilData;
@@ -108,7 +108,7 @@ angular.module("flowableModeler").factory("editorManager", ["$http", function ($
             }.bind(this));
 
             shapes = this.canvasTracker.get(resourceId);
-            if(!shapes){
+            if (!shapes) {
                 shapes = JSON.stringify([]);
             }
 
@@ -149,7 +149,7 @@ angular.module("flowableModeler").factory("editorManager", ["$http", function ($
                     child.set("id", childShape.resourceId);
                     child.set("type", stencilId);
                     child.set("current", childShape.resourceId === this.current);
-                    
+
                     //check if childshapes
 
                     if (stencilId === "CollapsedSubProcess") {
@@ -182,9 +182,9 @@ angular.module("flowableModeler").factory("editorManager", ["$http", function ($
         },
         getModel: function () {
             this.syncCanvasTracker();
-            
+
             var modelMetaData = this.getBaseModelData();
-            
+
             var stencilId = undefined;
             var stencilSetNamespace = undefined;
             var stencilSetUrl = undefined;
@@ -218,7 +218,7 @@ angular.module("flowableModeler").factory("editorManager", ["$http", function ($
 
             return model;
         },
-        setModelData: function(response){
+        setModelData: function (response) {
             this.modelData = response.data;
         },
         bootEditor: function () {
@@ -226,10 +226,10 @@ angular.module("flowableModeler").factory("editorManager", ["$http", function ($
             //resetting the state
             this.canvasTracker = new Hash();
             var config = jQuery.extend(true, {}, this.modelData); //avoid a reference to the original object.
-            if(!config.model.childShapes){
+            if (!config.model.childShapes) {
                 config.model.childShapes = [];
             }
-            
+
             this.findAndRegisterCanvas(config.model.childShapes); //this will remove any childshapes of a collapseable subprocess.
             this.canvasTracker.set(config.modelId, JSON.stringify(config.model.childShapes)); //this will be overwritten almost instantly.
 
@@ -261,19 +261,19 @@ angular.module("flowableModeler").factory("editorManager", ["$http", function ($
         _mergeCanvasToChild: function (parent) {
             for (var i = 0; i < parent.childShapes.length; i++) {
                 var childShape = parent.childShapes[i]
-                if(childShape.stencil.id === "CollapsedSubProcess"){
-                    
+                if (childShape.stencil.id === "CollapsedSubProcess") {
+
                     var elements = this.canvasTracker.get(childShape.resourceId);
-                    if(elements){
+                    if (elements) {
                         elements = JSON.parse(elements);
-                    }else{
+                    } else {
                         elements = [];
                     }
                     childShape.childShapes = elements;
                     this._mergeCanvasToChild(childShape);
-                }else if(childShape.stencil.id === "SubProcess"){
+                } else if (childShape.stencil.id === "SubProcess") {
                     this._mergeCanvasToChild(childShape);
-                }else{
+                } else {
                     //do nothing?
                 }
             }
@@ -281,35 +281,35 @@ angular.module("flowableModeler").factory("editorManager", ["$http", function ($
         dispatchOryxEvent: function (event) {
             FLOWABLE.eventBus.dispatchOryxEvent(event);
         },
-        isLoading: function(){
+        isLoading: function () {
             return this.loading;
         },
-        navigateTo: function(resourceId){
+        navigateTo: function (resourceId) {
             //TODO: this could be improved by check if the resourceId is not equal to the current tracker...
             this.syncCanvasTracker();
             var found = false;
-            this.canvasTracker.each(function(pair){
+            this.canvasTracker.each(function (pair) {
                 var key = pair.key;
                 var children = JSON.parse(pair.value);
                 var targetable = this._findTarget(children, resourceId);
-                if (!found && targetable){
+                if (!found && targetable) {
                     this.edit(key);
                     var flowableShape = this.getCanvas().getChildShapeByResourceId(targetable);
-                    this.setSelection([flowableShape],[],true);
+                    this.setSelection([flowableShape], [], true);
                     found = true;
                 }
-            },this);
+            }, this);
         },
-        _findTarget: function(children,resourceId){
-            for(var i =0; i < children.length; i++){
+        _findTarget: function (children, resourceId) {
+            for (var i = 0; i < children.length; i++) {
                 var child = children[i];
-                if(child.resourceId === resourceId){
+                if (child.resourceId === resourceId) {
                     return child.resourceId;
-                }else if(child.properties && child.properties["overrideid"] === resourceId){
+                } else if (child.properties && child.properties["overrideid"] === resourceId) {
                     return child.resourceId;
-                }else{
-                    var result = this._findTarget(child.childShapes,resourceId);
-                    if(result){
+                } else {
+                    var result = this._findTarget(child.childShapes, resourceId);
+                    if (result) {
                         return result;
                     }
                 }

@@ -15,14 +15,13 @@
  * Adhoc sub process ordering property
  */
 
-angular.module('flowableModeler').controller('FlowableOrderingCtrl', [ '$scope', function($scope) {
+angular.module('flowableModeler').controller('FlowableOrderingCtrl', ['$scope', function ($scope) {
 
-    if ($scope.property.value == undefined && $scope.property.value == null)
-    {
-    	$scope.property.value = 'Parallel';
+    if ($scope.property.value == undefined && $scope.property.value == null) {
+        $scope.property.value = 'Parallel';
     }
-        
-    $scope.orderingChanged = function() {
-    	$scope.updatePropertyInModel($scope.property);
+
+    $scope.orderingChanged = function () {
+        $scope.updatePropertyInModel($scope.property);
     };
 }]);

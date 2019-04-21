@@ -40,8 +40,7 @@ angular.module('flowableModeler').controller('FlowableEventListenersPopupCtrl',
 
             if ($scope.property.value.eventListeners.constructor == String) {
                 $scope.eventListeners = JSON.parse($scope.property.value.eventListeners);
-            }
-            else {
+            } else {
                 // Note that we clone the json object rather then setting it directly,
                 // this to cope with the fact that the user can click the cancel button and no changes should have happened
                 $scope.eventListeners = angular.copy($scope.property.value.eventListeners);
@@ -139,24 +138,19 @@ angular.module('flowableModeler').controller('FlowableEventListenersPopupCtrl',
                 if (listener.rethrowType && listener.rethrowType.length > 0) {
                     if (listener.rethrowType === 'error' && listener.errorcode !== '') {
                         implementationText = "Rethrow as error " + listener.errorcode;
-                    }
-                    else if (listener.rethrowType === 'message' && listener.messagename !== '') {
+                    } else if (listener.rethrowType === 'message' && listener.messagename !== '') {
                         implementationText = "Rethrow as message " + listener.messagename;
-                    }
-                    else if ((listener.rethrowType === 'signal' || listener.rethrowType === 'globalSignal') && listener.signalname !== '') {
+                    } else if ((listener.rethrowType === 'signal' || listener.rethrowType === 'globalSignal') && listener.signalname !== '') {
                         implementationText = "Rethrow as signal " + listener.signalname;
                     }
                 }
                 $scope.selectedListener.implementation = implementationText;
-            }
-            else {
+            } else {
                 if ($scope.selectedListener.className !== '') {
                     $scope.selectedListener.implementation = $scope.selectedListener.className;
-                }
-                else if ($scope.selectedListener.delegateExpression !== '') {
+                } else if ($scope.selectedListener.delegateExpression !== '') {
                     $scope.selectedListener.implementation = $scope.selectedListener.delegateExpression;
-                }
-                else {
+                } else {
                     $scope.selectedListener.implementation = '';
                 }
             }

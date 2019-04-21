@@ -44,11 +44,9 @@ angular.module('flowableModeler').controller('FlowableFieldsPopupCtrl',
                 var field = $scope.fields[i];
                 if (field.stringValue !== undefined && field.stringValue !== '') {
                     field.implementation = field.stringValue;
-                }
-                else if (field.expression !== undefined && field.expression !== '') {
+                } else if (field.expression !== undefined && field.expression !== '') {
                     field.implementation = field.expression;
-                }
-                else if (field.string !== undefined && field.string !== '') {
+                } else if (field.string !== undefined && field.string !== '') {
                     field.implementation = field.string;
                 }
             }
@@ -95,14 +93,11 @@ angular.module('flowableModeler').controller('FlowableFieldsPopupCtrl',
         $scope.fieldDetailsChanged = function () {
             if ($scope.selectedField.stringValue != '') {
                 $scope.selectedField.implementation = $scope.selectedField.stringValue;
-            }
-            else if ($scope.selectedField.expression != '') {
+            } else if ($scope.selectedField.expression != '') {
                 $scope.selectedField.implementation = $scope.selectedField.expression;
-            }
-            else if ($scope.selectedField.string != '') {
+            } else if ($scope.selectedField.string != '') {
                 $scope.selectedField.implementation = $scope.selectedField.string;
-            }
-            else {
+            } else {
                 $scope.selectedField.implementation = '';
             }
         };

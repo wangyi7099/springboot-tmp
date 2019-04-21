@@ -13,10 +13,10 @@
 /**
  * Service with small utility methods
  */
-angular.module('flowableModeler').service('UtilityService', [ '$window', '$document', '$timeout', function ($window, $document, $timeout) {
+angular.module('flowableModeler').service('UtilityService', ['$window', '$document', '$timeout', function ($window, $document, $timeout) {
 
-    this.scrollToElement = function(elementId) {
-        $timeout(function() {
+    this.scrollToElement = function (elementId) {
+        $timeout(function () {
             var someElement = angular.element(document.getElementById(elementId))[0];
             if (someElement) {
                 if (someElement.getBoundingClientRect().top > $window.innerHeight) {

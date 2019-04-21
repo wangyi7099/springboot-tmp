@@ -11,22 +11,22 @@
  * limitations under the License.
  */
 
-angular.module('flowableModeler').controller('ProcessNavigatorController',['editorManager', '$scope',function(editorManager, $scope){
+angular.module('flowableModeler').controller('ProcessNavigatorController', ['editorManager', '$scope', function (editorManager, $scope) {
     //problem here the ORYX editor is bound to the rootscope. In theory this communication should be moved to a service.
 
-    $scope.showSubProcess = function(child){
+    $scope.showSubProcess = function (child) {
         var flowableShapes = editorManager.getChildShapeByResourceId(child.resourceId);
-        editorManager.setSelection([flowableShapes],[],true);
+        editorManager.setSelection([flowableShapes], [], true);
     }
 
     $scope.treeview = {};
     $scope.isEditorReady = false;
 
-    $scope.edit = function(resourceId){
+    $scope.edit = function (resourceId) {
         editorManager.edit(resourceId);
     };
 
-    FLOWABLE.eventBus.addListener(FLOWABLE.eventBus.EVENT_TYPE_EDITOR_READY, function(event){
+    FLOWABLE.eventBus.addListener(FLOWABLE.eventBus.EVENT_TYPE_EDITOR_READY, function (event) {
         $scope.isEditorReady = true;
         renderProcessHierarchy();
 
@@ -37,39 +37,39 @@ angular.module('flowableModeler').controller('ProcessNavigatorController',['edit
     })
 
     //if an element is added te properties will catch this event.
-    FLOWABLE.eventBus.addListener(FLOWABLE.eventBus.EVENT_TYPE_PROPERTY_VALUE_CHANGED,filterEvent);
-    FLOWABLE.eventBus.addListener(FLOWABLE.eventBus.EVENT_TYPE_ITEM_DROPPED,filterEvent);
-    FLOWABLE.eventBus.addListener("EDITORMANAGER-EDIT-ACTION",function(){
+    FLOWABLE.eventBus.addListener(FLOWABLE.eventBus.EVENT_TYPE_PROPERTY_VALUE_CHANGED, filterEvent);
+    FLOWABLE.eventBus.addListener(FLOWABLE.eventBus.EVENT_TYPE_ITEM_DROPPED, filterEvent);
+    FLOWABLE.eventBus.addListener("EDITORMANAGER-EDIT-ACTION", function () {
         renderProcessHierarchy();
     });
 
-    function filterEvent(event){
+    function filterEvent(event) {
         //this event is fired when the user changes a property by the property editor.
-        if(event.type === "event-type-property-value-changed"){
-            if(event.property.key === "oryx-overrideid" || event.property.key === "oryx-name"){
+        if (event.type === "event-type-property-value-changed") {
+            if (event.property.key === "oryx-overrideid" || event.property.key === "oryx-name") {
                 renderProcessHierarchy()
             }
             //this event is fired when the stencil / shape's text is changed / updated.
-        }else if(event.type === "propertyChanged"){
-            if(event.name === "oryx-overrideid" || event.name === "oryx-name"){
+        } else if (event.type === "propertyChanged") {
+            if (event.name === "oryx-overrideid" || event.name === "oryx-name") {
                 renderProcessHierarchy();
             }
-        }else if(event.type === ORYX.CONFIG.ACTION_DELETE_COMPLETED){
+        } else if (event.type === ORYX.CONFIG.ACTION_DELETE_COMPLETED) {
             renderProcessHierarchy();
             //for some reason the new tree does not trigger an ui update.
             //$scope.$apply();
-        }else if(event.type === "event-type-item-dropped"){
+        } else if (event.type === "event-type-item-dropped") {
             renderProcessHierarchy();
         }
     }
 
-    function renderProcessHierarchy(){
+    function renderProcessHierarchy() {
         //only start calculating when the editor has done all his constructor work.
-        if(!$scope.isEditorReady){
+        if (!$scope.isEditorReady) {
             return false;
         }
-        
-        if (!editorManager.isLoading()){
+
+        if (!editorManager.isLoading()) {
             //the current implementation of has a lot of eventlisteners. when calling getTree() it could manipulate
             //the canvastracker while the canvas is stille loading stuff.
             //TODO: check if its possible to trigger the re-rendering by a single event instead of registering on 10 events...

@@ -52,11 +52,11 @@ angular.module('flowableModeler')
             ];
 
             $scope.form = {
-            	name: '', 
-            	key: '',
-            	description: '', 
-            	version: 1
-           	};
+                name: '',
+                key: '',
+                description: '',
+                version: 1
+            };
 
             $scope.formElements = [];
             $rootScope.currentOutcomes = [];
@@ -65,7 +65,7 @@ angular.module('flowableModeler')
 
             var guidSequence = 0;
 
-            function setFieldDragDropAttributes (field, prefix) {
+            function setFieldDragDropAttributes(field, prefix) {
                 if (!field._guid) {
                     field._guid = prefix + guidSequence++;
                 }
@@ -78,13 +78,13 @@ angular.module('flowableModeler')
             var lastDropArrayTarget = null;
 
             $scope.onFieldMoved = function (field, fieldArraySource) {
-            	
+
             };
 
 
             $scope.onFieldDrop = function (paletteElementOrField, dropArrayTarget, event, index) {
 
-				// Is it an existing object?
+                // Is it an existing object?
                 if (paletteElementOrField.hasOwnProperty('_guid')) {
 
                     lastDropArrayTarget = dropArrayTarget;
@@ -112,10 +112,10 @@ angular.module('flowableModeler')
 
                 var fieldId = paletteElementOrField.type;
                 var fieldType;
-                
+
                 if (fieldId === 'radio-buttons' || fieldId === 'dropdown') {
                     fieldType = 'OptionFormField';
-                    
+
                 } else if (fieldId === 'expression') {
                     fieldType = 'ExpressionFormField';
                 }
@@ -130,8 +130,8 @@ angular.module('flowableModeler')
                 setFieldDragDropAttributes(field, 'newField');
 
                 if (fieldId === 'radio-buttons') {
-                    field.options = [{ 
-                    	name: $translate.instant('FORM-BUILDER.COMPONENT.RADIO-BUTTON-DEFAULT')
+                    field.options = [{
+                        name: $translate.instant('FORM-BUILDER.COMPONENT.RADIO-BUTTON-DEFAULT')
                     }];
                 }
 
@@ -142,7 +142,7 @@ angular.module('flowableModeler')
                     field.value = field.options[0];
                     field.hasEmptyValue = true;
                 }
-                
+
                 return field;
             };
 
@@ -156,69 +156,157 @@ angular.module('flowableModeler')
                     url = FLOWABLE.APP_URL.getFormModelUrl($routeParams.modelId);
                 }
 
-                $http({method: 'GET', url: url}).
-                    success(function (response, status, headers, config) {
-                        if (response.formDefinition.fields) {
+                $http({method: 'GET', url: url}).success(function (response, status, headers, config) {
+                    if (response.formDefinition.fields) {
 
-                            for (var i = 0; i < response.formDefinition.fields.length; i++) {
-                                var field = response.formDefinition.fields[i];
-                                if (!field.params) {
-                                    field.params = {};
-                                }
-                                setFieldDragDropAttributes(field, 'savedField');
+                        for (var i = 0; i < response.formDefinition.fields.length; i++) {
+                            var field = response.formDefinition.fields[i];
+                            if (!field.params) {
+                                field.params = {};
                             }
-
-                            $scope.formElements = response.formDefinition.fields;
-                        } else {
-                            $scope.formElements = [];
+                            setFieldDragDropAttributes(field, 'savedField');
                         }
-                        if (response.formDefinition.outcomes) {
-                            $rootScope.currentOutcomes = response.formDefinition.outcomes;
-                            if ($rootScope.currentOutcomes.length > 0) {
-                                $scope.model.useOutcomes = true;
-                            }
-                        } else {
-                            $rootScope.currentOutcomes = [];
+
+                        $scope.formElements = response.formDefinition.fields;
+                    } else {
+                        $scope.formElements = [];
+                    }
+                    if (response.formDefinition.outcomes) {
+                        $rootScope.currentOutcomes = response.formDefinition.outcomes;
+                        if ($rootScope.currentOutcomes.length > 0) {
+                            $scope.model.useOutcomes = true;
                         }
-                        $rootScope.currentForm = response;
-                        delete $rootScope.currentForm.formDefinition;
+                    } else {
+                        $rootScope.currentOutcomes = [];
+                    }
+                    $rootScope.currentForm = response;
+                    delete $rootScope.currentForm.formDefinition;
 
-                        $rootScope.formItems = $scope.formElements;
+                    $rootScope.formItems = $scope.formElements;
 
-                        $rootScope.formChanges = false;
-                        $timeout(function () {
-                            // Flip switch in timeout to start watching all form-related models
-                            // after next digest cycle, to prevent first false-positive
-                            $scope.formLoaded = true;
-                        }, 200);
-                        
-                    }).
-                    error(function (response, status, headers, config) {
-                        $scope.model.loading = false;
-                    });
+                    $rootScope.formChanges = false;
+                    $timeout(function () {
+                        // Flip switch in timeout to start watching all form-related models
+                        // after next digest cycle, to prevent first false-positive
+                        $scope.formLoaded = true;
+                    }, 200);
+
+                }).error(function (response, status, headers, config) {
+                    $scope.model.loading = false;
+                });
             } else {
                 $scope.formLoaded = true;
             }
 
             $scope.palletteElements = [
-                {'type': 'text', 'title': $translate.instant('FORM-BUILDER.PALLETTE.TEXT'), 'icon': 'images/form-builder/textfield-icon.png', 'width': 1},
-                {'type': 'password', 'title': $translate.instant('FORM-BUILDER.PALLETTE.PASSWORD'), 'icon': 'images/form-builder/password-icon.png', 'width': 1},
-                {'type': 'multi-line-text', 'title': $translate.instant('FORM-BUILDER.PALLETTE.MULTILINE-TEXT'), 'icon': 'images/form-builder/multi-line-textfield-icon.png', 'width': 1},
-                {'type': 'integer', 'title': $translate.instant('FORM-BUILDER.PALLETTE.NUMBER'), 'icon': 'images/form-builder/numberfield-icon.png', 'width': 1},
-                {'type': 'decimal', 'title': $translate.instant('FORM-BUILDER.PALLETTE.DECIMAL'), 'icon': 'images/form-builder/decimalfield-icon.png', 'width': 1},
-                {'type': 'boolean', 'title': $translate.instant('FORM-BUILDER.PALLETTE.CHECKBOX'), 'icon': 'images/form-builder/booleanfield-icon.png', 'width': 1},
-                {'type': 'date', 'title': $translate.instant('FORM-BUILDER.PALLETTE.DATE'), 'icon': 'images/form-builder/datefield-icon.png', 'width': 1},
-                {'type': 'dropdown', 'title': $translate.instant('FORM-BUILDER.PALLETTE.DROPDOWN'), 'icon': 'images/form-builder/dropdownfield-icon.png', 'width': 1},
-                {'type': 'radio-buttons', 'title': $translate.instant('FORM-BUILDER.PALLETTE.RADIO'), 'icon': 'images/form-builder/choicefield-icon.png', 'width': 1},
-                {'type': 'people', 'title': $translate.instant('FORM-BUILDER.PALLETTE.PEOPLE'), 'icon': 'images/form-builder/peoplefield-icon.png', 'width': 1},
-                {'type': 'functional-group', 'title': $translate.instant('FORM-BUILDER.PALLETTE.GROUP-OF-PEOPLE'), 'icon': 'images/form-builder/peoplefield-icon.png', 'width': 1},
-                {'type': 'upload', 'title': $translate.instant('FORM-BUILDER.PALLETTE.UPLOAD'), 'icon': 'images/form-builder/uploadfield-icon.png', 'width': 1},
-                {'type': 'expression', 'title': $translate.instant('FORM-BUILDER.PALLETTE.EXPRESSION'), 'icon': 'images/form-builder/readonly-icon.png', 'width': 1},
-                {'type': 'hyperlink', 'title': $translate.instant('FORM-BUILDER.PALLETTE.HYPERLINK'), 'icon': 'images/form-builder/hyperlink-icon.png', 'width':1},
-				{'type': 'spacer', 'title': $translate.instant('FORM-BUILDER.PALLETTE.SPACER'), 'icon': 'images/form-builder/spacer-icon.png', 'width':1},
-				{'type': 'horizontal-line', 'title': $translate.instant('FORM-BUILDER.PALLETTE.HORIZONTAL-LINE'), 'icon': 'images/form-builder/horizontal-line-icon.png', 'width':1},
-				{'type': 'headline', 'title': $translate.instant('FORM-BUILDER.PALLETTE.HEADLINE'), 'icon': 'images/form-builder/headline-icon.png', 'width':1},
-				{'type': 'headline-with-line', 'title': $translate.instant('FORM-BUILDER.PALLETTE.HEADLINE-WITH-LINE'), 'icon': 'images/form-builder/headline-with-line-icon.png', 'width':1}
+                {
+                    'type': 'text',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.TEXT'),
+                    'icon': 'images/form-builder/textfield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'password',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.PASSWORD'),
+                    'icon': 'images/form-builder/password-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'multi-line-text',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.MULTILINE-TEXT'),
+                    'icon': 'images/form-builder/multi-line-textfield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'integer',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.NUMBER'),
+                    'icon': 'images/form-builder/numberfield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'decimal',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.DECIMAL'),
+                    'icon': 'images/form-builder/decimalfield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'boolean',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.CHECKBOX'),
+                    'icon': 'images/form-builder/booleanfield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'date',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.DATE'),
+                    'icon': 'images/form-builder/datefield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'dropdown',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.DROPDOWN'),
+                    'icon': 'images/form-builder/dropdownfield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'radio-buttons',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.RADIO'),
+                    'icon': 'images/form-builder/choicefield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'people',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.PEOPLE'),
+                    'icon': 'images/form-builder/peoplefield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'functional-group',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.GROUP-OF-PEOPLE'),
+                    'icon': 'images/form-builder/peoplefield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'upload',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.UPLOAD'),
+                    'icon': 'images/form-builder/uploadfield-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'expression',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.EXPRESSION'),
+                    'icon': 'images/form-builder/readonly-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'hyperlink',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.HYPERLINK'),
+                    'icon': 'images/form-builder/hyperlink-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'spacer',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.SPACER'),
+                    'icon': 'images/form-builder/spacer-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'horizontal-line',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.HORIZONTAL-LINE'),
+                    'icon': 'images/form-builder/horizontal-line-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'headline',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.HEADLINE'),
+                    'icon': 'images/form-builder/headline-icon.png',
+                    'width': 1
+                },
+                {
+                    'type': 'headline-with-line',
+                    'title': $translate.instant('FORM-BUILDER.PALLETTE.HEADLINE-WITH-LINE'),
+                    'icon': 'images/form-builder/headline-with-line-icon.png',
+                    'width': 1
+                }
             ];
 
             $scope.$watch('formItems', function () {

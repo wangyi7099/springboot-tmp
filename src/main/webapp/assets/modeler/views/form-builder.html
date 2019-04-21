@@ -9,7 +9,7 @@
                         class="btn btn-inverse" ng-class="{'separator': item.type == 'separator'}"
                         ng-disabled="item.type == 'separator' || item.enabled == false"
                         ng-click="toolbarButtonClicked($index)">
-                        
+
                     <i ng-switch-when="button" ng-class="item.cssClass" class="toolbar-button" data-toggle="tooltip"
                        title="{{item.title | translate}}"></i>
 
@@ -78,8 +78,10 @@
                                 dnd-effect-allowed="move"
                                 dnd-type="'width-1'"
                                 dnd-moved="onFieldMoved(field, formItems)">
-                                <div draggable="true" id="{{field._guid}}" form-builder-element form-element="field" edit-state="editState"
-                                     drop="onFieldDrop(item, list, event, index)" moved="onFieldMoved(item, list)" class="canvas-element">
+                                <div draggable="true" id="{{field._guid}}" form-builder-element form-element="field"
+                                     edit-state="editState"
+                                     drop="onFieldDrop(item, list, event, index)" moved="onFieldMoved(item, list)"
+                                     class="canvas-element">
                                 </div>
                             </li>
                         </ul>
@@ -114,7 +116,8 @@
                                 </div>
                                 <div class="col-xs-2">
                                     <button style="width:110px" ng-show="$index > 0" class="btn btn-default"
-                                            ng-click="removeOutcome($index)">{{'FORM-BUILDER.OUTCOMES.REMOVE' | translate}}
+                                            ng-click="removeOutcome($index)">{{'FORM-BUILDER.OUTCOMES.REMOVE' |
+                                        translate}}
                                     </button>
                                 </div>
                                 <div class="col-xs-2">

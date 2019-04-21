@@ -85,7 +85,7 @@ EDITOR.UTIL = {
         return collectedElements.reverse();
     },
 
-    _visitShapeAndCollectShape: function(shape, stencilId, collectedShapes) {
+    _visitShapeAndCollectShape: function (shape, stencilId, collectedShapes) {
 
         if (shape.childShapes && shape.childShapes.length > 0) {
             for (var i = 0; i < shape.childShapes.length; i++) {
@@ -117,7 +117,7 @@ EDITOR.UTIL = {
                 }
             }
         }
-        
+
         var childShapesIterator = element.getChildShapes();
         if (childShapesIterator) {
             for (var i = 0; i < childShapesIterator.length; i++) {
@@ -147,7 +147,7 @@ EDITOR.UTIL = {
                 }
             }
         }
-        
+
         var childShapesIterator = element.getChildShapes();
         if (childShapesIterator) {
             for (var i = 0; i < childShapesIterator.length; i++) {
@@ -203,7 +203,7 @@ EDITOR.UTIL = {
                         }
                     }
                 }
-            } catch(err) {
+            } catch (err) {
                 // start of model reached
             }
         }
@@ -260,7 +260,7 @@ EDITOR.UTIL = {
         return filteredSteps;
     },
 
-    extractSortedSteps: function(allElements) {
+    extractSortedSteps: function (allElements) {
 
         var elementsMap = {};
         var sortedSteps = [];
@@ -273,7 +273,7 @@ EDITOR.UTIL = {
         return sortedSteps;
     },
 
-    getOutgoingElements: function(element, elementsMap, sortedSteps, onlySteps) {
+    getOutgoingElements: function (element, elementsMap, sortedSteps, onlySteps) {
 
         if (element && elementsMap) {
             if (element.outgoing && element.outgoing.length > 0) {
@@ -299,7 +299,7 @@ EDITOR.UTIL = {
         }
     },
 
-    _elementIsStep: function(element) {
+    _elementIsStep: function (element) {
         var isStep = false;
         if (element && element.stencil) {
             if (element.stencil.id != 'SequenceFlow') {
@@ -308,7 +308,6 @@ EDITOR.UTIL = {
         }
         return isStep;
     },
-
 
 
 };

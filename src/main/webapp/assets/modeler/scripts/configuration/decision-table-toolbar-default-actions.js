@@ -35,28 +35,28 @@ var DECISION_TABLE_TOOLBAR = {
 
         },
 
-        closeEditor:  function (services) {
+        closeEditor: function (services) {
 
-            var callback = function() {
+            var callback = function () {
                 services.$rootScope.decisiontableChanges = false;
-                
+
                 if (services.$rootScope.editorHistory.length > 0) {
-                	var navigationObject = services.$rootScope.editorHistory.pop();
-                	var additionalParameters = '';
-                	if (navigationObject.subProcessId && navigationObject.subProcessId.length > 0) {
-                		additionalParameters = '?subProcessId=' + navigationObject.subProcessId;
-                	}
-        			services.$location.url('/editor/' + navigationObject.id + additionalParameters);
-        		} else {
-        			services.$location.path('/decision-tables');
-        		}
+                    var navigationObject = services.$rootScope.editorHistory.pop();
+                    var additionalParameters = '';
+                    if (navigationObject.subProcessId && navigationObject.subProcessId.length > 0) {
+                        additionalParameters = '?subProcessId=' + navigationObject.subProcessId;
+                    }
+                    services.$location.url('/editor/' + navigationObject.id + additionalParameters);
+                } else {
+                    services.$location.path('/decision-tables');
+                }
             };
 
             if (services.$rootScope.decisiontableChanges == true) {
 
                 services.$scope.$emit("decisionTableChangesEvent");
 
-                var unbindMustSave = services.$scope.$on("mustSaveEvent", function(){
+                var unbindMustSave = services.$scope.$on("mustSaveEvent", function () {
                     //save the decision table data
                     var description = '';
                     if (services.$rootScope.currentDecisionTable.description) {
@@ -66,13 +66,13 @@ var DECISION_TABLE_TOOLBAR = {
                     var data = {
                         newVersion: false
                     };
-                    
+
                     unbindEvents();
-                    services.DecisionTableBuilderService.saveDecisionTable(data, services.$rootScope.currentDecisionTable.name, 
-                    	null, description, callback);
+                    services.DecisionTableBuilderService.saveDecisionTable(data, services.$rootScope.currentDecisionTable.name,
+                        null, description, callback);
                 });
 
-                var unbindDiscardDataEvent = services.$scope.$on("discardDataEvent", function() {
+                var unbindDiscardDataEvent = services.$scope.$on("discardDataEvent", function () {
                     unbindEvents();
                     callback();
                 });
@@ -97,7 +97,7 @@ var DECISION_TABLE_TOOLBAR = {
 
 /** Custom controller for the save dialog */
 angular.module('flowableModeler')
-    .controller('SaveDecisionTableCtrl', [ '$rootScope', '$scope', '$http', '$route', '$location', '$translate', 'DecisionTableService', 'hotRegisterer',
+    .controller('SaveDecisionTableCtrl', ['$rootScope', '$scope', '$http', '$route', '$location', '$translate', 'DecisionTableService', 'hotRegisterer',
         function ($rootScope, $scope, $http, $route, $location, $translate, DecisionTableService, hotRegisterer) {
 
             var description = '';
@@ -124,18 +124,18 @@ angular.module('flowableModeler')
             };
 
             $scope.saveAndClose = function () {
-                $scope.save(function() {
+                $scope.save(function () {
                     if ($rootScope.editorHistory.length > 0) {
-		    	        var navigationObject = $rootScope.editorHistory.pop();
-		    	        var additionalParameters = '';
-	                	if (navigationObject.subProcessId && navigationObject.subProcessId.length > 0) {
-	                		additionalParameters = '?subProcessId=' + navigationObject.subProcessId;
-	                	}
-		    	        $location.url('/editor/' + navigationObject.id + additionalParameters);
-		 
-		            } else {
-		            	$location.path('/decision-tables');
-		            }
+                        var navigationObject = $rootScope.editorHistory.pop();
+                        var additionalParameters = '';
+                        if (navigationObject.subProcessId && navigationObject.subProcessId.length > 0) {
+                            additionalParameters = '?subProcessId=' + navigationObject.subProcessId;
+                        }
+                        $location.url('/editor/' + navigationObject.id + additionalParameters);
+
+                    } else {
+                        $location.path('/decision-tables');
+                    }
                 });
             };
 
@@ -158,24 +158,24 @@ angular.module('flowableModeler')
 
                 $rootScope.currentDecisionTableRules = $scope.model.rulesData;
 
-                var saveCallback = function() {
+                var saveCallback = function () {
                     $scope.$hide();
-                    
+
                     $rootScope.currentDecisionTableModel.name = $scope.saveDialog.name;
                     $rootScope.currentDecisionTableModel.key = $scope.saveDialog.key;
                     $rootScope.currentDecisionTableModel.description = $scope.saveDialog.description;
-                    
+
                     $rootScope.addAlertPromise($translate('DECISION-TABLE-EDITOR.ALERT.SAVE-CONFIRM', {name: $scope.saveDialog.name}), 'info');
-                    
+
                     if (additionalSaveCallback) {
                         additionalSaveCallback();
                     }
-                    
+
                     $rootScope.decisionTableChanges = false;
                 };
 
-                var errorCallback = function(errorMessage) {
-                	$scope.status.loading = false;
+                var errorCallback = function (errorMessage) {
+                    $scope.status.loading = false;
                     $scope.saveDialog.errorMessage = errorMessage.message;
                 };
 
@@ -185,11 +185,11 @@ angular.module('flowableModeler')
                     hotDecisionTableEditorInstance.deselectCell();
                 }
 
-                DecisionTableService.saveDecisionTable(data, $scope.saveDialog.name, $scope.saveDialog.key, 
-                	$scope.saveDialog.description, saveCallback, errorCallback);
+                DecisionTableService.saveDecisionTable(data, $scope.saveDialog.name, $scope.saveDialog.key,
+                    $scope.saveDialog.description, saveCallback, errorCallback);
             };
 
-            $scope.isOkButtonDisabled = function() {
+            $scope.isOkButtonDisabled = function () {
                 if ($scope.status.loading) {
                     return false;
                 } else if ($scope.error && $scope.error.conflictResolveAction) {
@@ -202,7 +202,7 @@ angular.module('flowableModeler')
                 return true;
             };
 
-            $scope.okClicked = function() {
+            $scope.okClicked = function () {
                 if ($scope.error) {
                     if ($scope.error.conflictResolveAction === 'discardChanges') {
                         $scope.close();
@@ -210,8 +210,8 @@ angular.module('flowableModeler')
                     } else if ($scope.error.conflictResolveAction === 'overwrite'
                         || $scope.error.conflictResolveAction === 'newVersion') {
                         $scope.save();
-                    } else if($scope.error.conflictResolveAction === 'saveAs') {
-                        $scope.save(function() {
+                    } else if ($scope.error.conflictResolveAction === 'saveAs') {
+                        $scope.save(function () {
                             $rootScope.ignoreChanges = true;  // Otherwise will get pop up that changes are not saved.
                             $location.path('/decision-tables');
                         });

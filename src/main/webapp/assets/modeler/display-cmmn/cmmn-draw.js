@@ -11,12 +11,11 @@
  * limitations under the License.
  */
 
-function _cmmnGetColor(element, defaultColor)
-{
+function _cmmnGetColor(element, defaultColor) {
     var strokeColor;
-    if(element.current) {
+    if (element.current) {
         strokeColor = CURRENT_COLOR;
-    } else if(element.completed) {
+    } else if (element.completed) {
         strokeColor = COMPLETED_COLOR;
     } else {
         strokeColor = defaultColor;
@@ -24,136 +23,114 @@ function _cmmnGetColor(element, defaultColor)
     return strokeColor;
 }
 
-function _drawPlanModel(planModel)
-{
-	var rect = paper.rect(planModel.x, planModel.y, planModel.width, planModel.height);
+function _drawPlanModel(planModel) {
+    var rect = paper.rect(planModel.x, planModel.y, planModel.width, planModel.height);
 
-	rect.attr({"stroke-width": 1,
-		"stroke": "#000000",
-		"fill": "white"
- 	});
+    rect.attr({
+        "stroke-width": 1,
+        "stroke": "#000000",
+        "fill": "white"
+    });
 
-	if (planModel.name)
-	{
-		var planModelName = paper.text(planModel.x + 14, planModel.y + (planModel.height / 2), planModel.name).attr({
-	        "text-anchor" : "middle",
-	        "font-family" : "Arial",
-	        "font-size" : "12",
-	        "fill" : "#000000"
-	  	});
+    if (planModel.name) {
+        var planModelName = paper.text(planModel.x + 14, planModel.y + (planModel.height / 2), planModel.name).attr({
+            "text-anchor": "middle",
+            "font-family": "Arial",
+            "font-size": "12",
+            "fill": "#000000"
+        });
 
-		planModelName.transform("r270");
-	}
-}
-
-function _drawSubProcess(element)
-{
-	var rect = paper.rect(element.x, element.y, element.width, element.height, 4);
-
-	var strokeColor = _cmmnGetColor(element, MAIN_STROKE_COLOR);
-
-	rect.attr({"stroke-width": 1,
-		"stroke": strokeColor,
-		"fill": "white"
- 	});
-}
-
-function _drawVariableServiceTaskIcon(element)
-{
-	_drawTask(element);
-	if (element.taskType === "mail")
-	{
-		_drawSendTaskIcon(paper, element.x + 4, element.y + 4);
-	}
-	else if (element.taskType === "camel")
-	{
-		_drawCamelTaskIcon(paper, element.x + 4, element.y + 4);
-	}
-	else if (element.taskType === "mule")
-	{
-		_drawMuleTaskIcon(paper, element.x + 4, element.y + 4);
-	}
-    else if (element.taskType === "http")
-    {
-        _drawHttpTaskIcon(paper, element.x + 4, element.y + 4);
+        planModelName.transform("r270");
     }
-	else if (element.stencilIconId)
-	{
-		paper.image("../service/stencilitem/" + element.stencilIconId + "/icon", element.x + 4, element.y + 4, 16, 16);
-	}
-	else
-	{
-		_drawServiceTaskIcon(paper, element.x + 4, element.y + 4);
-	}
-	_addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawHttpServiceTask(element)
-{
+function _drawSubProcess(element) {
+    var rect = paper.rect(element.x, element.y, element.width, element.height, 4);
+
+    var strokeColor = _cmmnGetColor(element, MAIN_STROKE_COLOR);
+
+    rect.attr({
+        "stroke-width": 1,
+        "stroke": strokeColor,
+        "fill": "white"
+    });
+}
+
+function _drawVariableServiceTaskIcon(element) {
+    _drawTask(element);
+    if (element.taskType === "mail") {
+        _drawSendTaskIcon(paper, element.x + 4, element.y + 4);
+    } else if (element.taskType === "camel") {
+        _drawCamelTaskIcon(paper, element.x + 4, element.y + 4);
+    } else if (element.taskType === "mule") {
+        _drawMuleTaskIcon(paper, element.x + 4, element.y + 4);
+    } else if (element.taskType === "http") {
+        _drawHttpTaskIcon(paper, element.x + 4, element.y + 4);
+    } else if (element.stencilIconId) {
+        paper.image("../service/stencilitem/" + element.stencilIconId + "/icon", element.x + 4, element.y + 4, 16, 16);
+    } else {
+        _drawServiceTaskIcon(paper, element.x + 4, element.y + 4);
+    }
+    _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
+}
+
+function _drawHttpServiceTask(element) {
     _drawTask(element);
     _drawHttpTaskIcon(paper, element.x + 4, element.y + 4);
     _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawHumanTask(element)
-{
-	_drawTask(element);
-	_drawHumanTaskIcon(paper, element.x + 4, element.y + 4);
-	_addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
+function _drawHumanTask(element) {
+    _drawTask(element);
+    _drawHumanTaskIcon(paper, element.x + 4, element.y + 4);
+    _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawCaseTask(element)
-{
+function _drawCaseTask(element) {
     _drawTask(element);
     _drawCaseTaskIcon(paper, element.x + 1, element.y + 1);
     _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawProcessTask(element)
-{
+function _drawProcessTask(element) {
     _drawTask(element);
     _drawProcessTaskIcon(paper, element.x + 1, element.y + 1);
     _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawScriptTaskIcon(paper, startX, startY)
-{
-	var path1 = paper.path("m 5,2 0,0.094 c 0.23706,0.064 0.53189,0.1645 0.8125,0.375 0.5582,0.4186 1.05109,1.228 1.15625,2.5312 l 8.03125,0 1,0 1,0 c 0,-3 -2,-3 -2,-3 l -10,0 z M 4,3 4,13 2,13 c 0,3 2,3 2,3 l 9,0 c 0,0 2,0 2,-3 L 15,6 6,6 6,5.5 C 6,4.1111 5.5595,3.529 5.1875,3.25 4.8155,2.971 4.5,3 4.5,3 L 4,3 z");
-	path1.attr({
-		"opacity": 1,
-		"stroke": "none",
-		"fill": "#72a7d0"
- 	});
+function _drawScriptTaskIcon(paper, startX, startY) {
+    var path1 = paper.path("m 5,2 0,0.094 c 0.23706,0.064 0.53189,0.1645 0.8125,0.375 0.5582,0.4186 1.05109,1.228 1.15625,2.5312 l 8.03125,0 1,0 1,0 c 0,-3 -2,-3 -2,-3 l -10,0 z M 4,3 4,13 2,13 c 0,3 2,3 2,3 l 9,0 c 0,0 2,0 2,-3 L 15,6 6,6 6,5.5 C 6,4.1111 5.5595,3.529 5.1875,3.25 4.8155,2.971 4.5,3 4.5,3 L 4,3 z");
+    path1.attr({
+        "opacity": 1,
+        "stroke": "none",
+        "fill": "#72a7d0"
+    });
 
-	var scriptTaskIcon = paper.set();
-	scriptTaskIcon.push(path1);
+    var scriptTaskIcon = paper.set();
+    scriptTaskIcon.push(path1);
 
-	scriptTaskIcon.transform("T" + startX + "," + startY);
+    scriptTaskIcon.transform("T" + startX + "," + startY);
 }
 
-function _drawScriptServiceTask(element)
-{
-	_drawTask(element);
-	_drawScriptTaskIcon(paper, element.x + 4, element.y + 4);
-	_addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
+function _drawScriptServiceTask(element) {
+    _drawTask(element);
+    _drawScriptTaskIcon(paper, element.x + 4, element.y + 4);
+    _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawDecisionTask(element)
-{
+function _drawDecisionTask(element) {
     _drawTask(element);
     _drawDecisionTaskIcon(paper, element.x + 1, element.y + 1);
     _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawServiceTask(element)
-{
+function _drawServiceTask(element) {
     _drawTask(element);
     _drawVariableServiceTaskIcon(element);
     _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawTask(element)
-{
+function _drawTask(element) {
     var rectAttrs = {};
 
     // Stroke
@@ -167,60 +144,56 @@ function _drawTask(element)
         strokeWidth = TASK_HIGHLIGHT_STROKE;
     }
 
-	var width = element.width - (strokeWidth / 2);
-	var height = element.height - (strokeWidth / 2);
+    var width = element.width - (strokeWidth / 2);
+    var height = element.height - (strokeWidth / 2);
 
-	var rect = paper.rect(element.x, element.y, width, height, 4);
+    var rect = paper.rect(element.x, element.y, width, height, 4);
     rectAttrs['stroke-width'] = strokeWidth;
 
     // Fill
-	rectAttrs['fill'] = ACTIVITY_FILL_COLOR;
+    rectAttrs['fill'] = ACTIVITY_FILL_COLOR;
 
     rect.attr(rectAttrs);
-	rect.id = element.id;
+    rect.id = element.id;
 
-	if (element.name) {
-		this._drawMultilineText(element.name, element.x, element.y, element.width, element.height, "middle", "middle", 11);
-	}
+    if (element.name) {
+        this._drawMultilineText(element.name, element.x, element.y, element.width, element.height, "middle", "middle", 11);
+    }
 }
 
-function _drawTimerEventListener(element)
-{
+function _drawTimerEventListener(element) {
     _drawEventListener(element);
     _drawTimerEventListenerIcon(paper, element);
     _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawUserEventListener(element)
-{
+function _drawUserEventListener(element) {
     _drawEventListener(element);
     _drawUserEventListenerIcon(paper, element);
     _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawGenericEventListener(element)
-{
+function _drawGenericEventListener(element) {
     _drawEventListener(element);
     _addHoverLogic(element, "rect", ACTIVITY_STROKE_COLOR);
 }
 
-function _drawEventListener(element)
-{
+function _drawEventListener(element) {
     var x = element.x + (element.width / 2);
-	var y = element.y + (element.height / 2);
+    var y = element.y + (element.height / 2);
 
-	var circle = paper.circle(x, y, 15);
+    var circle = paper.circle(x, y, 15);
 
-    circle.attr({"stroke-width": 1,
+    circle.attr({
+        "stroke-width": 1,
         "stroke": "black",
         "fill": "white"
     });
 
-	circle.id = element.id;
+    circle.id = element.id;
 }
 
-function _drawMilestone(element)
-{
+function _drawMilestone(element) {
     var rectAttrs = {};
 
     // Stroke
@@ -251,8 +224,7 @@ function _drawMilestone(element)
     }
 }
 
-function _drawStage(element)
-{
+function _drawStage(element) {
     var rectAttrs = {};
 
     // Stroke
@@ -283,8 +255,7 @@ function _drawStage(element)
     }
 }
 
-function _drawPlanModel(element)
-{
+function _drawPlanModel(element) {
     var rectAttrs = {};
 
     // Stroke
@@ -326,8 +297,7 @@ function _drawPlanModel(element)
     }
 }
 
-function _drawEntryCriterion(element)
-{
+function _drawEntryCriterion(element) {
     var strokeColor = _cmmnGetColor(element, MAIN_STROKE_COLOR);
 
     var rhombus = paper.path("M" + element.x + " " + (element.y + (element.height / 2)) +
@@ -350,8 +320,7 @@ function _drawEntryCriterion(element)
     rhombus.id = element.id;
 }
 
-function _drawExitCriterion(element)
-{
+function _drawExitCriterion(element) {
     var strokeColor = _cmmnGetColor(element, MAIN_STROKE_COLOR);
 
     var rhombus = paper.path("M" + element.x + " " + (element.y + (element.height / 2)) +
@@ -374,118 +343,110 @@ function _drawExitCriterion(element)
     rhombus.id = element.id;
 }
 
-function _drawMultilineText(text, x, y, boxWidth, boxHeight, horizontalAnchor, verticalAnchor, fontSize)
-{
-	if (!text || text == "")
-	{
-		return;
-	}
+function _drawMultilineText(text, x, y, boxWidth, boxHeight, horizontalAnchor, verticalAnchor, fontSize) {
+    if (!text || text == "") {
+        return;
+    }
 
-	var textBoxX, textBoxY;
+    var textBoxX, textBoxY;
     var width = boxWidth - (2 * TEXT_PADDING);
 
-    if (horizontalAnchor === "middle")
-    {
-    	textBoxX = x + (boxWidth / 2);
-    }
-    else if (horizontalAnchor === "start")
-    {
-    	textBoxX = x;
+    if (horizontalAnchor === "middle") {
+        textBoxX = x + (boxWidth / 2);
+    } else if (horizontalAnchor === "start") {
+        textBoxX = x;
     }
 
     textBoxY = y + (boxHeight / 2);
 
- 	var t = paper.text(textBoxX + TEXT_PADDING, textBoxY + TEXT_PADDING).attr({
-        "text-anchor" : horizontalAnchor,
-        "font-family" : "Arial",
-        "font-size" : fontSize,
-        "fill" : "#373e48"
-  	});
+    var t = paper.text(textBoxX + TEXT_PADDING, textBoxY + TEXT_PADDING).attr({
+        "text-anchor": horizontalAnchor,
+        "font-family": "Arial",
+        "font-size": fontSize,
+        "fill": "#373e48"
+    });
 
     var abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     t.attr({
-        "text" : abc
+        "text": abc
     });
     var letterWidth = t.getBBox().width / abc.length;
 
     t.attr({
-        "text" : text
+        "text": text
     });
     var removedLineBreaks = text.split("\n");
     var x = 0, s = [];
-    for (var r = 0; r < removedLineBreaks.length; r++)
-    {
-  	    var words = removedLineBreaks[r].split(" ");
-  	    for ( var i = 0; i < words.length; i++) {
+    for (var r = 0; r < removedLineBreaks.length; r++) {
+        var words = removedLineBreaks[r].split(" ");
+        for (var i = 0; i < words.length; i++) {
 
-  	        var l = words[i].length;
-  	        if (x + (l * letterWidth) > width) {
-  	            s.push("\n");
-  	            x = 0;
-  	        }
-  	        x += l * letterWidth;
-  	        s.push(words[i] + " ");
-  	    }
-	  	s.push("\n");
+            var l = words[i].length;
+            if (x + (l * letterWidth) > width) {
+                s.push("\n");
+                x = 0;
+            }
+            x += l * letterWidth;
+            s.push(words[i] + " ");
+        }
+        s.push("\n");
         x = 0;
     }
     t.attr({
-    	"text" : s.join("")
+        "text": s.join("")
     });
 
-    if (verticalAnchor && verticalAnchor === "top")
-    {
-    	t.attr({"y": y + (t.getBBox().height / 2)});
+    if (verticalAnchor && verticalAnchor === "top") {
+        t.attr({"y": y + (t.getBBox().height / 2)});
     }
 }
 
-function _drawAssociation(flow){
+function _drawAssociation(flow) {
 
-	var polyline = new Polyline(flow.id, flow.waypoints, ASSOCIATION_STROKE, paper);
-	polyline.element = paper.path(polyline.path);
-	polyline.element.attr({"stroke-width": ASSOCIATION_STROKE});
-	polyline.element.attr({"stroke-dasharray": ". "});
-	polyline.element.attr({"stroke":"#585858"});
+    var polyline = new Polyline(flow.id, flow.waypoints, ASSOCIATION_STROKE, paper);
+    polyline.element = paper.path(polyline.path);
+    polyline.element.attr({"stroke-width": ASSOCIATION_STROKE});
+    polyline.element.attr({"stroke-dasharray": ". "});
+    polyline.element.attr({"stroke": "#585858"});
 
-	polyline.element.id = flow.id;
+    polyline.element.id = flow.id;
 
-	var polylineInvisible = new Polyline(flow.id, flow.waypoints, ASSOCIATION_STROKE, paper);
+    var polylineInvisible = new Polyline(flow.id, flow.waypoints, ASSOCIATION_STROKE, paper);
 
-	polylineInvisible.element = paper.path(polyline.path);
-	polylineInvisible.element.attr({
-			"opacity": 0,
-			"stroke-width": 8,
-            "stroke" : "#000000"
-	});
+    polylineInvisible.element = paper.path(polyline.path);
+    polylineInvisible.element.attr({
+        "opacity": 0,
+        "stroke-width": 8,
+        "stroke": "#000000"
+    });
 
-	_showTip(jQuery(polylineInvisible.element.node), flow);
+    _showTip(jQuery(polylineInvisible.element.node), flow);
 
-	polylineInvisible.element.mouseover(function() {
-		paper.getById(polyline.element.id).attr({"stroke":"blue"});
-	});
+    polylineInvisible.element.mouseover(function () {
+        paper.getById(polyline.element.id).attr({"stroke": "blue"});
+    });
 
-	polylineInvisible.element.mouseout(function() {
-		paper.getById(polyline.element.id).attr({"stroke":"#585858"});
-	});
+    polylineInvisible.element.mouseout(function () {
+        paper.getById(polyline.element.id).attr({"stroke": "#585858"});
+    });
 }
 
-function _drawArrowHead(line, connectionType)
-{
-	var doubleArrowWidth = 2 * ARROW_WIDTH;
+function _drawArrowHead(line, connectionType) {
+    var doubleArrowWidth = 2 * ARROW_WIDTH;
 
-	var arrowHead = paper.path("M0 0L-" + (ARROW_WIDTH / 2 + .5) + " -" + doubleArrowWidth + "L" + (ARROW_WIDTH/2 + .5) + " -" + doubleArrowWidth + "z");
+    var arrowHead = paper.path("M0 0L-" + (ARROW_WIDTH / 2 + .5) + " -" + doubleArrowWidth + "L" + (ARROW_WIDTH / 2 + .5) + " -" + doubleArrowWidth + "z");
 
-	// anti smoothing
-	if (this.strokeWidth%2 == 1)
-		line.x2 += .5, line.y2 += .5;
+    // anti smoothing
+    if (this.strokeWidth % 2 == 1)
+        line.x2 += .5, line.y2 += .5;
 
-	arrowHead.transform("t" + line.x2 + "," + line.y2 + "");
-	arrowHead.transform("...r" + Raphael.deg(line.angle - Math.PI / 2) + " " + 0 + " " + 0);
+    arrowHead.transform("t" + line.x2 + "," + line.y2 + "");
+    arrowHead.transform("...r" + Raphael.deg(line.angle - Math.PI / 2) + " " + 0 + " " + 0);
 
-	arrowHead.attr("fill", "#585858");
+    arrowHead.attr("fill", "#585858");
 
-	arrowHead.attr("stroke-width", SEQUENCEFLOW_STROKE);
-	arrowHead.attr("stroke", "#585858");
+    arrowHead.attr("stroke-width", SEQUENCEFLOW_STROKE);
+    arrowHead.attr("stroke", "#585858");
 
-	return arrowHead;
+    return arrowHead;
 }

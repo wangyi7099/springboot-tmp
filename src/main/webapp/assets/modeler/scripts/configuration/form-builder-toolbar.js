@@ -13,21 +13,21 @@
 'use strict';
 
 var FORM_TOOLBAR_CONFIG = {
-    "items" : [
+    "items": [
         {
-            "type" : "button",
-            "title" : "FORM_TOOLBAR.ACTION.SAVE",
-            "cssClass" : "editor-icon editor-icon-save",
-            "action" : "FORM_TOOLBAR.ACTIONS.saveModel"
+            "type": "button",
+            "title": "FORM_TOOLBAR.ACTION.SAVE",
+            "cssClass": "editor-icon editor-icon-save",
+            "action": "FORM_TOOLBAR.ACTIONS.saveModel"
         }
     ],
-    
-    "secondaryItems" : [
-		{
-		    "type" : "button",
-		    "title" : "Close",
-		    "cssClass" : "glyphicon glyphicon-remove",
-		    "action" : "FORM_TOOLBAR.ACTIONS.closeEditor"
-		}
+
+    "secondaryItems": [
+        {
+            "type": "button",
+            "title": "Close",
+            "cssClass": "glyphicon glyphicon-remove",
+            "action": "FORM_TOOLBAR.ACTIONS.closeEditor"
+        }
     ]
 };

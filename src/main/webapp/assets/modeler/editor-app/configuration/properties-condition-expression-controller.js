@@ -15,7 +15,7 @@
  * Condition expression
  */
 
-angular.module('flowableModeler').controller('FlowableConditionExpressionCtrl', [ '$scope', '$modal', function($scope, $modal) {
+angular.module('flowableModeler').controller('FlowableConditionExpressionCtrl', ['$scope', '$modal', function ($scope, $modal) {
 
     // Config for the modal window
     var opts = {
@@ -28,32 +28,32 @@ angular.module('flowableModeler').controller('FlowableConditionExpressionCtrl', 
 }]);
 
 angular.module('flowableModeler').controller('FlowableConditionExpressionPopupCtrl',
-    [ '$rootScope', '$scope', '$translate', 'FormBuilderService', function($rootScope, $scope, $translate, FormBuilderService) {
-    	
-    // Put json representing assignment on scope
-    if ($scope.property.value !== undefined && $scope.property.value !== null
-        && $scope.property.value.expression !== undefined
-        && $scope.property.value.expression !== null) {
+    ['$rootScope', '$scope', '$translate', 'FormBuilderService', function ($rootScope, $scope, $translate, FormBuilderService) {
 
-        $scope.expression = $scope.property.value.expression;
+        // Put json representing assignment on scope
+        if ($scope.property.value !== undefined && $scope.property.value !== null
+            && $scope.property.value.expression !== undefined
+            && $scope.property.value.expression !== null) {
 
-    } else if ($scope.property.value !== undefined && $scope.property.value !== null) {
-        $scope.expression = {type: 'static', staticValue: $scope.property.value};
-        
-    } else {
-        $scope.expression = {};
-    }
+            $scope.expression = $scope.property.value.expression;
 
-    $scope.save = function() {
-        $scope.property.value = {expression: $scope.expression};
-        $scope.updatePropertyInModel($scope.property);
-        $scope.close();
-    };
+        } else if ($scope.property.value !== undefined && $scope.property.value !== null) {
+            $scope.expression = {type: 'static', staticValue: $scope.property.value};
 
-    // Close button handler
-    $scope.close = function() {
-    	$scope.property.mode = 'read';
-    	$scope.$hide();
-    };
+        } else {
+            $scope.expression = {};
+        }
 
-}]);
+        $scope.save = function () {
+            $scope.property.value = {expression: $scope.expression};
+            $scope.updatePropertyInModel($scope.property);
+            $scope.close();
+        };
+
+        // Close button handler
+        $scope.close = function () {
+            $scope.property.mode = 'read';
+            $scope.$hide();
+        };
+
+    }]);

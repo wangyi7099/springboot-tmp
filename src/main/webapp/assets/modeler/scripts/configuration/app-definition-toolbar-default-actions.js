@@ -33,116 +33,118 @@ var APP_DEFINITION_TOOLBAR = {
 
         },
 
-        closeEditor:  function (services) {
-        	services.$location.path('/apps');
+        closeEditor: function (services) {
+            services.$location.path('/apps');
         }
     }
 };
 
 /** Custom controller for the save dialog */
 angular.module('flowableModeler').controller('SaveAppDefinitionCtrl',
-    [ '$rootScope', '$scope', '$http', '$route', '$location', '$translate',
-    function ($rootScope, $scope, $http, $route, $location, $translate) {
+    ['$rootScope', '$scope', '$http', '$route', '$location', '$translate',
+        function ($rootScope, $scope, $http, $route, $location, $translate) {
 
-    var description = '';
-    if ($rootScope.currentAppDefinition.description) {
-    	description = $rootScope.currentAppDefinition.description;
-    }
+            var description = '';
+            if ($rootScope.currentAppDefinition.description) {
+                description = $rootScope.currentAppDefinition.description;
+            }
 
-    var saveDialog = {
-        name: $rootScope.currentAppDefinition.name,
-        key: $rootScope.currentAppDefinition.key,
-        description: description,
-        publish: false
-    };
+            var saveDialog = {
+                name: $rootScope.currentAppDefinition.name,
+                key: $rootScope.currentAppDefinition.key,
+                description: description,
+                publish: false
+            };
 
-    $scope.saveDialog = saveDialog;
+            $scope.saveDialog = saveDialog;
 
-    $scope.status = {
-        loading: false
-    };
+            $scope.status = {
+                loading: false
+            };
 
-    $scope.cancel = function () {
-    	$scope.$hide();
-    };
+            $scope.cancel = function () {
+                $scope.$hide();
+            };
 
-    $scope.saveAndClose = function (force) {
-    	$scope.save(function() {
-    		$location.path('/apps');
-    	}, force);
-    };
+            $scope.saveAndClose = function (force) {
+                $scope.save(function () {
+                    $location.path('/apps');
+                }, force);
+            };
 
-    $scope.save = function (saveCallback, force) {
+            $scope.save = function (saveCallback, force) {
 
-        if (!$scope.saveDialog.name || $scope.saveDialog.name.length == 0 ||
-        	!$scope.saveDialog.key || $scope.saveDialog.key.length == 0) {
+                if (!$scope.saveDialog.name || $scope.saveDialog.name.length == 0 ||
+                    !$scope.saveDialog.key || $scope.saveDialog.key.length == 0) {
 
-            return;
-        }
-
-        // Indicator spinner image
-        $scope.status.loading = true;
-
-        var data = {
-            appDefinition: $rootScope.currentAppDefinition,
-            publish: $scope.saveDialog.publish
-        };
-
-        data.appDefinition.name = $scope.saveDialog.name;
-        if ($scope.saveDialog.description && $scope.saveDialog.description.length > 0) {
-        	data.appDefinition.description = $scope.saveDialog.description;
-        }
-
-        if (force !== undefined && force !== null && force === true) {
-            data.force = true;
-        }
-
-        delete $scope.conflict;
-        $http({method: 'PUT', url: FLOWABLE.APP_URL.getAppDefinitionUrl($rootScope.currentAppDefinition.id), data: data}).
-            success(function(response, status, headers, config) {
-                // Regular error
-                if (response.error) {
-                    $scope.status.loading = false;
-                    $scope.saveDialog.errorMessage = response.errorDescription;
-                } else {
-                    $scope.$hide();
-                    $rootScope.addAlert($translate.instant('APP.POPUP.SAVE-APP-SAVE-SUCCESS', 'info'));
-                    if (saveCallback) {
-                        saveCallback();
-                    }
+                    return;
                 }
 
-            }).
-            error(function(data, status, headers, config) {
-                $scope.status.loading = false;
-                $scope.saveDialog.errorMessage = data.message;
-            });
-    };
+                // Indicator spinner image
+                $scope.status.loading = true;
 
-    $scope.isOkButtonDisabled = function() {
-        if ($scope.status.loading) {
-            return false;
-        } else if ($scope.error && $scope.error.hasCustomStencilItem) {
-            return false;
-        }
-        return true;
-    };
+                var data = {
+                    appDefinition: $rootScope.currentAppDefinition,
+                    publish: $scope.saveDialog.publish
+                };
 
-    $scope.okClicked = function() {
-        if ($scope.error) {
-            if ($scope.error.conflictResolveAction === 'discardChanges') {
-                $scope.close();
-                $route.reload();
-            } else if ($scope.error.conflictResolveAction === 'overwrite'
-                || $scope.error.conflictResolveAction === 'newVersion') {
-                $scope.save();
-            } else if($scope.error.conflictResolveAction === 'saveAs') {
-                $scope.save(function() {
-                    $rootScope.ignoreChanges = true;  // Otherwise will get pop up that changes are not saved.
-                    $location.path('/apps');
+                data.appDefinition.name = $scope.saveDialog.name;
+                if ($scope.saveDialog.description && $scope.saveDialog.description.length > 0) {
+                    data.appDefinition.description = $scope.saveDialog.description;
+                }
+
+                if (force !== undefined && force !== null && force === true) {
+                    data.force = true;
+                }
+
+                delete $scope.conflict;
+                $http({
+                    method: 'PUT',
+                    url: FLOWABLE.APP_URL.getAppDefinitionUrl($rootScope.currentAppDefinition.id),
+                    data: data
+                }).success(function (response, status, headers, config) {
+                    // Regular error
+                    if (response.error) {
+                        $scope.status.loading = false;
+                        $scope.saveDialog.errorMessage = response.errorDescription;
+                    } else {
+                        $scope.$hide();
+                        $rootScope.addAlert($translate.instant('APP.POPUP.SAVE-APP-SAVE-SUCCESS', 'info'));
+                        if (saveCallback) {
+                            saveCallback();
+                        }
+                    }
+
+                }).error(function (data, status, headers, config) {
+                    $scope.status.loading = false;
+                    $scope.saveDialog.errorMessage = data.message;
                 });
-            }
-        }
-    };
+            };
 
-}]);
+            $scope.isOkButtonDisabled = function () {
+                if ($scope.status.loading) {
+                    return false;
+                } else if ($scope.error && $scope.error.hasCustomStencilItem) {
+                    return false;
+                }
+                return true;
+            };
+
+            $scope.okClicked = function () {
+                if ($scope.error) {
+                    if ($scope.error.conflictResolveAction === 'discardChanges') {
+                        $scope.close();
+                        $route.reload();
+                    } else if ($scope.error.conflictResolveAction === 'overwrite'
+                        || $scope.error.conflictResolveAction === 'newVersion') {
+                        $scope.save();
+                    } else if ($scope.error.conflictResolveAction === 'saveAs') {
+                        $scope.save(function () {
+                            $rootScope.ignoreChanges = true;  // Otherwise will get pop up that changes are not saved.
+                            $location.path('/apps');
+                        });
+                    }
+                }
+            };
+
+        }]);
