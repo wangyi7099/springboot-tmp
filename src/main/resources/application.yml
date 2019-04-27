@@ -30,8 +30,11 @@ spring:
 
 
 mybatis-plus:
+  global-config:
+    db-config:
+      db-type: mysql
   typeAliasesPackage: cn.stylefeng.guns.modular.system.model
-  mapper-locations: classpath:cn/stylefeng/guns/modular/**/mapping/*.xml
+  mapper-locations: classpath:cn/stylefeng/guns/modular/**/mapping/*.xml,classpath:org/flowable/ui/common/security/xml/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
@@ -40,3 +43,4 @@ log:
 
 flowable:
   async-executor-activate: false
+  database-schema-update: true
