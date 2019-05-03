@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/assets/modeler/app")
+@RequestMapping("/app")
 public class flowableController {
 
     @RequestMapping(value = "/rest/account", method = RequestMethod.GET, produces = "application/json")

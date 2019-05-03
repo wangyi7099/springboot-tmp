@@ -15,16 +15,17 @@
  */
 package cn.stylefeng.guns;
 
-import cn.stylefeng.guns.config.flowable.AppDispatcherServletConfiguration;
-import cn.stylefeng.guns.config.flowable.ApplicationConfiguration;
 import cn.stylefeng.roses.core.config.WebAutoConfiguration;
+import org.flowable.ui.common.rest.idm.remote.RemoteAccountResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -33,20 +34,20 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author stylefeng
  * @Date 2017/5/21 12:06
  */
-@Import({
-        ApplicationConfiguration.class,
-        AppDispatcherServletConfiguration.class
-})
+@ComponentScan(basePackages = {
+        "cn.stylefeng.guns",
+        "org.flowable.ui"
+},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
+                        RemoteAccountResource.class})}
+)
 @SpringBootApplication(exclude = {
         WebAutoConfiguration.class,
-        LiquibaseAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.servlet.SecurityRequestMatcherProviderAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration.class,
-        org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration.class,
+        SecurityAutoConfiguration.class,
+        SecurityAutoConfiguration.class,
+        UserDetailsServiceAutoConfiguration.class,
+        LiquibaseAutoConfiguration.class
 })
 @EnableScheduling
 public class GunsApplication {
@@ -57,4 +58,5 @@ public class GunsApplication {
         SpringApplication.run(GunsApplication.class, args);
         logger.info(GunsApplication.class.getSimpleName() + " is success!");
     }
+
 }

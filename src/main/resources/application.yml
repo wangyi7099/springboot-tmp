@@ -28,15 +28,17 @@ spring:
       max-request-size: 100MB
       max-file-size: 100MB
 
-
 mybatis-plus:
   global-config:
     db-config:
       db-type: mysql
   typeAliasesPackage: cn.stylefeng.guns.modular.system.model
-  mapper-locations: classpath:cn/stylefeng/guns/modular/**/mapping/*.xml,classpath:org/flowable/ui/common/security/xml/*.xml
+  mapper-locations: classpath:cn/stylefeng/guns/modular/**/mapping/*.xml,classpath:META-INF/modeler-mybatis-mappings/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  configuration-properties:
+    prefix: ''
+    blobType: BLOB
 
 log:
   path: guns-logs
@@ -44,3 +46,13 @@ log:
 flowable:
   async-executor-activate: false
   database-schema-update: true
+  common:
+    app:
+      idm-url: http://localhost:86
+      idm-admin:
+        user: admin
+        password: test
+  diagram:
+    activityFontName: 宋体
+    labelFontName: 宋体
+    annotationFontName: 宋体
