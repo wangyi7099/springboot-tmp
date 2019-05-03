@@ -65,6 +65,16 @@ public class FlowDataSourceProcessEngineAutoConfiguration extends ProcessEngineA
         return conf;
     }
 
+    /**
+     * 数据库更新脚本 不添加的话
+     * 工作流就没有以下三张表
+     * act_de_model
+     * act_de_model_history
+     * act_de_model_relation
+     *
+     * @author yaoliguo
+     * @date 2019-05-03 11:26
+     */
     @Bean
     public Liquibase liquibase(DataSource dataSource) {
 
@@ -83,6 +93,12 @@ public class FlowDataSourceProcessEngineAutoConfiguration extends ProcessEngineA
         }
     }
 
+    /**
+     * 创建这个配置类 启动工作流modeler配置
+     *
+     * @author yaoliguo
+     * @date 2019-05-03 11:27
+     */
     @Bean
     public FlowableModelerAppProperties flowableModelerAppProperties() {
         FlowableModelerAppProperties flowableModelerAppProperties = new FlowableModelerAppProperties();

@@ -9,6 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 重flowable里的这个请求，画布上就有帐号
+ *
+ * @author yaoliguo
+ * @date 2019-05-03 11:28
+ * ©2018 版权所有
+ */
 @RestController
 @RequestMapping("/app")
 public class flowableController {

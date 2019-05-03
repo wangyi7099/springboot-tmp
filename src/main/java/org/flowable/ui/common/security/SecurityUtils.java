@@ -9,6 +9,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 覆盖jar包里的 这个类 包名 类名必须一致
+ * 重写getCurrentUserObject方法 不然画布不能用
+ *
+ * @author yaoliguo
+ * @date 2019-05-03 11:29
+ * ©2018 版权所有
+ */
 public class SecurityUtils {
 
     private static User assumeUser;

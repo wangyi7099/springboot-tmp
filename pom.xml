@@ -47,6 +47,7 @@
             <artifactId>kernel-core</artifactId>
             <version>1.2.2</version>
             <exclusions>
+                <!--排除fastjson 流程画布的接口返回数据就没有反斜杠-->
                 <exclusion>
                     <groupId>com.alibaba</groupId>
                     <artifactId>fastjson</artifactId>
@@ -272,12 +273,13 @@
             </exclusions>
         </dependency>
 
+        <!--liquibase的依赖-->
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
         </dependency>
 
-
+        <!--数据库字段更新用的-->
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
