@@ -9,6 +9,7 @@ import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.common.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.request.ResultData;
 import cn.stylefeng.guns.core.util.JwtTokenUtil;
 import cn.stylefeng.guns.modular.system.entity.Menu;
 import cn.stylefeng.guns.modular.system.model.MenuDto;
@@ -59,7 +60,7 @@ public class MenuApiController extends BaseController {
         //根据token获取userId
         String userId = JwtTokenUtil.getUsernameFromToken(token);
 
-        return ResponseData.success(userService.getLeftMenuByUserId(userId));
+        return ResultData.success(userService.getLeftMenuByUserId(userId));
     }
 
 
@@ -96,7 +97,7 @@ public class MenuApiController extends BaseController {
                              @RequestParam(required = false) Long menuId) {
         Page<Map<String, Object>> menus = this.menuService.selectMenus(menuName, level, menuId);
         Page<Map<String, Object>> wrap = new MenuWrapper(menus).wrap();
-        return ResponseData.success(wrap);
+        return ResultData.success(wrap);
     }
 
     /**
@@ -114,7 +115,7 @@ public class MenuApiController extends BaseController {
 
         LayuiPageInfo result = new LayuiPageInfo();
         result.setData(menusWrap);
-        return ResponseData.success(result);
+        return ResultData.success(result);
     }
 
     /**
@@ -166,7 +167,7 @@ public class MenuApiController extends BaseController {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
         Menu menu = this.menuService.getById(menuId);
-        return ResponseData.success(menu);
+        return ResultData.success(menu);
     }
 
     /**
@@ -191,7 +192,7 @@ public class MenuApiController extends BaseController {
         menuDto.setPid(ConstantFactory.me().getMenuIdByCode(menuDto.getPcode()));
         menuDto.setPcodeName(ConstantFactory.me().getMenuNameByCode(menuDto.getPcode()));
 
-        return ResponseData.success(menuDto);
+        return ResultData.success(menuDto);
     }
 
     /**
@@ -203,7 +204,7 @@ public class MenuApiController extends BaseController {
     @ApiOperation(value = "获取菜单列表(首页用)", notes = "获取菜单列表(首页用)")
     @RequestMapping(value = "/menuTreeList", method = RequestMethod.GET)
     public ResponseData menuTreeList() {
-        return ResponseData.success(menuService.menuTreeList());
+        return ResultData.success(menuService.menuTreeList());
     }
 
     /**
@@ -217,7 +218,7 @@ public class MenuApiController extends BaseController {
     public ResponseData selectMenuTreeList() {
         List<ZTreeNode> roleTreeList = this.menuService.menuTreeList();
         roleTreeList.add(ZTreeNode.createParent());
-        return ResponseData.success(roleTreeList);
+        return ResultData.success(roleTreeList);
     }
 
     /**
@@ -231,9 +232,9 @@ public class MenuApiController extends BaseController {
     public ResponseData menuTreeListByRoleId(@PathVariable Long roleId) {
         List<Long> menuIds = this.menuService.getMenuIdsByRoleId(roleId);
         if (ToolUtil.isEmpty(menuIds)) {
-            return ResponseData.success(menuService.menuTreeList());
+            return ResultData.success(menuService.menuTreeList());
         } else {
-            return ResponseData.success(menuService.menuTreeListByMenuIds(menuIds));
+            return ResultData.success(menuService.menuTreeListByMenuIds(menuIds));
         }
     }
 

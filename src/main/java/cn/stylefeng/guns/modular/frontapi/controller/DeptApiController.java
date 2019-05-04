@@ -6,6 +6,7 @@ import cn.stylefeng.guns.core.common.constant.dictmap.DeptDict;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.node.TreeviewNode;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
+import cn.stylefeng.guns.core.request.ResultData;
 import cn.stylefeng.guns.modular.system.entity.Dept;
 import cn.stylefeng.guns.modular.system.model.DeptDto;
 import cn.stylefeng.guns.modular.system.service.DeptService;
@@ -41,7 +42,7 @@ public class DeptApiController extends BaseController {
     public ResponseData tree() {
         List<ZTreeNode> tree = this.deptService.tree();
         tree.add(ZTreeNode.createParent());
-        return ResponseData.success(tree);
+        return ResultData.success(tree);
     }
 
     /**
@@ -63,7 +64,7 @@ public class DeptApiController extends BaseController {
         //把子节点为空的设为null
         DeptTreeWrapper.clearNull(results);
 
-        return ResponseData.success(results);
+        return ResultData.success(results);
     }
 
     /**
@@ -77,7 +78,7 @@ public class DeptApiController extends BaseController {
     @ApiOperation(value = "添加部门", notes = "添加部门")
     public ResponseData add(Dept dept) {
         this.deptService.addDept(dept);
-        return SUCCESS_TIP;
+        return ResultData.success();
     }
 
     /**
@@ -92,7 +93,7 @@ public class DeptApiController extends BaseController {
                              @RequestParam(value = "deptId", required = false) Long deptId) {
         Page<Map<String, Object>> list = this.deptService.list(condition, deptId);
         Page<Map<String, Object>> wrap = new DeptWrapper(list).wrap();
-        return ResponseData.success(wrap);
+        return ResultData.success(wrap);
     }
 
     /**
@@ -108,7 +109,7 @@ public class DeptApiController extends BaseController {
         DeptDto deptDto = new DeptDto();
         BeanUtil.copyProperties(dept, deptDto);
         deptDto.setPName(ConstantFactory.me().getDeptName(deptDto.getPid()));
-        return ResponseData.success(deptDto);
+        return ResultData.success(deptDto);
     }
 
     /**

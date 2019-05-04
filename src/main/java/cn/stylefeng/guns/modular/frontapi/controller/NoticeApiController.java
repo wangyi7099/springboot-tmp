@@ -6,6 +6,7 @@ import cn.stylefeng.guns.core.common.constant.dictmap.NoticeMap;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.request.ResultData;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.system.entity.Notice;
 import cn.stylefeng.guns.modular.system.service.NoticeService;
@@ -50,7 +51,7 @@ public class NoticeApiController extends BaseController {
     public ResponseData list(String condition) {
         Page<Map<String, Object>> list = this.noticeService.list(condition);
         Page<Map<String, Object>> wrap = new NoticeWrapper(list).wrap();
-        return ResponseData.success(wrap);
+        return ResultData.success(wrap);
     }
 
     /**

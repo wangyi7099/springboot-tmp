@@ -8,6 +8,7 @@ import cn.stylefeng.guns.core.common.constant.dictmap.UserDict;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.constant.state.ManagerStatus;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.core.request.ResultData;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.system.entity.User;
 import cn.stylefeng.guns.modular.system.factory.UserFactory;
@@ -111,7 +112,7 @@ public class UserMgrApiController extends BaseController {
 
         Page<Map<String, Object>> users = userService.selectUsers(null, name, beginTime, endTime, deptId);
         Page wrapped = new UserWrapper(users).wrap();
-        return ResponseData.success(wrapped);
+        return ResultData.success(wrapped);
     }
 
     /**

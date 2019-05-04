@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.frontapi.controller;
 
+import cn.stylefeng.guns.core.request.ResultData;
 import cn.stylefeng.guns.modular.system.entity.DictType;
 import cn.stylefeng.guns.modular.system.model.params.DictTypeParam;
 import cn.stylefeng.guns.modular.system.service.DictTypeService;
@@ -83,7 +84,7 @@ public class DictTypeApiController extends BaseController {
     @ApiOperation(value = "查询列表", notes = "查询列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseData list(DictTypeParam dictTypeParam) {
-        return ResponseData.success(dictTypeService.findPageBySpec(dictTypeParam));
+        return ResultData.success(dictTypeService.findPageBySpec(dictTypeParam));
     }
 
 }

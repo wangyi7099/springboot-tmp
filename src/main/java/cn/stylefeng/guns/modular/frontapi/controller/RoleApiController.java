@@ -8,6 +8,7 @@ import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.request.ResultData;
 import cn.stylefeng.guns.modular.system.entity.Role;
 import cn.stylefeng.guns.modular.system.entity.User;
 import cn.stylefeng.guns.modular.system.model.RoleDto;
@@ -53,7 +54,7 @@ public class RoleApiController extends BaseController {
     public ResponseData list(@RequestParam(value = "roleName", required = false) String roleName) {
         Page<Map<String, Object>> roles = this.roleService.selectRoles(roleName);
         Page<Map<String, Object>> wrap = new RoleWrapper(roles).wrap();
-        return ResponseData.success(wrap);
+        return ResultData.success(wrap);
     }
 
     /**
