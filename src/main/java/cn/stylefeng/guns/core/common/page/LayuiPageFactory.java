@@ -16,6 +16,7 @@
 package cn.stylefeng.guns.core.common.page;
 
 import cn.stylefeng.roses.core.util.HttpContext;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -39,10 +40,18 @@ public class LayuiPageFactory {
         HttpServletRequest request = HttpContext.getRequest();
 
         //每页多少条数据
-        int limit = Integer.valueOf(request.getParameter("limit"));
+        String lit = request.getParameter("limit");
+        if (ToolUtil.isEmpty(lit)) {
+            lit = "10";
+        }
+        int limit = Integer.valueOf(lit);
 
+        String pageStr = request.getParameter("page");
+        if (ToolUtil.isEmpty(pageStr)) {
+            pageStr = "1";
+        }
         //第几页
-        int page = Integer.valueOf(request.getParameter("page"));
+        int page = Integer.valueOf(pageStr);
 
         return new Page(page, limit);
     }

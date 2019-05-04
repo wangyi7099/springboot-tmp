@@ -69,7 +69,8 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:53 PM
      */
-    @RequestMapping(value = "/edit")
+    @ApiOperation(value = "修改菜单", notes = "修改菜单")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @BussinessLog(value = "修改菜单", key = "name", dict = MenuDict.class)
     public ResponseData edit(MenuDto menu) {
 
@@ -88,7 +89,8 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:53 PM
      */
-    @RequestMapping(value = "/list")
+    @ApiOperation(value = "获取菜单列表", notes = "获取菜单列表")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseData list(@RequestParam(required = false) String menuName,
                              @RequestParam(required = false) String level,
                              @RequestParam(required = false) Long menuId) {
@@ -103,7 +105,8 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2019年2月23日22:01:47
      */
-    @RequestMapping(value = "/listTree")
+    @ApiOperation(value = "获取菜单列表（s树形）", notes = "获取菜单列表（s树形）")
+    @RequestMapping(value = "/listTree", method = RequestMethod.GET)
     public ResponseData listTree(@RequestParam(required = false) String menuName,
                                  @RequestParam(required = false) String level) {
         List<Map<String, Object>> menus = this.menuService.selectMenuTree(menuName, level);
@@ -120,7 +123,8 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:53 PM
      */
-    @RequestMapping(value = "/add")
+    @ApiOperation(value = "新增菜单", notes = "新增菜单")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @BussinessLog(value = "菜单新增", key = "name", dict = MenuDict.class)
     public ResponseData add(MenuDto menu) {
         this.menuService.addMenu(menu);
@@ -133,9 +137,10 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:53 PM
      */
-    @RequestMapping(value = "/remove")
+    @ApiOperation(value = "删除菜单", notes = "删除菜单")
+    @RequestMapping(value = "/{menuId}/remove", method = RequestMethod.DELETE)
     @BussinessLog(value = "删除菜单", key = "menuId", dict = DeleteDict.class)
-    public ResponseData remove(@RequestParam Long menuId) {
+    public ResponseData remove(@PathVariable Long menuId) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -154,7 +159,8 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:53 PM
      */
-    @RequestMapping(value = "/{menuId}/view")
+    @ApiOperation(value = "查看菜单", notes = "查看菜单")
+    @RequestMapping(value = "/{menuId}/view", method = RequestMethod.GET)
     public ResponseData view(@PathVariable Long menuId) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
@@ -169,8 +175,9 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:53 PM
      */
-    @RequestMapping(value = "/getMenuInfo")
-    public ResponseData getMenuInfo(@RequestParam Long menuId) {
+    @ApiOperation(value = "获取菜单信息", notes = "获取菜单信息")
+    @RequestMapping(value = "/{menuId}/getMenuInfo", method = RequestMethod.GET)
+    public ResponseData getMenuInfo(@PathVariable Long menuId) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -193,7 +200,8 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:54 PM
      */
-    @RequestMapping(value = "/menuTreeList")
+    @ApiOperation(value = "获取菜单列表(首页用)", notes = "获取菜单列表(首页用)")
+    @RequestMapping(value = "/menuTreeList", method = RequestMethod.GET)
     public ResponseData menuTreeList() {
         return ResponseData.success(menuService.menuTreeList());
     }
@@ -204,7 +212,8 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:54 PM
      */
-    @RequestMapping(value = "/selectMenuTreeList")
+    @ApiOperation(value = "获取菜单列表(选择父级菜单用)", notes = "获取菜单列表(选择父级菜单用)")
+    @RequestMapping(value = "/selectMenuTreeList", method = RequestMethod.GET)
     public ResponseData selectMenuTreeList() {
         List<ZTreeNode> roleTreeList = this.menuService.menuTreeList();
         roleTreeList.add(ZTreeNode.createParent());
@@ -217,7 +226,8 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:54 PM
      */
-    @RequestMapping(value = "/{roleId}/menuTreeListByRoleId")
+    @ApiOperation(value = "获取角色的菜单列表", notes = "获取角色的菜单列表")
+    @RequestMapping(value = "/{roleId}/menuTreeListByRoleId", method = RequestMethod.GET)
     public ResponseData menuTreeListByRoleId(@PathVariable Long roleId) {
         List<Long> menuIds = this.menuService.getMenuIdsByRoleId(roleId);
         if (ToolUtil.isEmpty(menuIds)) {
