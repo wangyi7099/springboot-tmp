@@ -37,7 +37,7 @@ public class GunsMpFieldHandler extends CustomMetaObjectHandler {
         } catch (Exception e) {
 
             //如果获取不到当前用户就存空id
-            return "";
+            return null;
         }
     }
 }

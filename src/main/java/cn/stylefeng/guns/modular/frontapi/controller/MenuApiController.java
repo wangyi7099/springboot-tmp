@@ -79,7 +79,7 @@ public class MenuApiController extends BaseController {
         this.menuService.updateMenu(menu);
 
         //刷新当前用户菜单
-        this.userService.refreshCurrentUser();
+        //this.userService.refreshCurrentUser();
 
         return SUCCESS_TIP;
     }

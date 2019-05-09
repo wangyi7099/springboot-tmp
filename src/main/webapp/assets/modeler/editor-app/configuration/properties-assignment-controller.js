@@ -150,7 +150,7 @@ angular.module('flowableModeler').controller('FlowableAssignmentPopupCtrl',
                             var filteredUser = result.data[i];
 
                             var foundCandidateUser = false;
-                            if ($scope.popup.assignmentObject.idm.candidateUsers !== null && $scope.popup.assignmentObject.idm.candidateUsers !== undefined) {
+                            /*if ($scope.popup.assignmentObject.idm.candidateUsers !== null && $scope.popup.assignmentObject.idm.candidateUsers !== undefined) {
                                 for (var j = 0; j < $scope.popup.assignmentObject.idm.candidateUsers.length; j++) {
                                     var candidateUser = $scope.popup.assignmentObject.idm.candidateUsers[j];
                                     if (candidateUser.id === filteredUser.id) {
@@ -158,7 +158,7 @@ angular.module('flowableModeler').controller('FlowableAssignmentPopupCtrl',
                                         break;
                                     }
                                 }
-                            }
+                            }*/
 
                             if (!foundCandidateUser) {
                                 filteredUsers.push(filteredUser);
