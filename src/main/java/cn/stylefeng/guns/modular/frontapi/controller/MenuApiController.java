@@ -45,7 +45,7 @@ public class MenuApiController extends BaseController {
 
     @Autowired
     private UserService userService;
-
+    @CrossOrigin(value = "*", maxAge = 3600)
     @ApiOperation(value = "通过token获取做成菜单", notes = "通过token获取做成菜单")
     @RequestMapping(value = "/left_menu", method = RequestMethod.GET)
     @ApiImplicitParams({
@@ -70,6 +70,7 @@ public class MenuApiController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/23 5:53 PM
      */
+    @CrossOrigin(value = "*", maxAge = 3600)
     @ApiOperation(value = "修改菜单", notes = "修改菜单")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @BussinessLog(value = "修改菜单", key = "name", dict = MenuDict.class)
@@ -79,7 +80,7 @@ public class MenuApiController extends BaseController {
         this.menuService.updateMenu(menu);
 
         //刷新当前用户菜单
-        //this.userService.refreshCurrentUser();
+      //  this.userService.refreshCurrentUser();
 
         return SUCCESS_TIP;
     }
@@ -91,6 +92,7 @@ public class MenuApiController extends BaseController {
      * @Date 2018/12/23 5:53 PM
      */
     @ApiOperation(value = "获取菜单列表", notes = "获取菜单列表")
+    @CrossOrigin(value = "*", maxAge = 3600)
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseData list(@RequestParam(required = false) String menuName,
                              @RequestParam(required = false) String level,
