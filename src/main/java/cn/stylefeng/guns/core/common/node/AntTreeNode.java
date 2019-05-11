@@ -1,6 +1,5 @@
 package cn.stylefeng.guns.core.common.node;
 
-import lombok.Data;
 
 /**
  * 给ant design pro 树用的节点
@@ -9,7 +8,6 @@ import lombok.Data;
  * @date 2019-05-11 09:46
  * ©2018 版权所有
  */
-@Data
 public class AntTreeNode {
 
     /**
@@ -57,12 +55,76 @@ public class AntTreeNode {
      */
     public static AntTreeNode createParent() {
         AntTreeNode antTreeNode = new AntTreeNode();
+        antTreeNode.setId(-1l);
         antTreeNode.setChecked(true);
         antTreeNode.setKey(0L);
         antTreeNode.setTitle("顶级");
         antTreeNode.setOpen(true);
-        antTreeNode.setPId(0L);
+        antTreeNode.setpId(0l);
         return antTreeNode;
     }
 
+    public Long getKey() {
+        return key;
+    }
+
+    public void setKey(Long key) {
+        this.key = key;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getpId() {
+        return pId;
+    }
+
+    public void setpId(Long pId) {
+        this.pId = pId;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Boolean getOpen() {
+        return open;
+    }
+
+    public void setOpen(Boolean open) {
+        this.open = open;
+    }
+
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
+    }
+
+    public String getIconSkin() {
+        return iconSkin;
+    }
+
+    public void setIconSkin(String iconSkin) {
+        this.iconSkin = iconSkin;
+    }
 }
