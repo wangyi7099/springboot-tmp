@@ -55,12 +55,12 @@ public class AntTreeNode {
      */
     public static AntTreeNode createParent() {
         AntTreeNode antTreeNode = new AntTreeNode();
-        antTreeNode.setId(-1l);
+        antTreeNode.setId(0l);
         antTreeNode.setChecked(true);
         antTreeNode.setKey(0L);
         antTreeNode.setTitle("顶级");
         antTreeNode.setOpen(true);
-        antTreeNode.setpId(0l);
+        antTreeNode.setpId(-1l);
         return antTreeNode;
     }
 
