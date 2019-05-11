@@ -27,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -216,8 +217,9 @@ public class MenuApiController extends BaseController {
     @ApiOperation(value = "获取菜单列表(选择父级菜单用)", notes = "获取菜单列表(选择父级菜单用)")
     @RequestMapping(value = "/selectMenuTreeList", method = RequestMethod.GET)
     public ResponseData selectMenuTreeList() {
-        List<AntTreeNode> roleTreeList = this.menuService.antTreeList();
+        List<AntTreeNode> roleTreeList = new ArrayList<>();
         roleTreeList.add(AntTreeNode.createParent());
+        roleTreeList.addAll(this.menuService.antTreeList());
         return ResultData.success(roleTreeList);
     }
 
