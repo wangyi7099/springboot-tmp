@@ -69,6 +69,7 @@
     <select id="antTreeList" resultType="cn.stylefeng.guns.core.common.node.AntTreeNode">
         SELECT
         m1.menu_id AS `key`,
+        m1.menu_id AS `id`,
         m1.code AS value,
         (
         CASE
@@ -77,7 +78,7 @@
         ELSE
         m2.menu_id
         END
-        ) AS pKey,
+        ) AS pId,
         m1.name
         AS title,
         (

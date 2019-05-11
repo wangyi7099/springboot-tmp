@@ -17,10 +17,12 @@ public class AntTreeNode {
      */
     private Long key;
 
+    private Long id;
+
     /**
      * 父节点id
      */
-    private Long pKey;
+    private Long pId;
 
     /**
      * 菜单编码
@@ -59,7 +61,7 @@ public class AntTreeNode {
         antTreeNode.setKey(0L);
         antTreeNode.setTitle("顶级");
         antTreeNode.setOpen(true);
-        antTreeNode.setPKey(0L);
+        antTreeNode.setPId(0L);
         return antTreeNode;
     }
 
