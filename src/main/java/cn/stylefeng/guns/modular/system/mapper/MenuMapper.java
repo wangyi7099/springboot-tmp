@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.system.mapper;
 
+import cn.stylefeng.guns.core.common.node.AntTreeNode;
 import cn.stylefeng.guns.core.common.node.MenuNode;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.modular.system.entity.Menu;
@@ -43,6 +44,13 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @date 2017年2月19日 下午1:33:51
      */
     List<ZTreeNode> menuTreeList();
+
+    /**
+     * 获取ant节点结构数据列表
+     *
+     * @return
+     */
+    List<AntTreeNode> antTreeList();
 
     /**
      * 获取菜单列表树

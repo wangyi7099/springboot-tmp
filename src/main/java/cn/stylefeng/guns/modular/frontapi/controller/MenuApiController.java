@@ -6,7 +6,7 @@ import cn.stylefeng.guns.core.common.constant.dictmap.DeleteDict;
 import cn.stylefeng.guns.core.common.constant.dictmap.MenuDict;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
-import cn.stylefeng.guns.core.common.node.ZTreeNode;
+import cn.stylefeng.guns.core.common.node.AntTreeNode;
 import cn.stylefeng.guns.core.common.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.request.ResultData;
@@ -45,6 +45,7 @@ public class MenuApiController extends BaseController {
 
     @Autowired
     private UserService userService;
+
     @ApiOperation(value = "通过token获取做成菜单", notes = "通过token获取做成菜单")
     @RequestMapping(value = "/left_menu", method = RequestMethod.GET)
     @ApiImplicitParams({
@@ -78,7 +79,7 @@ public class MenuApiController extends BaseController {
         this.menuService.updateMenu(menu);
 
         //刷新当前用户菜单
-      //  this.userService.refreshCurrentUser();
+        //  this.userService.refreshCurrentUser();
 
         return SUCCESS_TIP;
     }
@@ -215,8 +216,8 @@ public class MenuApiController extends BaseController {
     @ApiOperation(value = "获取菜单列表(选择父级菜单用)", notes = "获取菜单列表(选择父级菜单用)")
     @RequestMapping(value = "/selectMenuTreeList", method = RequestMethod.GET)
     public ResponseData selectMenuTreeList() {
-        List<ZTreeNode> roleTreeList = this.menuService.menuTreeList();
-        roleTreeList.add(ZTreeNode.createParent());
+        List<AntTreeNode> roleTreeList = this.menuService.antTreeList();
+        roleTreeList.add(AntTreeNode.createParent());
         return ResultData.success(roleTreeList);
     }
 

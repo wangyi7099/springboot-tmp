@@ -6,7 +6,7 @@
     <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.entity.Menu">
         <id column="menu_id" property="menuId" />
         <result column="code" property="code" />
-        <result column="pcode" property="pcode" />
+        <result column="pcode" property="pcode"/>
         <result column="pcodes" property="pcodes" />
         <result column="name" property="name" />
         <result column="icon" property="icon" />
@@ -64,6 +64,35 @@
     <select id="getMenuIdsByRoleId" resultType="long">
         select menu_id from
         sys_relation where role_id = #{roleId}
+    </select>
+
+    <select id="antTreeList" resultType="cn.stylefeng.guns.core.common.node.AntTreeNode">
+        SELECT
+        m1.menu_id AS `key`,
+        m1.code AS value,
+        (
+        CASE
+        WHEN (m2.menu_id = 0 OR m2.menu_id IS NULL) THEN
+        0
+        ELSE
+        m2.menu_id
+        END
+        ) AS pKey,
+        m1.name
+        AS title,
+        (
+        CASE
+        WHEN (m2.menu_id = 0 OR m2.menu_id IS NULL) THEN
+        'true'
+        ELSE
+        'false'
+        END
+        ) as "open"
+        FROM
+        sys_menu m1
+        LEFT join sys_menu m2 ON m1.pcode = m2.code
+        ORDER BY
+        m1.menu_id ASC
     </select>
 
     <select id="menuTreeList" resultType="cn.stylefeng.guns.core.common.node.ZTreeNode">
