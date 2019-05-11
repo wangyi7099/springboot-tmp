@@ -61,7 +61,7 @@ public class AntTreeNode {
         antTreeNode.setTitle("顶级");
         antTreeNode.setValue("top_menu");
         antTreeNode.setOpen(true);
-        antTreeNode.setpId(-1l);
+        antTreeNode.setpId(0l);
         return antTreeNode;
     }
 
