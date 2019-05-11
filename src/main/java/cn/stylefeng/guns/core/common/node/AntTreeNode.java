@@ -59,6 +59,7 @@ public class AntTreeNode {
         antTreeNode.setChecked(true);
         antTreeNode.setKey(0L);
         antTreeNode.setTitle("顶级");
+        antTreeNode.setValue("top_menu");
         antTreeNode.setOpen(true);
         antTreeNode.setpId(-1l);
         return antTreeNode;
