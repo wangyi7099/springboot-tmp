@@ -10,6 +10,7 @@ import cn.stylefeng.guns.core.common.constant.state.ManagerStatus;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.request.ResultData;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
+import cn.stylefeng.guns.core.util.JwtTokenUtil;
 import cn.stylefeng.guns.modular.system.entity.User;
 import cn.stylefeng.guns.modular.system.factory.UserFactory;
 import cn.stylefeng.guns.modular.system.model.UserDto;
@@ -43,14 +44,40 @@ public class UserMgrApiController extends BaseController {
     @Autowired
     private UserService userService;
 
-
     /**
-     * 获取用户详情
+     * 通过token获取用户详情
      *
      * @author fengshuonan
      * @Date 2018/12/24 22:43
      */
-    @ApiOperation(value = "获取用户详情", notes = "获取用户详情")
+    @ApiOperation(value = "通过token获取用户详情", notes = "通过token获取用户详情")
+    @RequestMapping(value = "/getUserInfoByToken", method = RequestMethod.GET)
+    public ResponseData getUserInfoByToken(@RequestParam String token) {
+        if (ToolUtil.isEmpty(token)) {
+            throw new RequestEmptyException();
+        }
+        String userIdStr = JwtTokenUtil.getUsernameFromToken(token);
+        Long userId = Long.parseLong(userIdStr);
+
+        User user = this.userService.getById(userId);
+        Map<String, Object> map = UserFactory.removeUnSafeFields(user);
+
+        HashMap<Object, Object> hashMap = CollectionUtil.newHashMap();
+        hashMap.putAll(map);
+        hashMap.put("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
+        hashMap.put("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
+
+        return ResponseData.success(hashMap);
+    }
+
+
+    /**
+     * 通过userId获取用户详情
+     *
+     * @author fengshuonan
+     * @Date 2018/12/24 22:43
+     */
+    @ApiOperation(value = "通过userId获取用户详情", notes = "通过userId获取用户详情")
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
     public ResponseData getUserInfo(@RequestParam Long userId) {
         if (ToolUtil.isEmpty(userId)) {
