@@ -48,4 +48,10 @@ public interface CacheKey {
      */
     String MENU_LIST = "nemu_list_";
 
+
+    /**
+     * 用户缓存
+     */
+    String USER_LIST = "nemu_list_";
+
 }
