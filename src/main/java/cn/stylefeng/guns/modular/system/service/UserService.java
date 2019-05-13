@@ -19,6 +19,7 @@ import cn.stylefeng.guns.modular.system.model.UserDto;
 import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +148,19 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return this.baseMapper.selectUsers(page, dataScope, name, beginTime, endTime, deptId);
     }
 
+    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.USER_LIST + "'+#name")
+    public List<User> fuzzyUsers(String name) {
+
+        QueryWrapper<User> wrp = new QueryWrapper<>();
+        if (ToolUtil.isNotEmpty(name)) {
+            wrp.like("name", name);
+        }
+        wrp.select("user_id as userId", "name");
+        List<User> list = list(wrp);
+
+        return list;
+    }
+
     /**
      * 设置用户的角色
      *
@@ -222,12 +236,12 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
 
     /**
-     * 通过token获取左侧菜单
+     * 通过userId获取左侧菜单
      *
      * @author yaoliguo
      * @date 2019-04-15 20:00
      */
-    @Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.MENU_LIST + "'+#userId")
+    //@Cacheable(value = Cache.CONSTANT, key = "'" + CacheKey.MENU_LIST + "'+#userId")
     public List<MenuNode> getLeftMenuByUserId(String userId) {
 
         User user = baseMapper.selectById(userId);
