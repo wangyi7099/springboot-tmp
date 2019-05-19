@@ -41,14 +41,23 @@ public class LayuiPageFactory {
 
         //每页多少条数据
         String lit = request.getParameter("limit");
-        if (ToolUtil.isEmpty(lit)) {
-            lit = "10";
+        String pageSize = request.getParameter("pageSize");
+        if (ToolUtil.isEmpty(pageSize)) {
+            pageSize = "10";
         }
+        if (ToolUtil.isEmpty(lit)) {
+            lit = pageSize;
+        }
+
         int limit = Integer.valueOf(lit);
 
         String pageStr = request.getParameter("page");
+        String current = request.getParameter("current");
+        if (ToolUtil.isEmpty(current)) {
+            current = "1";
+        }
         if (ToolUtil.isEmpty(pageStr)) {
-            pageStr = "1";
+            pageStr = current;
         }
         //第几页
         int page = Integer.valueOf(pageStr);

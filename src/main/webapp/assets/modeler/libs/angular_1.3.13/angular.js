@@ -16231,7 +16231,7 @@
                     var prefixes = ['ng-', 'data-ng-', 'ng\\:'];
                     for (var p = 0; p < prefixes.length; ++p) {
                         var attributeEquals = opt_exactMatch ? '=' : '*=';
-                        var selector = '[' + prefixes[p] + 'model' + attributeEquals + '"' + expression + '"]';
+                        var selector = '[' + prefixes[p] + 'assets.modular.flow.model.model' + attributeEquals + '"' + expression + '"]';
                         var elements = element.querySelectorAll(selector);
                         if (elements.length) {
                             return elements;

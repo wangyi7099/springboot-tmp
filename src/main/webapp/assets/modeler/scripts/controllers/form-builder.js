@@ -28,7 +28,7 @@ angular.module('flowableModeler')
 
             $rootScope.currentReadonlyFields = {fields: {}};
 
-            $scope.$watch('model.useOutcomes', function (value) {
+            $scope.$watch('assets.modular.flow.model.model.useOutcomes', function (value) {
                 if (value) {
                     if (!$rootScope.currentOutcomes || $rootScope.currentOutcomes.length === 0) {
                         $rootScope.currentOutcomes = [{name: ''}];
