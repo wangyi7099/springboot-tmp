@@ -122,9 +122,7 @@ public class UserMgrApiController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseData list(@RequestParam(required = false) String name,
                              @RequestParam(required = false) String timeLimit,
-                             @RequestParam(required = false) Long deptId,
-                             @RequestParam(required = true) Integer limit,
-                             @RequestParam(required = true) Integer page) {
+                             @RequestParam(required = false) Long deptId ) {
 
         //拼接查询条件
         String beginTime = "";
