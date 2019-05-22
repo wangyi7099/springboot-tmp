@@ -120,7 +120,7 @@ public class UserMgrApiController extends BaseController {
      */
     @ApiOperation(value = "查询管理员列表", notes = "查询管理员列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ResponseData list(@RequestParam(required = false) String name,
+    public ResponseData list(@RequestParam(required = false) String userName,
                              @RequestParam(required = false) String timeLimit,
                              @RequestParam(required = false) Long deptId ) {
 
@@ -135,7 +135,7 @@ public class UserMgrApiController extends BaseController {
         }
 
 
-        Page<Map<String, Object>> users = userService.selectUsers(null, name, beginTime, endTime, deptId);
+        Page<Map<String, Object>> users = userService.selectUsers(null, userName, beginTime, endTime, deptId);
         Page wrapped = new UserWrapper(users).wrap();
         return ResultData.success(wrapped);
     }
