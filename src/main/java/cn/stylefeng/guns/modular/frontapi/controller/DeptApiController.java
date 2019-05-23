@@ -4,8 +4,8 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.stylefeng.guns.core.common.annotion.BussinessLog;
 import cn.stylefeng.guns.core.common.constant.dictmap.DeptDict;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
+import cn.stylefeng.guns.core.common.node.AntTreeNode;
 import cn.stylefeng.guns.core.common.node.TreeviewNode;
-import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.request.ResultData;
 import cn.stylefeng.guns.modular.system.entity.Dept;
 import cn.stylefeng.guns.modular.system.model.DeptDto;
@@ -40,8 +40,8 @@ public class DeptApiController extends BaseController {
     @ApiOperation(value = "获取部门树", notes = "获取部门树结构")
     @RequestMapping(value = "/tree", method = RequestMethod.GET)
     public ResponseData tree() {
-        List<ZTreeNode> tree = this.deptService.tree();
-        tree.add(ZTreeNode.createParent());
+        List<AntTreeNode> tree = this.deptService.antTree();
+        tree.add(AntTreeNode.createParent());
         return ResultData.success(tree);
     }
 

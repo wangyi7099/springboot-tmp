@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.system.service;
 
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.core.common.node.AntTreeNode;
 import cn.stylefeng.guns.core.common.node.TreeviewNode;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
@@ -97,6 +98,16 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
      */
     public List<ZTreeNode> tree() {
         return this.baseMapper.tree();
+    }
+
+    /**
+     * 获取ztree的节点列表
+     *
+     * @author fengshuonan
+     * @Date 2018/12/23 5:16 PM
+     */
+    public List<AntTreeNode> antTree() {
+        return this.baseMapper.antTree();
     }
 
     /**

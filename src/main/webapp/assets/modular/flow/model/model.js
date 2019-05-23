@@ -97,7 +97,7 @@ layui.use(['layer', 'ax', 'table'], function () {
         }, function (data) {
             Feng.error("署失败!" + data.responseJSON.message + "!");
         });
-        ajax.set("key", id);
+        ajax.set("modelId", id);
         ajax.start();
     };
 
