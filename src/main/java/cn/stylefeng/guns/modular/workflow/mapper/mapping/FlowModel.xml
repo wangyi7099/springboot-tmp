@@ -31,5 +31,19 @@
         order by created desc
     </select>
 
+    <select id="selectFlowFileByKey" resultType="map">
+        SELECT
+        *
+        FROM
+        ACT_DE_MODEL
+        <where>
+            <if test="flowKey!=null">
+                and model_key = #{flowKey}
+            </if>
+        </where>
+
+
+    </select>
+
 
 </mapper>

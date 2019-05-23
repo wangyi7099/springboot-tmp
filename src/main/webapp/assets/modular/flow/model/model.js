@@ -90,14 +90,14 @@ layui.use(['layer', 'ax', 'table'], function () {
         window.open(Feng.ctxPath + "/assets/modeler/index.html?trigger=createProcess");
     });
 
-    FlowModel.deploy = function (id) {
+    FlowModel.deploy = function (flowKey) {
         var ajax = new $ax(Feng.ctxPath + "/gunsApi/flow/deploy", function () {
             table.reload(MgrUser.tableId);
             Feng.success("部署成功!");
         }, function (data) {
             Feng.error("署失败!" + data.responseJSON.message + "!");
         });
-        ajax.set("modelId", id);
+        ajax.set("flowKey", flowKey);
         ajax.start();
     };
 
@@ -110,7 +110,7 @@ layui.use(['layer', 'ax', 'table'], function () {
         if (layEvent === 'view') {
             window.open(Feng.ctxPath + "/assets/modeler/index.html#/editor/" + data.id);
         } else if (layEvent === 'deploy') {
-            FlowModel.deploy(data.id);
+            FlowModel.deploy(data.key);
         } else if (layEvent === 'delete') {
             FlowModel.onDeleteModel(data);
         }

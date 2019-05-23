@@ -6,19 +6,14 @@ import cn.stylefeng.guns.modular.workflow.entity.FlowModel;
 import cn.stylefeng.guns.modular.workflow.service.FlowModelService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.swagger.annotations.ApiOperation;
-import org.flowable.bpmn.converter.BpmnXMLConverter;
 import org.flowable.bpmn.model.BpmnModel;
-import org.flowable.editor.language.json.converter.BpmnJsonConverter;
 import org.flowable.engine.ProcessEngine;
-import org.flowable.engine.repository.Deployment;
-import org.flowable.engine.repository.Model;
+import org.flowable.engine.ProcessEngineConfiguration;
+import org.flowable.engine.runtime.Execution;
+import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.image.ProcessDiagramGenerator;
 import org.flowable.task.api.Task;
-import org.flowable.validation.ProcessValidator;
-import org.flowable.validation.ProcessValidatorFactory;
-import org.flowable.validation.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -78,39 +77,14 @@ public class FlowController extends BaseController {
     @ApiOperation(value = "部署model", notes = "部署model")
     @RequestMapping(value = "/deploy", method = RequestMethod.POST)
     @ResponseBody
-    public Object deploy(@RequestParam(required = false) String modelId) {
+    public Object deploy(@RequestParam(required = false) String flowKey) {
 
-
-        try {
-            BpmnModel bpmnModel1 = processEngine.getRepositoryService().getBpmnModel(modelId);
-            Model modelData = processEngine.getRepositoryService().getModel(modelId);
-            ObjectNode modelNode = (ObjectNode) new ObjectMapper()//
-                    .readTree(processEngine.getRepositoryService()//
-                            .getModelEditorSource(modelData.getId()));
-            byte[] bpmnBytes = null;
-            BpmnModel bpmnModel = new BpmnJsonConverter().convertToBpmnModel(modelNode);
-
-            //验证bpmnModel 是否是正确的bpmn xml文件
-            ProcessValidatorFactory processValidatorFactory = new ProcessValidatorFactory();
-            ProcessValidator defaultProcessValidator = processValidatorFactory.createDefaultProcessValidator();
-            //验证失败信息的封装ValidationError
-            List<ValidationError> validate = defaultProcessValidator.validate(bpmnModel);
-            if (validate.size() > 0) {
-                return ResultData.error(validate.toString());
-            }
-            bpmnBytes = new BpmnXMLConverter().convertToXML(bpmnModel);
-            String processName = modelData.getName() + ".bpmn20.xml";
-            Deployment dep = processEngine.getRepositoryService()//
-                    .createDeployment()//
-                    .name(modelData.getName())//
-                    .addString(processName, new String(bpmnBytes, "UTF-8"))//
-                    .deploy();
-        } catch (IOException e) {
-            e.printStackTrace();
+        String deploy = flowModelService.deploy(flowKey);
+        if (deploy != null) {
+            return ResultData.success(deploy);
         }
 
-
-        return ResultData.success();
+        return ResultData.error("部署失败");
     }
 
     /**
@@ -141,7 +115,7 @@ public class FlowController extends BaseController {
     @ResponseBody
     public Object findTask(@RequestParam(required = false) String assignee) {
 
-        List<Task> list = processEngine.getTaskService().createTaskQuery().taskAssignee(assignee).orderByTaskCreateTime().list();
+        List<Task> list = processEngine.getTaskService().createTaskQuery().taskAssignee(assignee).orderByTaskCreateTime().desc().list();
 
 
         return ResultData.success(list);
@@ -162,6 +136,72 @@ public class FlowController extends BaseController {
 
 
         return ResultData.success();
+    }
+
+    @ApiOperation(value = "查看运行的流程图", notes = "查看运行的流程图")
+    @RequestMapping(value = "/getRunPic", method = RequestMethod.GET)
+    public void getRunPic(@RequestParam(required = false) String procInstId) {
+
+        ServletOutputStream outputStream = null;
+        InputStream in = null;
+
+        try {
+            ProcessInstance pi = processEngine.getRuntimeService()//
+                    .createProcessInstanceQuery()//
+                    .processInstanceId(procInstId)
+                    .singleResult();
+            // 流程走完的不显示图
+            if (pi == null) {
+                return;
+            }
+
+            List<Execution> executions = processEngine.getRuntimeService().createExecutionQuery().processInstanceId(procInstId).list();
+
+            // 得到正在执行的Activity的Id
+            List<String> activityIds = new ArrayList<>();
+            List<String> flows = new ArrayList<>();
+            for (Execution exe : executions) {
+                List<String> ids = processEngine.getRuntimeService().getActiveActivityIds(exe.getId());
+                activityIds.addAll(ids);
+            }
+
+            // 获取流程图
+            BpmnModel bpmnModel = processEngine.getRepositoryService().getBpmnModel(pi.getProcessDefinitionId());
+
+            ProcessEngineConfiguration engconf = processEngine.getProcessEngineConfiguration();
+            ProcessDiagramGenerator diagramGenerator = engconf.getProcessDiagramGenerator();
+            in = diagramGenerator.generateDiagram(bpmnModel, "png", activityIds, flows,
+                    engconf.getActivityFontName(), engconf.getLabelFontName(), engconf.getAnnotationFontName(),
+                    engconf.getClassLoader(), 1.0, true);
+
+            HttpServletResponse httpServletResponse = getHttpServletResponse();
+            outputStream = httpServletResponse.getOutputStream();
+
+            byte[] buf = new byte[1024];
+            int l = 0;
+            while ((l = in.read(buf, 0, 1024)) > 0) {
+                outputStream.write(buf, 0, l);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
     }
 
 }

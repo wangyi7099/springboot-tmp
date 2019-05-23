@@ -17,4 +17,6 @@ public interface FlowModelMapper extends BaseMapper<FlowModel> {
      */
     Page<FlowModel> getModelList(@Param("page") Page page, @Param("map") Map<String, Object> map);
 
+    Map<String, Object> selectFlowFileByKey(@Param("flowKey") String flowKey);
+
 }
