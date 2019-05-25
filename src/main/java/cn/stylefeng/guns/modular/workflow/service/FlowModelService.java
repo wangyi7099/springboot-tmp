@@ -22,6 +22,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * model相关的服务类
+ *
+ * @author yaoliguo
+ * @date 2019-05-25 09:44
+ * ©2018 版权所有
+ */
 @Service
 public class FlowModelService extends ServiceImpl<FlowModelMapper, FlowModel> {
 
