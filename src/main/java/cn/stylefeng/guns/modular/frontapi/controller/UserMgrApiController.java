@@ -245,7 +245,6 @@ public class UserMgrApiController extends BaseController {
         if (userId.equals(Const.ADMIN_ID)) {
             throw new ServiceException(BizExceptionEnum.CANT_FREEZE_ADMIN);
         }
-        this.userService.assertAuth(userId);
         this.userService.setStatus(userId, ManagerStatus.FREEZED.getCode());
         return SUCCESS_TIP;
     }
@@ -263,7 +262,6 @@ public class UserMgrApiController extends BaseController {
         if (ToolUtil.isEmpty(userId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
-        this.userService.assertAuth(userId);
         this.userService.setStatus(userId, ManagerStatus.OK.getCode());
         return SUCCESS_TIP;
     }
