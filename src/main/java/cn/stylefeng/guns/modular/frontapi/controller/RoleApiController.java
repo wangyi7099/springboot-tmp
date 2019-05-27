@@ -149,7 +149,7 @@ public class RoleApiController extends BaseController {
      * @Date 2018/12/23 6:31 PM
      */
     @ApiOperation(value = "配置权限", notes = "配置权限")
-    @RequestMapping(value = "/roleTreeList", method = RequestMethod.POST)
+    @RequestMapping(value = "/roleTreeList", method = RequestMethod.GET)
     public ResponseData roleTreeList() {
         List<ZTreeNode> roleTreeList = this.roleService.roleTreeList();
         roleTreeList.add(ZTreeNode.createParent());
