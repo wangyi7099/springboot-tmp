@@ -53,7 +53,7 @@
 
     <select id="roleAntTreeList" resultType="cn.stylefeng.guns.core.common.node.AntTreeNode">
 		select role_id AS `key`,role_id AS id, pid as "pId",
-		name as title,name as `value`, (case when (pid = 0 or pid is null) then 'true'
+		name as title,role_id as `value`, (case when (pid = 0 or pid is null) then 'true'
 		else 'false' end) as "open" from sys_role
 	</select>
 
