@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.system.mapper;
 
+import cn.stylefeng.guns.core.common.node.AntTreeNode;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.modular.system.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -43,6 +44,9 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @date 2017年2月18日 上午10:32:04
      */
     List<ZTreeNode> roleTreeList();
+
+
+    List<AntTreeNode> roleAntTreeList();
 
     /**
      * 获取角色列表树

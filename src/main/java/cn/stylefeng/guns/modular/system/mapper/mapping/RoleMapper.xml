@@ -51,6 +51,12 @@
 		else 'false' end) as "open" from sys_role
 	</select>
 
+    <select id="roleAntTreeList" resultType="cn.stylefeng.guns.core.common.node.AntTreeNode">
+		select role_id AS `key`,role_id AS id, pid as "pId",
+		name as title,name as `value`, (case when (pid = 0 or pid is null) then 'true'
+		else 'false' end) as "open" from sys_role
+	</select>
+
     <select id="roleTreeList" resultType="cn.stylefeng.guns.core.common.node.ZTreeNode" databaseId="oracle">
 		select role_id AS id, pid as "pId",
 		name as name, (case when (pid = 0 or pid is null) then '1'

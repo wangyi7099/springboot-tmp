@@ -6,7 +6,7 @@ import cn.stylefeng.guns.core.common.constant.dictmap.DeleteDict;
 import cn.stylefeng.guns.core.common.constant.dictmap.RoleDict;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
-import cn.stylefeng.guns.core.common.node.ZTreeNode;
+import cn.stylefeng.guns.core.common.node.AntTreeNode;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.request.ResultData;
 import cn.stylefeng.guns.modular.system.entity.Role;
@@ -151,8 +151,8 @@ public class RoleApiController extends BaseController {
     @ApiOperation(value = "配置权限", notes = "配置权限")
     @RequestMapping(value = "/roleTreeList", method = RequestMethod.GET)
     public ResponseData roleTreeList() {
-        List<ZTreeNode> roleTreeList = this.roleService.roleTreeList();
-        roleTreeList.add(ZTreeNode.createParent());
+        List<AntTreeNode> roleTreeList = this.roleService.roleAntTreeList();
+        roleTreeList.add(AntTreeNode.createParent());
         return ResponseData.success(roleTreeList);
     }
 

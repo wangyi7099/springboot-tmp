@@ -6,6 +6,7 @@ import cn.stylefeng.guns.core.common.constant.Const;
 import cn.stylefeng.guns.core.common.constant.cache.Cache;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.core.common.node.AntTreeNode;
 import cn.stylefeng.guns.core.common.node.ZTreeNode;
 import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
@@ -172,6 +173,10 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
      */
     public List<ZTreeNode> roleTreeList() {
         return this.baseMapper.roleTreeList();
+    }
+
+    public List<AntTreeNode> roleAntTreeList() {
+        return this.baseMapper.roleAntTreeList();
     }
 
     /**
