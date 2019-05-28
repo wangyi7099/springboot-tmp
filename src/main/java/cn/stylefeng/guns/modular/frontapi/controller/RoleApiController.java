@@ -78,7 +78,7 @@ public class RoleApiController extends BaseController {
      * @Date 2018/12/23 6:31 PM
      */
     @ApiOperation(value = "角色修改", notes = "角色修改")
-    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @BussinessLog(value = "修改角色", key = "name", dict = RoleDict.class)
     public ResponseData edit(RoleDto roleDto) {
         this.roleService.editRole(roleDto);
