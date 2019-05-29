@@ -458,9 +458,34 @@ CREATE TABLE `sys_user`  (
   PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '管理员表' ROW_FORMAT = Dynamic;
 
+
+DROP TABLE IF EXISTS `biz_leave_bill`;
+CREATE TABLE `biz_leave_bill` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `applicant` int(11) DEFAULT NULL COMMENT '申请人',
+  `app_time` datetime DEFAULT NULL,
+  `days` int(11) DEFAULT NULL COMMENT '申请时间',
+  `title` varchar(100) DEFAULT NULL COMMENT '标题',
+  `content` varchar(255) DEFAULT NULL COMMENT '内容',
+  `state` int(11) DEFAULT '0' COMMENT '0未提交，1审批中，2审批完成,3批准，4不批准',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user` VALUES (1, '1', 'admin', '1d6b1208c7d151d335790276a18e3d99', 'q6taw', 'stylefeng', '2018-11-16 00:00:00', 'M', 'sn93@qq.com', '18200000000', '1', 27, 'ENABLE', '2016-01-29 08:49:53', NULL, '2018-12-28 22:52:24', 24, 25);
+
+INSERT INTO `sys_menu` (`menu_id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `sort`, `levels`, `menu_flag`, `description`, `status`, `new_page_flag`, `open_flag`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES ('173', 'LEAVE_BILL', '0', '[0],', '请假单', 'fa-star', '#', '999', '1', 'Y', '', 'ENABLE', '', '', '2019-05-27 21:14:23', '2019-05-28 19:22:34', '1', '1');
+INSERT INTO `sys_menu` (`menu_id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `sort`, `levels`, `menu_flag`, `description`, `status`, `new_page_flag`, `open_flag`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES ('174', 'LEAVE_BILL_ADD', 'LEAVE_BILL', '[0],[LEAVE_BILL],', '请假单添加', 'fa-star', '', '999', '2', 'N', '', 'ENABLE', '', '', '2019-05-27 21:14:23', '2019-05-28 19:22:34', '1', '1');
+INSERT INTO `sys_menu` (`menu_id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `sort`, `levels`, `menu_flag`, `description`, `status`, `new_page_flag`, `open_flag`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES ('175', 'LEAVE_BILL_EDIT', 'LEAVE_BILL', '[0],[LEAVE_BILL],', '请假单修改', 'fa-star', '', '999', '2', 'N', '', 'ENABLE', '', '', '2019-05-27 21:14:23', '2019-05-28 19:22:34', '1', '1');
+INSERT INTO `sys_menu` (`menu_id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `sort`, `levels`, `menu_flag`, `description`, `status`, `new_page_flag`, `open_flag`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES ('176', 'LEAVE_BILL_DELETE', 'LEAVE_BILL', '[0],[LEAVE_BILL],', '请假单删除', 'fa-star', '', '999', '2', 'N', '', 'ENABLE', '', '', '2019-05-27 21:14:23', '2019-05-28 19:22:34', '1', '1');
+INSERT INTO `sys_menu` (`menu_id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `sort`, `levels`, `menu_flag`, `description`, `status`, `new_page_flag`, `open_flag`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES ('177', 'flow_manage', '0', '[0],', '流程管理', '', '#', '50', '1', 'Y', NULL, 'ENABLE', NULL, NULL, '2019-05-28 19:21:23', '2019-05-28 19:37:32', '1', '1');
+INSERT INTO `sys_menu` (`menu_id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `sort`, `levels`, `menu_flag`, `description`, `status`, `new_page_flag`, `open_flag`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES ('178', 'leaveBill_list', 'LEAVE_BILL', '[0],[LEAVE_BILL],', '请假单列表', '', '/leaveBill', '40', '2', 'Y', NULL, 'ENABLE', NULL, NULL, '2019-05-28 19:25:09', NULL, '1', NULL);
+INSERT INTO `sys_menu` (`menu_id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `sort`, `levels`, `menu_flag`, `description`, `status`, `new_page_flag`, `open_flag`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES ('179', 'flow_list', 'flow_manage', '[0],[flow_manage],', '流程列表', '', '/gunsApi/flow', '10', '2', 'Y', NULL, 'ENABLE', NULL, NULL, '2019-05-28 19:27:44', '2019-05-28 19:58:03', '1', '1');
+INSERT INTO `sys_menu` (`menu_id`, `code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `sort`, `levels`, `menu_flag`, `description`, `status`, `new_page_flag`, `open_flag`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES ('180', 'model_lidt', 'flow_manage', '[0],[flow_manage],', '流程model列表', '', '/gunsApi/flow/list', '20', '2', 'N', NULL, 'ENABLE', NULL, NULL, '2019-05-28 19:39:21', '2019-05-28 19:58:19', '1', '1');
+
+
+
 
 SET FOREIGN_KEY_CHECKS = 1;
