@@ -15,6 +15,7 @@
  */
 package cn.stylefeng.guns.config.web;
 
+import cn.stylefeng.guns.config.LongJsonSerializer;
 import cn.stylefeng.guns.config.properties.GunsProperties;
 import cn.stylefeng.guns.core.common.controller.GunsErrorView;
 import cn.stylefeng.guns.core.interceptor.AttributeSetInteceptor;
@@ -28,7 +29,6 @@ import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
 import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import org.springframework.aop.Advisor;
@@ -100,8 +100,9 @@ public class WebConfig implements WebMvcConfigurer {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper mapper = new ObjectMapper();
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
-        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        LongJsonSerializer longStr = new LongJsonSerializer();
+        simpleModule.addSerializer(Long.class, longStr);
+        simpleModule.addSerializer(Long.TYPE, longStr);
         mapper.registerModule(simpleModule);
         converter.setObjectMapper(mapper);
         return converter;

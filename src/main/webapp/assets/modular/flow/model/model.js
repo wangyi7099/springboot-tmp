@@ -91,14 +91,22 @@ layui.use(['layer', 'ax', 'table'], function () {
     });
 
     FlowModel.deploy = function (flowKey) {
-        var ajax = new $ax(Feng.ctxPath + "/gunsApi/flow/deploy", function () {
-            table.reload(MgrUser.tableId);
-            Feng.success("部署成功!");
-        }, function (data) {
-            Feng.error("署失败!" + data.responseJSON.message + "!");
-        });
-        ajax.set("flowKey", flowKey);
-        ajax.start();
+
+        $.ajax({
+            url: Feng.ctxPath + "/gunsApi/flow/deploy",
+            type: "POST",
+            data: {"flowKey": flowKey},
+            success: function (data) {
+                table.reload(FlowModel.tableId);
+                Feng.success("部署成功!");
+            },
+            error: function (xhr) {
+                console.log(xhr);
+                Feng.error("署失败!" + data.responseJSON.message + "!");
+            }
+
+        })
+
     };
 
 
