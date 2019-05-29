@@ -43,4 +43,6 @@ public class LeaveBillResult implements Serializable {
      */
     private String content;
 
+    private Integer state;
+
 }

@@ -25,13 +25,15 @@ layui.use(['table', 'admin', 'ax'], function () {
             {
                 field: 'center', sort: true, title: '操作', templet: function (d) {
 
+                    console.log(d);
+
                     var submit = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">提交流程</a>';
                     var edit = '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a><a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>';
 
-                    if (d.state = 0) {
-                        return edit;
+                    if (d.state == 0) {
+                        return submit + edit;
                     } else {
-                        return submit;
+                        return "";
                     }
                 }
             }
